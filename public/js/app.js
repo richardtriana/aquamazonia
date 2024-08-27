@@ -5876,7 +5876,11 @@ __webpack_require__.r(__webpack_exports__);
         warehouse_id: "",
         category_id: "",
         provider_id: "",
-        brand_id: ""
+        brand_id: "",
+        cantidad: "",
+        cantidad_maxima: "",
+        cantidad_minima: "",
+        inventario: true
       })
     };
   },
@@ -6740,7 +6744,8 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       form: new vform__WEBPACK_IMPORTED_MODULE_0__.Form({
-        id: ""
+        id: "",
+        phase_id: 0
       }),
       listadoItems: [],
       nombresEspecies: [],
@@ -6832,6 +6837,7 @@ __webpack_require__.r(__webpack_exports__);
     guardarEdita: function guardarEdita() {
       var _this3 = this;
       var me = this;
+      console.log("********* FORM:", this.form);
       var data = {
         siembra: this.form,
         especies: this.listadoItems
@@ -16175,6 +16181,164 @@ var render = function render() {
     slot: "no-options"
   }, [_vm._v("\n                Escribe para iniciar la búsqueda\n              ")])], 2)], 1), _vm._v(" "), _c("div", {
     staticClass: "form-group row"
+  }, [_c("label", {
+    staticClass: "col-sm-12 col-md-4 col-form-label",
+    attrs: {
+      "for": "cantidad"
+    }
+  }, [_vm._v("Cantidad\n            ")]), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-12 col-md-8"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.cantidad,
+      expression: "form.cantidad"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "number",
+      step: "any",
+      id: "cantidad"
+    },
+    domProps: {
+      value: _vm.form.cantidad
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.form, "cantidad", $event.target.value);
+      }
+    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row"
+  }, [_c("label", {
+    staticClass: "col-sm-12 col-md-4 col-form-label",
+    attrs: {
+      "for": "cantidad_minima"
+    }
+  }, [_vm._v("Cantidad mínima\n            ")]), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-12 col-md-8"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.cantidad_minima,
+      expression: "form.cantidad_minima"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "number",
+      step: "any",
+      id: "cantidad_minima"
+    },
+    domProps: {
+      value: _vm.form.cantidad_minima
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.form, "cantidad_minima", $event.target.value);
+      }
+    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row"
+  }, [_c("label", {
+    staticClass: "col-sm-12 col-md-4 col-form-label",
+    attrs: {
+      "for": "cantidad_maxima"
+    }
+  }, [_vm._v("Cantidad máxima\n            ")]), _vm._v(" "), _c("div", {
+    staticClass: "col-sm-12 col-md-8"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.cantidad_maxima,
+      expression: "form.cantidad_maxima"
+    }],
+    staticClass: "form-control",
+    attrs: {
+      type: "number",
+      step: "any",
+      id: "cantidad_maxima"
+    },
+    domProps: {
+      value: _vm.form.cantidad_maxima
+    },
+    on: {
+      input: function input($event) {
+        if ($event.target.composing) return;
+        _vm.$set(_vm.form, "cantidad_maxima", $event.target.value);
+      }
+    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row"
+  }, [_c("label", {
+    staticClass: "col-sm-12 col-md-4 col-form-label",
+    attrs: {
+      "for": "inventario"
+    }
+  }, [_vm._v("Inventario")]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-check-inline"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.inventario,
+      expression: "form.inventario"
+    }],
+    staticClass: "form-check-input",
+    attrs: {
+      type: "radio",
+      name: "inlineInventarioOptions",
+      id: "inlineRadio1",
+      value: "1"
+    },
+    domProps: {
+      checked: _vm._q(_vm.form.inventario, "1")
+    },
+    on: {
+      change: function change($event) {
+        return _vm.$set(_vm.form, "inventario", "1");
+      }
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label",
+    attrs: {
+      "for": "inlineRadio1"
+    }
+  }, [_vm._v("Si")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-check-inline"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.inventario,
+      expression: "form.inventario"
+    }],
+    staticClass: "form-check-input",
+    attrs: {
+      type: "radio",
+      name: "inlineInventarioOptions",
+      id: "inlineRadio2",
+      value: "0"
+    },
+    domProps: {
+      checked: _vm._q(_vm.form.inventario, "0")
+    },
+    on: {
+      change: function change($event) {
+        return _vm.$set(_vm.form, "inventario", "0");
+      }
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label",
+    attrs: {
+      "for": "inlineRadio2"
+    }
+  }, [_vm._v("No")])])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row"
   }, [_c("div", {
     staticClass: "col-sm-12 text-right"
   }, [_c("button", {
@@ -17201,6 +17365,7 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       type: "number",
+      step: "any",
       id: "cantidad"
     },
     domProps: {
@@ -17231,6 +17396,7 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       type: "number",
+      step: "any",
       id: "cantidad_minima"
     },
     domProps: {
@@ -17261,6 +17427,7 @@ var render = function render() {
     staticClass: "form-control",
     attrs: {
       type: "number",
+      step: "any",
       id: "cantidad_maxima"
     },
     domProps: {
@@ -17273,6 +17440,71 @@ var render = function render() {
       }
     }
   })])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group row"
+  }, [_c("label", {
+    staticClass: "col-sm-12 col-md-4 col-form-label",
+    attrs: {
+      "for": "inventario"
+    }
+  }, [_vm._v("Inventario")]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-check-inline"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.inventario,
+      expression: "form.inventario"
+    }],
+    staticClass: "form-check-input",
+    attrs: {
+      type: "radio",
+      name: "inlineInventarioOptions",
+      id: "inlineRadio1",
+      value: "true"
+    },
+    domProps: {
+      checked: _vm._q(_vm.form.inventario, "true")
+    },
+    on: {
+      change: function change($event) {
+        return _vm.$set(_vm.form, "inventario", "true");
+      }
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label",
+    attrs: {
+      "for": "inlineRadio1"
+    }
+  }, [_vm._v("Si")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-check form-check-inline"
+  }, [_c("input", {
+    directives: [{
+      name: "model",
+      rawName: "v-model",
+      value: _vm.form.inventario,
+      expression: "form.inventario"
+    }],
+    staticClass: "form-check-input",
+    attrs: {
+      type: "radio",
+      name: "inlineInventarioOptions",
+      id: "inlineRadio2",
+      value: "false"
+    },
+    domProps: {
+      checked: _vm._q(_vm.form.inventario, "false")
+    },
+    on: {
+      change: function change($event) {
+        return _vm.$set(_vm.form, "inventario", "false");
+      }
+    }
+  }), _vm._v(" "), _c("label", {
+    staticClass: "form-check-label",
+    attrs: {
+      "for": "inlineRadio2"
+    }
+  }, [_vm._v("No")])])]), _vm._v(" "), _c("div", {
     staticClass: "form-group row"
   }, [_c("label", {
     staticClass: "col-sm-12 col-md-4 col-form-label",
@@ -17884,7 +18116,6 @@ var render = function render() {
     }],
     staticClass: "form-control",
     attrs: {
-      disabled: _vm.id ? true : false,
       type: "text",
       id: "nombre_siembra"
     },
@@ -17934,7 +18165,7 @@ var render = function render() {
     staticClass: "col-sm-12 col-md-12 text-left"
   }, [_c("label", {
     attrs: {
-      "for": ""
+      "for": "phase_id"
     }
   }, [_vm._v("Fase")]), _vm._v(" "), _c("select", {
     directives: [{

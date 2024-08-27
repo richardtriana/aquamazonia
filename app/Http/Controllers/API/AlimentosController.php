@@ -35,7 +35,10 @@ class AlimentosController extends Controller
       'warehouse_id'=> 'nullable',
       'category_id'=> 'nullable',
       'brand_id'=> 'nullable',
-      'provider_id'=> 'nullable'
+      'provider_id'=> 'nullable',
+      'cantidad' => 'numeric',
+      'cantidad_minima' => 'numeric',
+      'cantidad_maxima' => 'numeric'
     ]);
     $alimento = Alimento::create([
       'alimento' => $request['alimento'],
@@ -43,13 +46,16 @@ class AlimentosController extends Controller
       'warehouse_id' => $request['warehouse_id'],
       'category_id' => $request['category_id'],
       'brand_id' => $request['brand_id'],
-      'provider_id' => $request['provider_id']
+      'provider_id' => $request['provider_id'],
+      'cantidad' => $request['cantidad'],
+      'cantidad_minima' => $request['cantidad_minima'],
+      'cantidad_maxima' => $request['cantidad_maxima'],
     ]);
 
     HistorialAlimento::create([
       'id_alimento' => $alimento['id'],
       'costo' => $alimento['costo_kg'],
-      'fecha_registro' => date('Y-m-d')
+      'fecha_registro' => date('Y-m-d'),
     ]);
   }
 
@@ -77,9 +83,9 @@ class AlimentosController extends Controller
     $alimento->update($request->all());
 
     HistorialAlimento::create([
-      'id_alimento' => $request['id'],
+      'alimento_id' => $request['id'],
       'costo' => $request['costo_kg'],
-      'fecha_registro' => date('Y-m-d')
+      'fecha_registro' => date('Y-m-d')      
     ]);
 
     return $alimento;
@@ -95,7 +101,7 @@ class AlimentosController extends Controller
   {
     //
     Alimento::destroy($id);
-    HistorialAlimento::where('id_alimento', $id)->delete();
+    HistorialAlimento::where('alimento_id', $id)->delete();
 
     return 'eliminado';
   }

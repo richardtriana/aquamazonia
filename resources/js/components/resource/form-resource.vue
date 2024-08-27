@@ -44,21 +44,34 @@
               <label for="cantidad" class="col-sm-12 col-md-4 col-form-label">Cantidad
               </label>
               <div class="col-sm-12 col-md-8">
-                <input type="number" class="form-control" id="cantidad" v-model="form.cantidad" />
+                <input type="number" step="any" class="form-control" id="cantidad" v-model="form.cantidad" />
               </div>
             </div>
             <div class="form-group row">
               <label for="cantidad_minima" class="col-sm-12 col-md-4 col-form-label">Cantidad mínima
               </label>
               <div class="col-sm-12 col-md-8">
-                <input type="number" class="form-control" id="cantidad_minima" v-model="form.cantidad_minima" />
+                <input type="number" step="any" class="form-control" id="cantidad_minima" v-model="form.cantidad_minima" />
               </div>
             </div>
             <div class="form-group row">
               <label for="cantidad_maxima" class="col-sm-12 col-md-4 col-form-label">Cantidad máxima
               </label>
               <div class="col-sm-12 col-md-8">
-                <input type="number" class="form-control" id="cantidad_maxima" v-model="form.cantidad_maxima" />
+                <input type="number" step="any" class="form-control" id="cantidad_maxima" v-model="form.cantidad_maxima" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-sm-12 col-md-4 col-form-label" for="inventario">Inventario</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineInventarioOptions" id="inlineRadio1"
+                  value="true" v-model="form.inventario">
+                <label class="form-check-label" for="inlineRadio1">Si</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineInventarioOptions" id="inlineRadio2"
+                  value="false" v-model="form.inventario">
+                <label class="form-check-label" for="inlineRadio2">No</label>
               </div>
             </div>
 

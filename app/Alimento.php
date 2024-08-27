@@ -14,7 +14,12 @@ class Alimento extends Model
         'warehouse_id',
         'category_id',
         'brand_id',
-        'provider_id'   
+        'provider_id',
+        'cantidad',
+        'cantidad_minima',
+        'cantidad_maxima',
+        'inventario',
+        'activo' 
     ];
 
     protected $with = [

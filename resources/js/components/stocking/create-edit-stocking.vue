@@ -29,7 +29,7 @@
             <div class="form-group row col-md-4">
               <div class="col-sm-12 col-md-12 text-left">
                 <label for="nombre_siembra">Nombre de Siembra</label>
-                <input :disabled="id ? true : false" class="form-control" type="text" id="nombre_siembra"
+                <input class="form-control" type="text" id="nombre_siembra"
                   v-model="form.nombre_siembra" />
               </div>
             </div>
@@ -42,7 +42,7 @@
             </div>
             <div class="form-group row col-md-4">
               <div class="col-sm-12 col-md-12 text-left">
-                <label for="">Fase</label>
+                <label for="phase_id">Fase</label>
                 <select v-model="form.phase_id" name="phase_id" class="form-control" id="phase_id">
                   <option v-for="(phase, index) in phaseListing.data" :value="phase.id" :key="index" selected>
                     {{ (form.phase = phase.phase) }}
@@ -173,6 +173,7 @@ export default {
     return {
       form: new Form({
         id: "",
+        phase_id:0
       }),
       listadoItems: [],
       nombresEspecies: [],
@@ -271,6 +272,7 @@ export default {
     },
     guardarEdita() {
       let me = this;
+      console.log("********* FORM:", this.form)
       const data = {
         siembra: this.form,
         especies: this.listadoItems,

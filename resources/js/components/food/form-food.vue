@@ -4,7 +4,8 @@
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="modalalimentosLabel" v-text="edit == 0 ? 'Crear alimento' : 'Actualizar alimento'">
+          <h5 class="modal-title" id="modalalimentosLabel"
+            v-text="edit == 0 ? 'Crear alimento' : 'Actualizar alimento'">
           </h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -109,6 +110,41 @@
               </v-select>
             </div>
             <div class="form-group row">
+              <label for="cantidad" class="col-sm-12 col-md-4 col-form-label">Cantidad
+              </label>
+              <div class="col-sm-12 col-md-8">
+                <input type="number" step="any" class="form-control" id="cantidad" v-model="form.cantidad" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="cantidad_minima" class="col-sm-12 col-md-4 col-form-label">Cantidad mínima
+              </label>
+              <div class="col-sm-12 col-md-8">
+                <input type="number" step="any" class="form-control" id="cantidad_minima" v-model="form.cantidad_minima" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label for="cantidad_maxima" class="col-sm-12 col-md-4 col-form-label">Cantidad máxima
+              </label>
+              <div class="col-sm-12 col-md-8">
+                <input type="number" step="any" class="form-control" id="cantidad_maxima" v-model="form.cantidad_maxima" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-sm-12 col-md-4 col-form-label" for="inventario">Inventario</label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineInventarioOptions" id="inlineRadio1"
+                  value=1 v-model="form.inventario">
+                <label class="form-check-label" for="inlineRadio1">Si</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineInventarioOptions" id="inlineRadio2"
+                  value=0 v-model="form.inventario">
+                <label class="form-check-label" for="inlineRadio2">No</label>
+              </div>
+            </div>
+            <div class="form-group row">
               <div class="col-sm-12 text-right">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">
                   Cancelar
@@ -145,7 +181,11 @@ export default {
         warehouse_id: "",
         category_id: "",
         provider_id: "",
-        brand_id: ""
+        brand_id: "",
+        cantidad: "",
+        cantidad_maxima: "",
+        cantidad_minima: "",
+        inventario: true
       }),
     }
   },

@@ -175,6 +175,11 @@ class SiembraController extends Controller
 				]);
 			}
 		}
+
+		$siembra = Siembra::findOrFail($request->siembra['siembra_id']);
+		$siembra->nombre_siembra = $request->siembra['nombre_siembra'];
+		$siembra->phase_id = $request->siembra['phase_id'];
+		$siembra->save();
 	}
 
 

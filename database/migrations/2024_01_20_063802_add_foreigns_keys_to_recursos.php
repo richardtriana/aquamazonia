@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('brand_id')->nullable();
             $table->foreignId('provider_id')->nullable();
             $table->foreignId('category_id')->nullable();
+            $table->foreignId('warehouse_id')->nullable();
 
             $table->foreign('brand_id')
                 ->references('id')
@@ -30,6 +31,10 @@ return new class extends Migration
             $table->foreign('category_id')
                 ->references('id')
                 ->on('resource_categories');
+
+            $table->foreign('warehouse_id')
+                ->references('id')
+                ->on('warehouses');
         });
     }
 
@@ -50,6 +55,9 @@ return new class extends Migration
 
             $table->dropForeign('recursos_category_id_foreign');
             $table->dropColumn('category_id');
+
+            $table->dropForeign('recursos_warehouse_id_foreign');
+            $table->dropColumn('warehouse_id');
         });
     }
 };

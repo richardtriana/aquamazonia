@@ -20,7 +20,9 @@ class Recursos extends Model
         'expiration_date',
         'cantidad',
         'cantidad_minima',
-        'cantidad_maxima'
+        'cantidad_maxima',
+        'inventario',
+        'activo'
     ];
 
     protected $with = [

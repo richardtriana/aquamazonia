@@ -19,9 +19,9 @@ class AddCostsToRecursosNecesarios extends Migration
     public function up()
     {
         Schema::table('recursos_necesarios', function (Blueprint $table) {
-            $table->float('costo_minutos_hombre', 20, 2)->nullable();
-            $table->float('costo_alimento', 20, 2)->nullable();
-            $table->float('costo_recurso', 20, 2)->nullable();
+            // $table->float('costo_minutos_hombre', 20, 2)->nullable();
+            // $table->float('costo_alimento', 20, 2)->nullable();
+            // $table->float('costo_recurso', 20, 2)->nullable();
         });
 
         $minutos_hombre = Recursos::select()->where('recurso', 'Minutos hombre')->orWhere('recurso', 'Minuto hombre')->orWhere('recurso', 'Minutos')->first();

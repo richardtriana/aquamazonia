@@ -85,7 +85,7 @@ class RecursosController extends Controller
         $recurso->update($request->all());
 
         HistorialRecurso::create([
-            'id_recurso' => $request['id'],
+            'recurso_id' => $request['id'],
             'costo' => $request['costo'],
             'fecha_registro' => date('Y-m-d')
         ]);
@@ -102,7 +102,7 @@ class RecursosController extends Controller
     public function destroy($id)
     {
         Recursos::destroy($id);
-        HistorialRecurso::where('id_recurso', $id)->delete();
+        HistorialRecurso::where('recurso_id', $id)->delete();
 
         return 'eliminado';
     }
