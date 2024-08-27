@@ -7,135 +7,61 @@
           <div class="card-body">
             <div class="row">
               <div class="form-row col-12">
+                <div class="form-group col-md-3">
+                  <label for="contenedor">Estanque:</label>
+                  <select class="custom-select" id="contenedor" v-model="id_contenedor">
+                    <option value="-1">Seleccionar</option>
+                    <option :value="cont.id" v-for="(cont, index) in listadoEstanques" :key="index">
+                      {{ cont.contenedor }}
+                    </option>
+                  </select>
+                </div>
                 <div class="form-group col-3">
-                  <label for="estado_siembra">Estado de siembra</label>
-                  <select
-                    name="estado_siembra"
-                    class="custom-select"
-                    id="estado_siembra"
-                    v-model="estado_siembra"
-                    @click.prevent="listar(1, '', estado_siembra, '', '')"
-                  >
+                  <label for="estado_siembta">Estado de siembra</label>
+                  <select name="f_estado" class="custom-select" id="f_estado" v-model="f_estado">
                     <option value="-1">Todas</option>
                     <option value="1">Activas</option>
                     <option value="0">Inactivas</option>
                   </select>
                 </div>
-                <div class="form-group col-3" v-show="estado_siembra == 1">
-                  <label for="estado_siembta">Siembras Activas</label>
-                  <select
-                    name="estado_siembra"
-                    class="custom-select"
-                    id="estado_siembra"
-                    v-model="siembra_activa"
-                    @click.prevent="listar(1, siembra_activa, '', '', '')"
-                  >
-                    <option value="">Todas</option>
-                    <option
-                      v-for="(siembraActiva, index) in siembrasActivas"
-                      :key="index"
-                      :value="siembraActiva.id"
-                    >
-                      {{ siembraActiva.nombre_siembra }}
-                    </option>
-                  </select>
-                </div>
-                <div class="form-group col-3" v-show="estado_siembra == 0">
-                  <label for="estado_siembta">Siembras Inactivas</label>
-                  <select
-                    name="estado_siembra"
-                    class="custom-select"
-                    id="estado_siembra"
-                    v-model="siembra_inactiva"
-                    @click.prevent="listar(1, siembra_inactiva, '', '', '')"
-                  >
-                    <option value="">Todas</option>
-                    <option
-                      v-for="(siembraInactiva, index) in siembrasInactivas"
-                      :key="index"
-                      :value="siembraInactiva.id"
-                    >
-                      {{ siembraInactiva.nombre_siembra }}
-                    </option>
-                  </select>
+                <div class="form-group col-3">
+                  <label for="siembra_activa">Siembras
+                    {{ f_estado == 0 ? "inactivas" : "activas" }} :
+                  </label>
+                  <template v-if="f_estado != '-1'">
+                    <v-select :options="filteredItems" label="nombre_siembra" :reduce="(siembra) => siembra.id"
+                      v-model="f_siembra"  />
+                  </template>
+                  <template v-if="f_estado == '-1'">
+                    <v-select :options="listadoSiembras" label="nombre_siembra" :reduce="(siembra) => siembra.id"
+                      v-model="f_siembra" />
+                  </template>
                 </div>
                 <div class="form-group col-md-2">
                   <label for="alimento">Alimento: </label>
-                  <select
-                    class="form-control"
-                    id="alimento"
-                    v-show="estado_siembra == 1"
-                    v-model="alimento_s"
-                    @click.prevent="
-                      listar(1, siembra_activa, '', alimento_s, '')
-                    "
-                  >
-                    <option selected>Seleccionar</option>
-                    <option
-                      v-for="(alimento, index) in listadoAlimentos"
-                      :key="index"
-                      v-bind:value="alimento.id"
-                    >
-                      {{ alimento.alimento }}
-                    </option>
-                  </select>
-                  <select
-                    class="form-control"
-                    id="alimento"
-                    v-show="estado_siembra == 0"
-                    v-model="alimento_s"
-                    @click.prevent="
-                      listar(1, siembra_inactiva, '', alimento_s, '')
-                    "
-                  >
-                    <option value="-1" selected>Seleccionar</option>
-                    <option
-                      v-for="(alimento, index) in listadoAlimentos"
-                      :key="index"
-                      v-bind:value="alimento.id"
-                    >
+                  <select class="form-control" id="alimento" v-model="id_alimento">
+                    <option selected value="-1">Seleccionar</option>
+                    <option v-for="(alimento, index) in listadoAlimentos" :key="index" v-bind:value="alimento.id">
                       {{ alimento.alimento }}
                     </option>
                   </select>
                 </div>
-                <div class="form-group col-md-2">
-                  <label for="contenedor">Estanque:</label>
-                  <select
-                    class="custom-select"
-                    id="contenedor"
-                    v-model="id_contenedor"
-                    @click.prevent="
-                      listar(1, '', '', '', id_contenedor)
-                    "
-                  >
-                    <option value="-1">Seleccionar</option>
-                    <option
-                      :value="cont.id"
-                      v-for="(cont, index) in listadoEstanques"
-                      :key="index"
-                    >
-                      {{ cont.contenedor }}
-                    </option>
-                  </select>
+                <div class="form-group col-md-3 offset-9">
+                  <button class="btn btn-primary" @click="listar()">
+                    Filtrar resultados
+                  </button>
                 </div>
               </div>
 
               <div class="col-md-2">
-                <downloadexcel
-                  class="btn btn-success form-control"
-                  :fetch="fetchData"
-                  :fields="json_fields"
-                  name="informe-consolidado-alimentos.xls"
-                  type="xls"
-                >
+                <downloadexcel class="btn btn-success form-control" :fetch="fetchData" :fields="json_fields"
+                  name="informe-consolidado-alimentos.xls" type="xls">
                   <i class="fa fa-fw fa-download"></i> Generar Excel
                 </downloadexcel>
               </div>
             </div>
             <div class="table-container" id="table-container2">
-              <table
-                class="table-sticky table table-sm table-hover table-bordered"
-              >
+              <table class="table-sticky table table-sm table-hover table-bordered">
                 <thead class="thead-primary">
                   <tr>
                     <th>#</th>
@@ -144,9 +70,9 @@
                     <th>Tipo actividad</th>
                     <th>Alimento</th>
                     <th>Costo Kg</th>
-                    <th>Alimento Mañana</th>
-                    <th>Alimento Tarde</th>
-                    <th>Cantidad Total Alimento</th>
+                    <th>Alimento Mañana (kg)</th>
+                    <th>Alimento Tarde (kg) </th>
+                    <th>Cantidad Total Alimento (kg) </th>
                     <th>% Cantidad Alimento</th>
                     <th>Costo Alimento</th>
                   </tr>
@@ -159,9 +85,9 @@
                     <td v-else>Inactiva</td>
                     <td>
                       {{
-                        lrn.tipo_actividad == 1
-                          ? (lrn.actividad = "Alimentacion")
-                          : ""
+                      lrn.tipo_actividad == 1
+                      ? (lrn.actividad = "Alimentacion")
+                      : ""
                       }}
                     </td>
                     <td>{{ lrn.alimento }}</td>
@@ -169,51 +95,26 @@
                     <td>{{ lrn.c_manana }}</td>
                     <td>{{ lrn.c_tarde }}</td>
                     <th v-text="lrn.cantidadTotalAlimento"></th>
-                    <td
-                      class="text-right"
-                      v-text="lrn.porcCantidadAlimento + '%'"
-                    ></td>
-                    <th class="text-right">$ {{ lrn.costoAlimento }}</th>
+                    <td class="text-right">{{  lrn.porcCantidadAlimento | numeral('0.00')}} %</td>
+                    <th class="text-right"> {{ lrn.costoAlimento  | numeral('$0,0.00') }}</th>
                   </tr>
                 </tbody>
               </table>
               <nav class="mt-5 navigation">
                 <ul class="pagination justify-content-center">
                   <li class="page-item" v-if="pagination.current_page > 1">
-                    <a
-                      class="page-link"
-                      href="#"
-                      @click.prevent="
-                        cambiarPagina(pagination.current_page - 1)
-                      "
-                      >Ant</a
-                    >
+                    <a class="page-link" href="#" @click.prevent="
+                      cambiarPagina(pagination.current_page - 1)
+                    ">Ant</a>
                   </li>
-                  <li
-                    class="page-item"
-                    v-for="page in pagesNumber"
-                    :key="page"
-                    :class="[page == isActived ? 'active' : '']"
-                  >
-                    <a
-                      class="page-link"
-                      href="#"
-                      @click.prevent="cambiarPagina(page)"
-                      v-text="page"
-                    ></a>
+                  <li class="page-item" v-for="page in pagesNumber" :key="page"
+                    :class="[page == isActived ? 'active' : '']">
+                    <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
                   </li>
-                  <li
-                    class="page-item"
-                    v-if="pagination.current_page < pagination.last_page"
-                  >
-                    <a
-                      class="page-link"
-                      href="#"
-                      @click.prevent="
-                        cambiarPagina(pagination.current_page + 1)
-                      "
-                      >Sig</a
-                    >
+                  <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                    <a class="page-link" href="#" @click.prevent="
+                      cambiarPagina(pagination.current_page + 1)
+                    ">Sig</a>
                   </li>
                 </ul>
               </nav>
@@ -232,16 +133,66 @@ export default {
   data() {
     return {
       json_fields: {
-        Siembra: "nombre_siembra",
-        Estado: "estado",
-        "Tipo actividad": "actividad",
-        Alimento: "alimento",
-        "Costo Kg": "costoUnitarioAlimento",
-        "Alimento Mañana\n (Kg)": "c_manana",
-        "Alimento Tarde\n (Kg)": "c_tarde",
-        "Cantidad total alimento \n (Kg)": "cantidadTotalAlimento",
-        "% Cantidad Alimento": "porcCantidadAlimento",
-        "Costo total alimento": "costoAlimento",
+        Siembra:{
+          field: "nombre_siembra",
+          callback:(value) => {
+            return value
+          }
+        },
+        Estado:{
+          field: "estado",
+          callback:(value) => {
+            return value
+          }
+        },
+        "Tipo actividad":{
+          field: "actividad",
+          callback:(value) => {
+            return value
+          }
+        },
+        Alimento:{
+          field: "alimento",
+          callback:(value) => {
+            return value
+          }
+        },
+        "Costo Kg":{
+          field: "costoUnitarioAlimento",
+          callback:(value) => {
+            return numeral(value).format('0.00')
+          }
+        },
+        "Alimento Mañana\n (Kg)":{
+          field: "c_manana",
+          callback:(value) => {
+            return numeral(value).format('0.00')
+          }
+        },
+        "Alimento Tarde\n (Kg)":{
+          field: "c_tarde",
+          callback:(value) => {
+            return numeral(value).format('0.00')
+          }
+        },
+        "Cantidad total alimento \n (Kg)":{
+          field: "cantidadTotalAlimento",
+          callback:(value) => {
+            return numeral(value).format('0.00')
+          }
+        },
+        "% Cantidad Alimento":{
+          field: "porcCantidadAlimento",
+          callback:(value) => {
+            return numeral(value).format('0.00')
+          }
+        },
+        "Costo total alimento":{
+          field: "costoAlimento",
+          callback:(value) => {
+            return numeral(value).format('0.00')
+          }
+        },
       },
       pagination: {
         total: 0,
@@ -253,19 +204,14 @@ export default {
       },
       offset: 10,
       tipoActividad: "",
-      alimento_s: "",
-      f_siembra: "",
-      id_contenedor: 0,
+      id_alimento: "-1",
+      f_siembra: "-1",
+      f_estado: '1',
+      id_contenedor: '-1',
       listado: [],
       listadoSiembras: [],
       listadoAlimentos: [],
-      listadoEstanques: [],
-
-      estado_siembra: "1",
-      siembra_activa: "",
-      siembra_inactiva: "",
-      siembrasActivas: [],
-      siembrasInactivas: [],
+      listadoEstanques: []
     };
   },
   components: {
@@ -298,6 +244,9 @@ export default {
       }
       return pagesArray;
     },
+    filteredItems() {
+      return this.listadoSiembras.filter((item) => item.estado == this.f_estado);
+    }
   },
   methods: {
     async fetchData() {
@@ -305,34 +254,32 @@ export default {
       const response = await this.listado;
       return this.listado;
     },
-    listar(page, id_siembra, estado_siembra, id_alimento, id_contenedor) {
+    listar(page = 1) {
       let me = this;
+
+      const data = {
+        'id_siembra': this.f_siembra == '-1' ? '-1' : this.f_siembra,
+        'id_contenedor': this.id_contenedor == '-1' ? '-1' : this.id_contenedor,
+        'estado_siembra': this.f_estado == '-1' ? '-1' : this.f_estado,
+        'id_alimento': this.id_alimento == '-1' ? '-1' : this.id_alimento,
+        'page': page == '-1' ? '-1' : page,
+      };
+
       axios
         .get(
-          "api/informes-alimentos?page=" +
-            page +
-            "&id_siembra=" +
-            id_siembra +
-            "&estado_siembra=" +
-            estado_siembra +
-            "&id_alimento=" +
-            id_alimento +
-            "&id_contenedor=" +
-            id_contenedor
+          "api/informes-alimentos",
+          { params: data }
         )
         .then(function (response) {
           me.listado = response.data.recursosNecesarios.data;
           me.pagination = response.data.pagination;
         });
     },
-    listarSiembras(estado_siembra) {
+    listarSiembras() {
       let me = this;
-      axios
-        .get("api/siembras?estado_siembra=" + estado_siembra)
-        .then(function (response) {
-          me.siembrasActivas = response.data.listado_siembras;
-          me.siembrasInactivas = response.data.listado_siembras_inactivas;
-        });
+      axios.get("api/siembras/listado").then(function (response) {
+        me.listadoSiembras = response.data;
+      });
     },
     listarAlimentos() {
       let me = this;
@@ -351,11 +298,11 @@ export default {
       //Actualiza la página actual
       me.pagination.current_page = page;
       me.listar(page);
-    },
+    }
   },
   mounted() {
     this.listar(1, "", -1, "", "");
-    this.listarSiembras(-1);
+    this.listarSiembras(1);
     this.listarAlimentos();
     this.listarEstanques();
   },

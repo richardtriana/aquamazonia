@@ -16,7 +16,11 @@ class Registro extends Model
 		'peso_ganado',
 		'mortalidad',
 		'biomasa',
-		'cantidad', 
+		'cantidad',
 		'estado'
 	];
+
+	public function siembra() {
+		return $this->belongsTo(Siembra::class, 'id_siembra');
+	}
 }

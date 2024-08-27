@@ -12,6 +12,41 @@ class Recursos extends Model
         
         'costo',
         'recurso',
-        'unidad'
+        'unidad',
+        'warehouse_id',
+        'category_id',
+        'brand_id',
+        'provider_id',
+        'expiration_date',
+        'cantidad',
+        'cantidad_minima',
+        'cantidad_maxima'
     ];
+
+    protected $with = [
+        'warehouse',
+        'provider',
+        'category',
+        'brand'
+    ];
+
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id');
+    }
+
+    public function provider()
+    {
+        return $this->belongsTo(Provider::class, 'provider_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(ResourceCategory::class, 'category_id');
+    }
+
+    public function brand()
+    {
+        return $this->belongsTo(Brand::class, 'brand_id');
+    }
 }

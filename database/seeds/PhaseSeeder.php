@@ -1,5 +1,6 @@
 <?php
 
+use App\Phase;
 use Illuminate\Database\Seeder;
 
 class PhaseSeeder extends Seeder
@@ -11,6 +12,8 @@ class PhaseSeeder extends Seeder
      */
     public function run()
     {
-        //
+        Phase::factory()
+        ->count(3)
+        ->create();
     }
 }
