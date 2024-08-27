@@ -17,13 +17,28 @@
                 <h2>Filtrar por:</h2>
                 <form class="row">
                   <div class="form-group col-md-2">
-                    <label for="Siembra">Siembra:</label>
-                    <select class="form-control" id="f_siembra" v-model="f_siembra">
-                      <option value="-1" selected>Seleccionar</option>
-                      <option :value="ls.id" v-for="(ls,
-                      index) in listadoSiembras" :key="index">{{ ls.nombre_siembra }}
-                      </option>
-                    </select>
+                    <label for="f_estado">
+                      Estado:
+                      <select class="custom-select" name="estado" id="estado" v-model="f_estado">
+                        <option value="-1">--Seleccionar--</option>
+                        <option value="0">Inactiva</option>
+                        <option value="1">Activa</option>
+                      </select>
+                    </label>
+                  </div>
+
+                  <div class="form-group col-3">
+                    <label for="siembra_activa">Siembras
+                      {{ f_estado == 0 ? "inactivas" : "activas" }} :
+                    </label>
+                    <template v-if="f_estado != '-1'">
+                      <v-select :options="filteredItems" label="nombre_siembra" :reduce="(siembra) => siembra.id"
+                        v-model="f_siembra" />
+                    </template>
+                    <template v-if="f_estado == '-1'">
+                      <v-select :options="listadoSiembras" label="nombre_siembra" :reduce="(siembra) => siembra.id"
+                        v-model="f_siembra" />
+                    </template>
                   </div>
                   <div class="form-group col-md-2">
                     <label for="t_actividad">Tipo de Actividad:
@@ -31,11 +46,14 @@
                     <select class="form-control" id="t_actividad" v-model="t_actividad">
                       <option value="-1" selected>
                         Seleccionar</option>
-                      <option v-for="(actividad,
-                      index) in listadoActividades" :key="index" v-bind:value="actividad.id">
-                        {{
-                            actividad.actividad
-                        }}</option>
+                      <template v-for="(actividad,
+                      index) in listadoActividades">
+                        <option :key="index" :value="actividad.id" v-if="actividad.actividad != 'Alimentación'">
+                          {{
+                              actividad.actividad
+                          }}</option>
+                      </template>
+
                     </select>
                   </div>
                   <div class="form-group col-md-2">
@@ -44,9 +62,9 @@
                       <option value="-1">
                         Seleccionar</option>
                       <option v-for="(recurso,
-                      index) in listadoRecursos" :key="index" v-bind:value="recurso.id">{{
-      recurso.recurso
-  }}</option>
+                      index) in listadoRecursos" :key="index" v-bind:value="recurso.id">
+                        {{ recurso.recurso }}
+                      </option>
                     </select>
                   </div>
                   <div class="form-group col-md-2">
@@ -67,7 +85,7 @@
                     </label>
                   </div>
                   <div class="form-group col-md-2">
-                    <button class="btn btn-primary rounded-circle mt-4" type="button" @click="buscarResultados()">
+                    <button class="btn btn-primary rounded-circle mt-4" type="button" @click="listar()">
                       <i class="fas fa-search"></i>
                     </button>
                   </div>
@@ -109,11 +127,17 @@
                     <td v-text="item.nombre_siembra"></td>
                     <td v-text="item.fecha_ra"></td>
                     <td v-text="item.minutos_hombre"></td>
-                    <td v-text="item.total_minutos_hombre"></td>
+                    <td>
+                      {{ item.total_minutos_hombre | numeral('$0,0.00') }}
+                    </td>
                     <td v-text="item.recurso"></td>
                     <td v-text="item.cantidad_recurso"></td>
-                    <td v-text="item.costo"></td>
-                    <td v-text="item.costo_total_recurso"></td>
+                    <td>
+                      {{ item.costo | numeral('$0,0.00') }}
+                    </td>
+                    <td>
+                      {{ item.costo_total_recurso | numeral('$0,0.00') }}
+                    </td>
                     <td v-text="item.detalles"></td>
                     <td>
                       <button class="btn btn-danger" @click="
@@ -130,12 +154,18 @@
                     <th colspan="4" class="text-right">
                       TOTAL:
                     </th>
-                    <th v-text="promedios.tmh"></th>
-                    <th v-text="promedios.ttmh"></th>
+                    <th v-text="promedios.tmh"> </th>
+                    <th>
+                      {{ promedios.ttmh | numeral('$0,0.00') }}
+                    </th>
                     <th></th>
                     <th v-text="promedios.tcr"></th>
-                    <th v-text="promedios.tc"></th>
-                    <th v-text="promedios.ctr"></th>
+                    <th>
+                      {{ promedios.tc | numeral('$0,0.00') }}
+                    </th>
+                    <th>
+                      {{ promedios.ctr | numeral('$0,0.00') }}
+                    </th>
                     <th></th>
                     <th></th>
                   </tr>
@@ -263,7 +293,9 @@
                 <span v-if="form.id_siembra.length == ''" class="text-danger mb-3">
                   Debe seleccionar al menos una siembra
                 </span>
-                <div v-for="(item, index) in listadoSiembras" :key="index">
+                <v-select :options="siembrasActivas" label="nombre_siembra" :reduce="(siembra) => siembra.id"
+                  v-model="form.id_siembra" multiple />
+                <!-- <div v-for="(item, index) in listadoSiembras" :key="index">
                   <input type="checkbox" class="form-check-input" v-bind:value="item.id" v-model="form.id_siembra"
                     :id="'siembra-' + item.id" :name="'siembra-' + item.id" />
                   <label :for="'siembra-' + item.id" class="form-check-label">
@@ -271,7 +303,7 @@
                     {{ item.nombre_siembra }}
                   </label>
                   <br />
-                </div>
+                </div> -->
               </div>
             </form>
           </div>
@@ -326,10 +358,11 @@ export default {
       hora_inicio: "07:00",
       fecha_fin: "",
       hora_fin: "07:00",
-      t_actividad: "",
+      t_actividad: "-1",
       fecha_ra1: "",
       fecha_ra2: "",
       f_siembra: "",
+      f_estado: "1",
       alimento_s: "",
       recurso_s: "",
       see_all: 0,
@@ -360,6 +393,12 @@ export default {
     downloadexcel
   },
   computed: {
+    filteredItems() {
+      return this.listadoSiembras.filter((item) => item.estado == this.f_estado);
+    },
+    siembrasActivas() {
+      return this.listadoSiembras.filter((item) => item.estado == 1);
+    },
     isActived: function () {
       return this.pagination.current_page;
     },
@@ -397,38 +436,19 @@ export default {
       let me = this;
       $("#modalRecursos").modal("show");
     },
-    buscarResultados() {
+
+    listar(page = 1) {
       let me = this;
-      if (this.f_siembra == "") {
-        this.f_s = "-1";
-      } else {
-        this.f_s = this.f_siembra;
-      }
-      if (this.t_actividad == "") {
-        this.actividad = "-1";
-      } else {
-        this.actividad = this.t_actividad;
-      }
-      if (this.see_all == "") {
-        this.check = 0;
-      } else {
-        this.check = this.see_all;
-      }
-      if (this.recurso_s == "") {
-        this.rec = "-1";
-      } else {
-        this.rec = this.recurso_s;
-      }
-      if (this.fecha_ra1 == "") {
-        this.fecha1 = "-3";
-      } else {
-        this.fecha1 = this.fecha_ra1;
-      }
-      if (this.fecha_ra2 == "") {
-        this.fecha2 = "-1";
-      } else {
-        this.fecha2 = this.fecha_ra2;
-      }
+
+      let f_siembra = this.f_siembra == "" ? "-1" : this.f_siembra;
+      let f_estado = this.f_estado == "-1" ? "-1" : this.f_estado;
+      let search_activity = this.t_actividad == "" ? "-1" : this.t_actividad;
+      let see_all = this.see_all == "" ? "0" : this.see_all;
+      let recurso_s = this.recurso_s == "" ? "-1" : this.recurso_s;
+      let fecha_ra1 = this.fecha_ra1 == "" ? "-3" : this.fecha_ra1;
+      let fecha_ra2 = this.fecha_ra2 == "" ? "-1" : this.fecha_ra2;
+
+   
       if (this.recurso_s == "") {
         this.rec = "-1";
       } else {
@@ -436,42 +456,36 @@ export default {
       }
 
       const data = {
-        f_siembra: this.f_s,
-        tipo_actividad: this.actividad,
-        recurso_s: this.rec,
-        alimento_s: this.ali,
-        fecha_ra1: this.fecha1,
-        fecha_ra2: this.fecha2,
-        see_all: this.check
+        page: page,
+        f_siembra: f_siembra,
+        f_estado: f_estado,
+        tipo_actividad: search_activity,
+        recurso_s: recurso_s,
+        fecha_ra1:fecha_ra1,
+        fecha_ra2: fecha_ra2,
+        see_all: see_all
       };
-      axios.post("api/searchResults", data).then(response => {
-        if (response.data.pagination) {
-          this.showPagination = 1;
-          me.listado = response.data.recursosNecesarios.data;
-          me.promedios = response.data.promedioRecursos;
-          me.pagination = response.data.pagination;
-        } else {
-          this.showPagination = 0;
-          me.listado = response.data.recursosNecesarios;
-          me.promedios = response.data.promedioRecursos;
-          me.pagination = [];
-        }
-      });
-    },
-    listar(page) {
-      let me = this;
+
       axios
-        .get("api/recursos-necesarios?page=" + page)
+        .get("api/recursos-necesarios", { params: data })
         .then(function (response) {
-          me.listado = response.data.recursosNecesarios.data;
-          me.promedios = response.data.promedioRecursos;
-          me.pagination = response.data.pagination;
+          if (response.data.pagination) {
+            me.showPagination = 1;
+            me.listado = response.data.recursosNecesarios.data;
+            me.promedios = response.data.promedioRecursos;
+            me.pagination = response.data.pagination;
+          } else {
+            me.showPagination = 0;
+            me.listado = response.data.recursosNecesarios;
+            me.promedios = response.data.promedioRecursos;
+            me.pagination = [];
+          }
         });
     },
     listarSiembras() {
       let me = this;
-      axios.get("api/siembras").then(function (response) {
-        me.listadoSiembras = response.data.listado_siembras;
+      axios.get("api/siembras/listado").then(function (response) {
+        me.listadoSiembras = response.data;
       });
     },
     listarAlimentos() {

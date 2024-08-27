@@ -3,7 +3,9 @@
     <div class="row justify-content-center">
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header">Informes recursos y actividades Aquamazonia</div>
+          <div class="card-header">
+            Informes recursos y actividades Aquamazonia
+          </div>
           <!-- <a href="informe-excel"><button type="submit" class="btn btn-success" name="infoSiembras"><i class="fa fa-fw fa-download"></i> Generar Excel </button></a> -->
           <div class="card-body">
             <div class="row mb-1">
@@ -13,72 +15,80 @@
                   <div class="form-group col-md-2">
                     <label for="Estado">Estado siembra </label>
                     <select class="form-control" id="estado_s" v-model="estado_s" name="estado_s">
-                      <!-- <option value="-1">Todos</option> -->
+                      <option value="-1">Todos</option>
                       <option value="0">Inactivo</option>
                       <option value="1" selected>Activo</option>
                     </select>
                   </div>
-                  <div class="form-group col-md-2">
-                    <label for="Siembra">Siembra:</label>
-                    <select class="form-control" id="f_siembra" v-model="f_siembra">
-                      <option value="-1" selected>Seleccionar</option>
-                      <template v-for="(ls, index) in listadoSiembras">
-                        <option :value="ls.id" v-if="ls.estado == estado_s" :key="index">{{ ls.nombre_siembra }}
-                        </option>
-                      </template>
-                    </select>
+                  <div class="form-group col-3">
+                    <label for="siembra_activa">Siembras
+                      {{ estado_s == 0 ? "inactivas" : "activas" }} :
+                    </label>
+                    <template v-if="estado_s != '-1'">
+                      <v-select :options="filteredItems" label="nombre_siembra" :reduce="(siembra) => siembra.id"
+                        v-model="f_siembra" />
+                    </template>
+                    <template v-if="estado_s == '-1'">
+                      <v-select :options="listadoSiembras" label="nombre_siembra" :reduce="(siembra) => siembra.id"
+                        v-model="f_siembra" />
+                    </template>
                   </div>
+
 
                   <div class="form-group col-md-2">
                     <label for="contenedor">Estanque:</label>
                     <select class="custom-select" id="contenedor" v-model="f_contenedor">
                       <option value="-1">Seleccionar</option>
                       <option :value="cont.id" v-for="(cont, index) in listadoEstanques" :key="index">
-                        {{ cont.contenedor }}</option>
+                        {{ cont.contenedor }}
+                      </option>
                     </select>
                   </div>
                   <div class="form-group col-md-2">
                     <label for="actividad">Tipo actividad: </label>
                     <select class="form-control" id="actividad" v-model="actividad_s" name="tipo_actividad"
                       @click="cambiarActividad()">
-                      <option value="-1" selected> Seleccionar</option>
+                      <option value="-1" selected>Seleccionar</option>
                       <option v-for="(actividad, index) in listadoActividades" :key="index" v-bind:value="actividad.id">
-                        {{ actividad.actividad }}</option>
+                        {{ actividad.actividad }}
+                      </option>
                     </select>
                   </div>
                   <div class="form-group col-md-2">
                     <label for="alimento">Alimento: </label>
                     <select class="form-control" id="alimento" v-model="alimento_s">
-                      <option value="-1" selected> Seleccionar</option>
+                      <option value="-1" selected>Seleccionar</option>
                       <option v-for="(alimento, index) in listadoAlimentos" :key="index" v-bind:value="alimento.id">
-                        {{ alimento.alimento }}</option>
+                        {{ alimento.alimento }}
+                      </option>
                     </select>
                   </div>
                   <div class="form-group col-md-2">
                     <label for="recurso">Recurso: </label>
                     <select class="form-control" id="recurso" v-model="recurso_s">
-                      <option value="-1" selected> Seleccionar</option>
+                      <option value="-1" selected>Seleccionar</option>
                       <option v-for="(recurso, index) in listadoRecursos" :key="index" v-bind:value="recurso.id">
-                        {{ recurso.recurso }}</option>
+                        {{ recurso.recurso }}
+                      </option>
                     </select>
                   </div>
                   <div class="form-group col-md-2">
                     <label for="search">Desde: </label>
                     <input class="form-control" type="date" placeholder="Search" aria-label="fecha_ra1"
-                      v-model="fecha_ra1">
+                      v-model="fecha_ra1" />
                   </div>
                   <div class="form-group col-md-2">
                     <label for="search">Hasta: </label>
                     <input class="form-control" type="date" placeholder="Search" aria-label="fecha_ra2"
-                      v-model="fecha_ra2">
+                      v-model="fecha_ra2" />
                   </div>
                   <div class="form-group col-md-1">
                     <label for="">Buscar</label>
-                    <button class="btn btn-primary form-control" type="button" @click="listar()"><i
-                        class="fas fa-search"></i></button>
+                    <button class="btn btn-primary form-control" type="button" @click="listar()">
+                      <i class="fas fa-search"></i>
+                    </button>
                   </div>
                   <div class="form-group col-md-2">
-
                     <downloadexcel class="btn btn-success form-control" :fetch="fetchData" :fields="json_fields"
                       name="informe-recursos.xls" type="xls">
                       <i class="fa fa-fw fa-download"></i> Generar Excel
@@ -94,10 +104,10 @@
                     <th>#</th>
                     <th>Siembra</th>
                     <th>Estado siembras</th>
-                    <th>Tipo <br>actividad</th>
+                    <th>Tipo <br />actividad</th>
                     <th>Fecha</th>
-                    <th>Minutos <br>hombre</th>
-                    <th>Costo minutos </th>
+                    <th>Minutos <br />hombre</th>
+                    <th>Costo minutos</th>
 
                     <template v-if="tipoActividad != 'Alimentación'">
                       <th>Recursos</th>
@@ -107,8 +117,8 @@
                     </template>
                     <template v-if="tipoActividad == 'Alimentación'">
                       <th>Alimentos</th>
-                      <th>Cantidada Mañana (KG)</th>
-                      <th>Cantidada Tarde (KG)</th>
+                      <th>Cantidad Mañana (KG)</th>
+                      <th>Cantidad Tarde (KG)</th>
                       <th>Costo Alimento</th>
                       <!-- <th>Costo <br>Acumulado</th> -->
                     </template>
@@ -119,15 +129,17 @@
                   <tr v-for="(lrn, index) in listadorn" :key="index">
                     <th v-text="index + 1"></th>
                     <td v-text="lrn.nombre_siembra"></td>
-                    <td v-text="estados[lrn.estado]"></td>
-                    <td v-text="lrn.actividad"></td>
-                    <td v-text="lrn.fecha_ra"></td>
-                    <td v-text="lrn.minutos_hombre + 'min'"></td>
-                    <td>{{ lrn.costo_minutosh | numeral('$0,0.00') }}</td>
+                    <td>{{ estados[lrn.estado] }}</td>
+                    <td>{{ lrn.actividad }}</td>
+                    <td>{{ lrn.fecha_ra }}</td>
+                    <td>{{ lrn.minutos_hombre + 'min' }}</td>
+                    <td>{{ lrn.costo_minutosh | numeral("$0,0.00") }}</td>
                     <template v-if="tipoActividad != 'Alimentación'">
-                      <td v-text="lrn.recurso"></td>
-                      <td v-text="lrn.cantidad_recurso"></td>
-                      <td> {{ lrn.costo_total_recurso | numeral('$0,0.00') }}</td>
+                      <td>{{ lrn.recurso }}</td>
+                      <td>{{ lrn.cantidad_recurso }}</td>
+                      <td>
+                        {{ lrn.costo_total_recurso | numeral("$0,0.00") }}
+                      </td>
                       <!-- <th v-text="lrn.costo_r_acum"></th> -->
                     </template>
 
@@ -135,10 +147,14 @@
                       <td v-text="lrn.alimento"></td>
                       <td v-text="lrn.cant_manana"></td>
                       <td v-text="lrn.cant_tarde"></td>
-                      <th>{{ lrn.costo_total_alimento | numeral('$0,0.00') }} </th>
+                      <td>
+                        {{ lrn.costo_total_alimento | numeral("$0,0.00") }}
+                      </td>
                       <!-- <th v-text="lrn.costo_a_acum" ></th> -->
-                      <th>{{ lrn.costo_total_actividad | numeral('$0,0.00') }}</th>
                     </template>
+                    <th>
+                      {{ lrn.costo_total_actividad | numeral("$0,0.00") }}
+                    </th>
                   </tr>
                 </tbody>
                 <tfoot>
@@ -155,28 +171,17 @@
                 </tfoot>
               </table>
             </div>
-            <nav v-show="showPagination" class="mt-5 navigation ">
+            <nav v-show="showPagination" class="mt-5 navigation">
               <ul class="pagination justify-content-center">
                 <li class="page-item" v-if="pagination.current_page > 1">
-                  <a class="page-link" href="#" @click.prevent="
-                    cambiarPagina(
-                      pagination.current_page - 1
-                    )
-                  ">Ant</a>
+                  <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1)">Ant</a>
                 </li>
                 <li class="page-item" v-for="page in pagesNumber" :key="page"
                   :class="[page == isActived ? 'active' : '']">
                   <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
                 </li>
-                <li class="page-item" v-if="
-                  pagination.current_page <
-                  pagination.last_page
-                ">
-                  <a class="page-link" href="#" @click.prevent="
-                    cambiarPagina(
-                      pagination.current_page + 1
-                    )
-                  ">Sig</a>
+                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
+                  <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1)">Sig</a>
                 </li>
               </ul>
             </nav>
@@ -191,24 +196,62 @@
 import downloadexcel from "vue-json-excel";
 export default {
   data() {
-
     return {
       json_fields: {
-        'Nombre Siembra': 'nombre_siembra',
-        'Estado Siembra': 'estado',
-        'Tipo de Actividad': 'actividad',
-        'Fecha Registro': 'fecha_ra',
-        'Minutos hombre': 'minutos_hombre',
-        'Costo minutos hombre': 'costo_minutosh',
-        'Recurso': 'recurso',
-        'Cantidad Recurso': 'cantidad_recurso',
-        'Costo Recurso': 'costo_total_recurso',
-        'Alimento': 'alimento',
-        'Cantidad KG mañana': 'cant_manana',
-        'Cantidad KG tarde': 'cant_tarde',
-        'Costo Alimento': 'costo_total_alimento',
-        'Costo Actividad': 'costo_total_actividad'
-
+        "Nombre Siembra": "nombre_siembra",
+        "Estado Siembra": "estado",
+        "Tipo de Actividad": "actividad",
+        "Fecha Registro": "fecha_ra",
+        "Minutos hombre": {
+          field: "minutos_hombre",
+          callback: (value) => {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Costo minutos hombre": {
+          field: "costo_minutosh",
+          callback: (value) => {
+            return numeral(value).format('0.00');
+          }
+        },
+        Recurso: "recurso",
+        "Cantidad Recurso": {
+          field: "cantidad_recurso",
+          callback: (value) => {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Costo Recurso": {
+          field: "costo_total_recurso",
+          callback: (value) => {
+            return numeral(value).format('0.00');
+          }
+        },
+        Alimento: "alimento",
+        "Cantidad KG mañana": {
+          field: "cant_manana",
+          callback: (value) => {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Cantidad KG tarde": {
+          field: "cant_tarde",
+          callback: (value) => {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Costo Alimento": {
+          field: "costo_total_alimento",
+          callback: (value) => {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Costo Actividad": {
+          field: "costo_total_actividad",
+          callback: (value) => {
+            return numeral(value).format('0.00');
+          }
+        },
       },
       listadorn: [],
       listadoActividades: [],
@@ -218,16 +261,16 @@ export default {
       listadoEstanques: [],
       imprimirRecursos: [],
       estados: [],
-      f_siembra: '',
-      f_contenedor: '',
-      estado_s: '',
-      actividad_s: '',
-      alimento_s: '',
-      recurso_s: '',
-      fecha_ra1: '',
-      fecha_ra2: '',
+      f_siembra: "",
+      f_contenedor: "",
+      estado_s: "1",
+      actividad_s: "",
+      alimento_s: "",
+      recurso_s: "",
+      fecha_ra1: "",
+      fecha_ra2: "",
       costo_acum: 0,
-      tipoActividad: '',
+      tipoActividad: "",
       //Paginación
       offset: 10,
       pagination: {
@@ -236,10 +279,10 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0
+        to: 0,
       },
       showPagination: 1,
-    }
+    };
   },
   components: {
     downloadexcel,
@@ -270,51 +313,81 @@ export default {
         from++;
       }
       return pagesArray;
+    },
+    filteredItems() {
+      return this.listadoSiembras.filter((item) => item.estado == this.estado_s);
     }
   },
   methods: {
     async fetchData() {
-      let me = this;
-      // const response = await axios.get('api/informe-recursos');
-      const response = await this.imprimirRecursos;
-      return this.imprimirRecursos;
+      return this.listadorn;
     },
     cambiarActividad() {
-      if (this.actividad_s == 1) { this.tipoActividad = 'Alimentación' } else (this.tipoActividad = '');
+      if (this.actividad_s == 1) {
+        this.tipoActividad = "Alimentación";
+      } else this.tipoActividad = "";
     },
     listar(page) {
       let me = this;
-      if (this.f_siembra == '') { this.smb = '-1' } else { this.smb = this.f_siembra }
-      if (this.estado_s == '') { this.est = '-1' } else { this.est = this.estado_s }
-      if (this.f_contenedor == '') { this.cont = '-1' } else { this.cont = this.f_contenedor }
-      if (this.actividad_s == '') { this.act = '-1' } else { this.act = this.actividad_s }
-      if (this.alimento_s == '') { this.ali = '-1' } else { this.ali = this.alimento_s }
-      if (this.recurso_s == '') { this.rec = '-1' } else { this.rec = this.recurso_s }
-      if (this.fecha_ra1 == '') { this.fec1 = '-1' } else { this.fec1 = this.fecha_ra1 }
-      if (this.fecha_ra2 == '') { this.fec2 = '-1' } else { this.fec2 = this.fecha_ra2 }
+      if (this.f_siembra == "") {
+        this.smb = "-1";
+      } else {
+        this.smb = this.f_siembra;
+      }
+      if (this.estado_s == "") {
+        this.est = "-1";
+      } else {
+        this.est = this.estado_s;
+      }
+      if (this.f_contenedor == "") {
+        this.cont = "-1";
+      } else {
+        this.cont = this.f_contenedor;
+      }
+      if (this.actividad_s == "") {
+        this.act = "-1";
+      } else {
+        this.act = this.actividad_s;
+      }
+      if (this.alimento_s == "") {
+        this.ali = "-1";
+      } else {
+        this.ali = this.alimento_s;
+      }
+      if (this.recurso_s == "") {
+        this.rec = "-1";
+      } else {
+        this.rec = this.recurso_s;
+      }
+      if (this.fecha_ra1 == "") {
+        this.fec1 = "-1";
+      } else {
+        this.fec1 = this.fecha_ra1;
+      }
+      if (this.fecha_ra2 == "") {
+        this.fec2 = "-1";
+      } else {
+        this.fec2 = this.fecha_ra2;
+      }
 
-      axios.get("api/informes", {
-        params: {
-          'f_siembra': this.smb,
-          'estado_s': this.est,
-          'f_contenedor': this.cont,
-          'actividad_s': this.act,
-          'alimento_s': this.ali,
-          'recurso_s': this.rec,
-          'fecha_ra1': this.fec1,
-          'fecha_ra2': this.fec2,
-          'page': page
-        }
-      })
+      axios
+        .get("api/informes", {
+          params: {
+            f_siembra: this.smb,
+            estado_s: this.est,
+            f_contenedor: this.cont,
+            actividad_s: this.act,
+            alimento_s: this.ali,
+            recurso_s: this.rec,
+            fecha_ra1: this.fec1,
+            fecha_ra2: this.fec2,
+            page: page,
+          },
+        })
         .then(function (response) {
           me.listadorn = response.data.recursosNecesarios.data;
           me.pagination = response.data.pagination;
-
-        })
-      // axios.get("api/traer-recursos")
-      //   .then(response => {
-      //     me.imprimirRecursos = response.data.recursosNecesarios;
-      //   })
+        });
     },
     cambiarPagina(page) {
       let me = this;
@@ -324,40 +397,34 @@ export default {
     },
     listarActividades() {
       let me = this;
-      axios.get("api/actividades")
-        .then(function (response) {
-          me.listadoActividades = response.data;
-        })
+      axios.get("api/actividades").then(function (response) {
+        me.listadoActividades = response.data;
+      });
     },
     listarAlimentos() {
       let me = this;
-      axios.get("api/alimentos")
-        .then(function (response) {
-          me.listadoAlimentos = response.data;
-        })
+      axios.get("api/alimentos").then(function (response) {
+        me.listadoAlimentos = response.data;
+      });
     },
     listarRecursos() {
       let me = this;
-      axios.get("api/recursos")
-        .then(function (response) {
-          me.listadoRecursos = response.data;
-        })
+      axios.get("api/recursos").then(function (response) {
+        me.listadoRecursos = response.data;
+      });
     },
     listarSiembras() {
       let me = this;
-      axios.get("api/siembras")
-        .then(function (response) {
-          me.listadoSiembras = response.data.listado_siembras;
-        })
+      axios.get("api/siembras/listado").then(function (response) {
+        me.listadoSiembras = response.data;
+      });
     },
     listarEstanques() {
       let me = this;
-      axios.get("api/contenedores")
-        .then(function (response) {
-          me.listadoEstanques = response.data;
-        })
+      axios.get("api/contenedores").then(function (response) {
+        me.listadoEstanques = response.data;
+      });
     },
-
   },
   mounted() {
     this.listar(1);
@@ -366,8 +433,8 @@ export default {
     this.listarRecursos();
     this.listarActividades();
     this.listarEstanques();
-    this.estados[0] = 'Inactivo';
-    this.estados[1] = 'Activo';
-  }
-}
+    this.estados[0] = "Inactivo";
+    this.estados[1] = "Activo";
+  },
+};
 </script>

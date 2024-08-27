@@ -11,23 +11,33 @@ window.Vue = require('vue');
 import VueRouter from 'vue-router'
 import Swal from 'sweetalert2'
 import Vue from 'vue'
-import { Form, HasError, AlertError } from 'vform'
-
+import vSelect from 'vue-select'
+import 'vue-select/dist/vue-select.css';
+// import 'vue-select/dist/vue-select'
 import JsonExcel from 'vue-json-excel'
+import vueNumeralFilterInstaller from 'vue-numeral-filter';
+import {  HasError, AlertError } from 'vform'
+
 Vue.component('downloadExcel', JsonExcel)
+Vue.component("pagination", require("laravel-vue-pagination"));
+Vue.component('v-select', vSelect)
+
+Vue.component(HasError.name, HasError)
+Vue.component(AlertError.name, AlertError)
+
+
 window.Swal = Swal
 Vue.use(VueRouter)
-
-import vueNumeralFilterInstaller from 'vue-numeral-filter';
 Vue.use(vueNumeralFilterInstaller, { locale: 'es' });
+
 
 let routes = [
     { path: '/', component: require('./components/Dashboard.vue').default },
     { path: '/dashboard', component: require('./components/Dashboard.vue').default },
     { path: '/contenedores', component: require('./components/Contenedores.vue').default },
     { path: '/especies', component: require('./components/Especies.vue').default },
-    { path: '/alimentos', component: require('./components/Alimentos.vue').default },
-    { path: '/recursos', component: require('./components/Recursos.vue').default },
+    { path: '/foods', component: require('./components/food/foods.vue').default },
+    { path: '/recursos', component: require('./components/resource/resources.vue').default },
     { path: '/usuarios', component: require('./components/users/users.vue').default },
     { path: '/siembras', component: require('./components/stocking/siembras.vue').default },
     // { path: '/siembras', component: require('./components/Siembras.vue').default },
@@ -46,8 +56,12 @@ let routes = [
     { path: '/historial-costos-alimentos', component: require('./components/HistorialCostosAlimentos.vue').default },
     { path: '/historial-costos-recursos', component: require('./components/HistorialCostosRecursos.vue').default },
     { path: '/informe-consolidado-alimentos', component: require('./components/InformeConsolidadoAlimentos.vue').default },
-    { path: '/phases', component: require('./components/phases/phases.vue').default }
-
+    { path: '/phases', component: require('./components/phase/phases.vue').default },
+    { path: '/warehouses', component: require('./components/warehouse/warehouses.vue').default },
+    { path: '/resource-categories', component: require('./components/resource-category/resource-categories.vue').default },
+    { path: '/food-categories', component: require('./components/food-category/food-categories.vue').default },
+    { path: '/providers', component: require('./components/provider/providers.vue').default },
+    { path: '/brands', component: require('./components/brand/brands.vue').default },
 ]
 
 const router = new VueRouter({
