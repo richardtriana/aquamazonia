@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Recursos;
+use App\HistorialRecurso;
 
 class RecursosController extends Controller
 {
@@ -15,7 +16,6 @@ class RecursosController extends Controller
      */
     public function index()
     {
-        //
         $recursos = Recursos::orderBy('recurso', 'asc')->get();
         return $recursos;
     }
@@ -28,16 +28,36 @@ class RecursosController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        $val = $request->validate([
-            'recurso' => 'required',            
+        $request->validate([
+            'recurso' => 'required',
             'unidad' => 'required',
-            'costo' => 'required'
+            'costo' => 'required',
+            'warehouse_id' => 'nullable',
+            'expiration_date' => 'nullable',
+            'cantidad' => 'numeric',
+            'cantidad_minima' => 'numeric',
+            'cantidad_maxima' => 'numeric'
         ]);
-        $alimento = Recursos::create([
-            'recurso' => $request['recurso'],            
+
+        $recursos = Recursos::create([
+            'recurso' => $request['recurso'],
             'unidad' => $request['unidad'],
-            'costo' => $request['costo']
+            'costo' => $request['costo'],
+            'warehouse_id' => $request['warehouse_id'],
+            'category_id' => $request['category_id'],
+            'brand_id' => $request['brand_id'],
+            'provider_id' => $request['provider_id'],
+            'expiration_date' => $request['expiration_date'],
+            'cantidad' => $request['cantidad'],
+            'cantidad_minima' => $request['cantidad_minima'],
+            'cantidad_maxima' => $request['cantidad_maxima'],
+
+        ]);
+
+        HistorialRecurso::create([
+            'id_recurso' => $recursos['id'],
+            'costo' => $recursos['costo'],
+            'fecha_registro' => date('Y-m-d')
         ]);
     }
 
@@ -49,7 +69,7 @@ class RecursosController extends Controller
      */
     public function show($id)
     {
-        //
+        abort(404);
     }
 
     /**
@@ -61,10 +81,16 @@ class RecursosController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
         $recurso = Recursos::findOrFail($id);
         $recurso->update($request->all());
-        return 'ok';
+
+        HistorialRecurso::create([
+            'id_recurso' => $request['id'],
+            'costo' => $request['costo'],
+            'fecha_registro' => date('Y-m-d')
+        ]);
+
+        return $recurso;
     }
 
     /**
@@ -75,8 +101,9 @@ class RecursosController extends Controller
      */
     public function destroy($id)
     {
-        //
         Recursos::destroy($id);
+        HistorialRecurso::where('id_recurso', $id)->delete();
+
         return 'eliminado';
     }
 }
