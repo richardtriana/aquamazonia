@@ -75,4 +75,5 @@ Route::namespace('API')->group(function () {
 	Route::get('traer-existencias', 'InformeController@traerExistencias');
 	Route::get('traer-existencias-detalle', 'InformeController@traerExistenciasDetalle');
 	Route::get('parametros-contenedores', 'ParametroCalidadController@listadoParametrosContenedores');
+	Route::get('food/list', 'AlimentosController@list');
 });

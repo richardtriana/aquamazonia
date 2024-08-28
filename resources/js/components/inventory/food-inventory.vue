@@ -3,7 +3,7 @@
         <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
-                    <div class="card-header">Gestión de alimentos</div>
+                    <div class="card-header">Inventario de alimentos</div>
 
                     <div class="card-body">
                         <div class="row">
@@ -11,7 +11,7 @@
                             <div class="form-group col-xs-6 col-sm-6 col-md-4 col-lg-3">
                                 <label for="warehouse" class="col-form-label">Bodega
                                 </label>
-                                <v-select label="warehouse" class="w-100" v-model="filter.warehouse" :reduce="(option) => option.id"
+                                <v-select label="warehouse" class="w-100" v-model="filter.warehouse_id" :reduce="(option) => option.id"
                                     :filterable="false" :options="listWarehouses" @search="onSearchWarehouse">
                                     <template slot="no-options">
                                         Escribe para iniciar la búsqueda
@@ -32,7 +32,7 @@
                             <div class="form-group col-xs-6 col-sm-6 col-md-4 col-lg-3">
                                 <label for="brand" class="col-form-label">Marca
                                 </label>
-                                <v-select label="brand" class="w-100" v-model="filter.brand" :reduce="(option) => option.id"
+                                <v-select label="brand" class="w-100" v-model="filter.brand_id" :reduce="(option) => option.id"
                                     :filterable="false" :options="listBrands" @search="onSearchBrand">
                                     <template slot="no-options">
                                         Escribe para iniciar la búsqueda
@@ -53,7 +53,7 @@
                             <div class="form-group col-xs-6 col-sm-6 col-md-4 col-lg-3">
                                 <label for="food_category" class="col-form-label">Categoría
                                 </label>
-                                <v-select label="food_category" class="w-100" v-model="filter.food_category" :reduce="(option) => option.id"
+                                <v-select label="food_category" class="w-100" v-model="filter.food_category_id" :reduce="(option) => option.id"
                                     :filterable="false" :options="listFoodCategories" @search="onSearchFoodCategory">
                                     <template slot="no-options">
                                         Escribe para iniciar la búsqueda
@@ -82,14 +82,6 @@
                             </div>
                             
                         </div>
-                        <!-- <div class="row mb-1">
-                            <div class="col-12 text-right">
-                                <button class="btn btn-success" @click="$refs.FormFood.ResetData()" data-toggle="modal"
-                                    data-target="#modalFoods">
-                                    Añadir Alimento
-                                </button>
-                            </div>
-                        </div> -->
                         <div class="row">
                             <table class="table table-hover table-sm table-bordered">
                                 <thead class="thead-primary">
@@ -148,15 +140,13 @@ export default {
     methods: {
         listFoods() {
             let me = this;
-
-
             let data = {
                 page:1,
                 ...this.filter
 
             }
-            axios.get("api/alimentos",{ params: data }).then(function (response) {
-                me.listado = response.data;
+            axios.get("api/food/list",{ params: data }).then(function (response) {
+                me.listado = response.data.foods.data;
             });
         },
         onSearchWarehouse(search, loading) {

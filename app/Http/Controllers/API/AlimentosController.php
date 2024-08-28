@@ -14,11 +14,46 @@ class AlimentosController extends Controller
    *
    * @return \Illuminate\Http\Response
    */
-  public function index()
+  public function index(Request $request)
   {
-    //
+
     $alimentos = Alimento::all();
     return $alimentos;
+  }
+
+  /**
+   * Display a listing of the resource for inventory.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function list(Request $request)
+  {
+    $nro_results = $request->nro_results ?? 15;
+    $category_id = $request->food_category_id;
+    $brand_id = $request->brand_id;
+    $warehouse_id = $request->warehouse_id;
+
+    $foods = Alimento::orderBy('alimento', 'asc')
+      ->where(function ($query) use ($category_id) {
+        if (!is_null($category_id) && $category_id != '' && $category_id != 'all') {
+          $query->where('category_id', 'LIKE',  "%$category_id%");
+        }
+      })->where(function ($query) use ($brand_id) {
+        if (!is_null($brand_id) && $brand_id != '' && $brand_id != 'all') {
+          $query->where('brand_id', 'LIKE',  "%$brand_id%");
+        }
+      })->where(function ($query) use ($warehouse_id) {
+        if (!is_null($warehouse_id) && $warehouse_id != '' && $warehouse_id != 'all') {
+          $query->where('warehouse_id', 'LIKE',  "%$warehouse_id%");
+        }
+      })
+      ->paginate($nro_results);
+
+    return response()->json([
+      'status' => 'success',
+      'code' => 200,
+      'foods' => $foods
+    ], 200);
   }
 
   /**
@@ -32,10 +67,10 @@ class AlimentosController extends Controller
     $val = $request->validate([
       'alimento' => 'required',
       'costo_kg' => 'required',
-      'warehouse_id'=> 'nullable',
-      'category_id'=> 'nullable',
-      'brand_id'=> 'nullable',
-      'provider_id'=> 'nullable',
+      'warehouse_id' => 'nullable',
+      'category_id' => 'nullable',
+      'brand_id' => 'nullable',
+      'provider_id' => 'nullable',
       'cantidad' => 'numeric',
       'cantidad_minima' => 'numeric',
       'cantidad_maxima' => 'numeric'
@@ -85,7 +120,7 @@ class AlimentosController extends Controller
     HistorialAlimento::create([
       'id_alimento' => $request['id'],
       'costo' => $request['costo_kg'],
-      'fecha_registro' => date('Y-m-d')      
+      'fecha_registro' => date('Y-m-d')
     ]);
 
     return $alimento;

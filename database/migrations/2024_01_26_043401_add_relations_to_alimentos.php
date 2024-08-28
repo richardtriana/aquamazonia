@@ -29,7 +29,7 @@ return new class extends Migration
 
             $table->foreign('category_id')
                 ->references('id')
-                ->on('resource_categories');
+                ->on('food_categories');
 
             $table->foreign('warehouse_id')
                 ->references('id')

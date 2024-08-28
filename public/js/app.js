@@ -6024,10 +6024,10 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       var data = _objectSpread({
         page: 1
       }, this.filter);
-      axios.get("api/alimentos", {
+      axios.get("api/food/list", {
         params: data
       }).then(function (response) {
-        me.listado = response.data;
+        me.listado = response.data.foods.data;
       });
     },
     onSearchWarehouse: function onSearchWarehouse(search, loading) {
@@ -16505,7 +16505,7 @@ var render = function render() {
     staticClass: "card"
   }, [_c("div", {
     staticClass: "card-header"
-  }, [_vm._v("Gestión de alimentos")]), _vm._v(" "), _c("div", {
+  }, [_vm._v("Inventario de alimentos")]), _vm._v(" "), _c("div", {
     staticClass: "card-body"
   }, [_c("div", {
     staticClass: "row"
@@ -16545,11 +16545,11 @@ var render = function render() {
       }
     }]),
     model: {
-      value: _vm.filter.warehouse,
+      value: _vm.filter.warehouse_id,
       callback: function callback($$v) {
-        _vm.$set(_vm.filter, "warehouse", $$v);
+        _vm.$set(_vm.filter, "warehouse_id", $$v);
       },
-      expression: "filter.warehouse"
+      expression: "filter.warehouse_id"
     }
   }, [_c("template", {
     slot: "no-options"
@@ -16589,11 +16589,11 @@ var render = function render() {
       }
     }]),
     model: {
-      value: _vm.filter.brand,
+      value: _vm.filter.brand_id,
       callback: function callback($$v) {
-        _vm.$set(_vm.filter, "brand", $$v);
+        _vm.$set(_vm.filter, "brand_id", $$v);
       },
-      expression: "filter.brand"
+      expression: "filter.brand_id"
     }
   }, [_c("template", {
     slot: "no-options"
@@ -16633,11 +16633,11 @@ var render = function render() {
       }
     }]),
     model: {
-      value: _vm.filter.food_category,
+      value: _vm.filter.food_category_id,
       callback: function callback($$v) {
-        _vm.$set(_vm.filter, "food_category", $$v);
+        _vm.$set(_vm.filter, "food_category_id", $$v);
       },
-      expression: "filter.food_category"
+      expression: "filter.food_category_id"
     }
   }, [_c("template", {
     slot: "no-options"
