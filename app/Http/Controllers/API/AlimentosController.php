@@ -83,7 +83,7 @@ class AlimentosController extends Controller
     $alimento->update($request->all());
 
     HistorialAlimento::create([
-      'alimento_id' => $request['id'],
+      'id_alimento' => $request['id'],
       'costo' => $request['costo_kg'],
       'fecha_registro' => date('Y-m-d')      
     ]);
@@ -101,7 +101,7 @@ class AlimentosController extends Controller
   {
     //
     Alimento::destroy($id);
-    HistorialAlimento::where('alimento_id', $id)->delete();
+    HistorialAlimento::where('id_alimento', $id)->delete();
 
     return 'eliminado';
   }

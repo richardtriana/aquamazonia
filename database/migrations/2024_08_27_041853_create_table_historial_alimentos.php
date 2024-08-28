@@ -15,10 +15,10 @@ return new class extends Migration
     {
         Schema::create('historial_costos_alimentos', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('alimento_id')->nullable();
+            $table->foreignId('id_alimento')->nullable();
             $table->float("costo")->default(0);
             $table->date("fecha_registro")->nullable();
-            $table->foreign('alimento_id')
+            $table->foreign('id_alimento')
                 ->references('id')
                 ->on('alimentos');
             $table->timestamps();

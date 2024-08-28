@@ -62,6 +62,9 @@ let routes = [
     { path: '/food-categories', component: require('./components/food-category/food-categories.vue').default },
     { path: '/providers', component: require('./components/provider/providers.vue').default },
     { path: '/brands', component: require('./components/brand/brands.vue').default },
+    //inventario
+    { path: '/food-inventory', component: require('./components/inventory/food-inventory.vue').default },
+
 ]
 
 const router = new VueRouter({
