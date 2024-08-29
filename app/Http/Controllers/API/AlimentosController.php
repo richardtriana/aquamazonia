@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Alimento;
 use App\HistorialAlimento;
+use App\Http\Controllers\GetReportTotalController;
 
 class AlimentosController extends Controller
 {
@@ -49,10 +50,14 @@ class AlimentosController extends Controller
       })
       ->paginate($nro_results);
 
+      $total_products = new GetReportTotalController();
+      $total_products = $total_products->reportTotalAlimentos($request);
+
     return response()->json([
       'status' => 'success',
       'code' => 200,
-      'foods' => $foods
+      'foods' => $foods,
+      'totals' => $total_products
     ], 200);
   }
 
@@ -64,7 +69,7 @@ class AlimentosController extends Controller
    */
   public function store(Request $request)
   {
-    $val = $request->validate([
+    $request->validate([
       'alimento' => 'required',
       'costo_kg' => 'required',
       'warehouse_id' => 'nullable',

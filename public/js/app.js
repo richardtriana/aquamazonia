@@ -6009,7 +6009,8 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
-      listado: [],
+      listado: {},
+      totals: {},
       listWarehouses: [],
       listBrands: [],
       listFoodCategories: [],
@@ -6020,14 +6021,16 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
   },
   methods: {
     listFoods: function listFoods() {
+      var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       var me = this;
       var data = _objectSpread({
-        page: 1
+        page: page
       }, this.filter);
       axios.get("api/food/list", {
         params: data
       }).then(function (response) {
-        me.listado = response.data.foods.data;
+        me.listado = response.data.foods;
+        me.totals = response.data.totals;
       });
     },
     onSearchWarehouse: function onSearchWarehouse(search, loading) {
@@ -16508,7 +16511,33 @@ var render = function render() {
   }, [_vm._v("Inventario de alimentos")]), _vm._v(" "), _c("div", {
     staticClass: "card-body"
   }, [_c("div", {
-    staticClass: "row"
+    staticClass: "row justify-content-between"
+  }, [_c("div", {
+    staticClass: "col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-end-xxl-0 border-bottom-xxl-0 border-end border-bottom pb-4 pb-xxl-0"
+  }, [_c("span", {
+    staticClass: "uil fs-5 lh-1 uil-envelope text-primary"
+  }), _vm._v(" "), _c("h1", {
+    staticClass: "fs-5 pt-3"
+  }, [_vm._v(_vm._s(_vm.totals.numero_de_productos))]), _vm._v(" "), _c("p", {
+    staticClass: "fs-9 mb-0"
+  }, [_vm._v("Numero de referencias")])]), _vm._v(" "), _c("div", {
+    staticClass: "col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-end-xxl-0 border-bottom-xxl-0 border-end-md border-bottom pb-4 pb-xxl-0"
+  }, [_c("span", {
+    staticClass: "uil fs-5 lh-1 uil-envelope-upload text-info"
+  }), _vm._v(" "), _c("h1", {
+    staticClass: "fs-5 pt-3"
+  }, [_vm._v(_vm._s(_vm.totals.cantidad_de_productos))]), _vm._v(" "), _c("p", {
+    staticClass: "fs-9 mb-0"
+  }, [_vm._v("Cantidad de alimentos")])]), _vm._v(" "), _c("div", {
+    staticClass: "col-6 col-md-4 col-xxl-2 text-center border-translucent border-start-xxl border-bottom-xxl-0 border-bottom border-end border-end-md-0 pb-4 pb-xxl-0 pt-4 pt-md-0"
+  }, [_c("span", {
+    staticClass: "uil fs-5 lh-1 uil-envelopes text-primary"
+  }), _vm._v(" "), _c("h1", {
+    staticClass: "fs-5 pt-3"
+  }, [_vm._v(_vm._s(_vm._f("numeral")(_vm.totals.costo_stock, "$0,0.00")))]), _vm._v(" "), _c("p", {
+    staticClass: "fs-9 mb-0"
+  }, [_vm._v("Valor Stock")])])]), _vm._v(" "), _c("div", {
+    staticClass: "row mt-2"
   }, [_c("div", {
     staticClass: "form-group col-xs-6 col-sm-6 col-md-4 col-lg-3"
   }, [_c("label", {
@@ -16647,7 +16676,7 @@ var render = function render() {
     attrs: {
       "for": "filter.nro_results"
     }
-  }, [_vm._v("Mostrar " + _vm._s(_vm.filter.nro_results) + " resultados por página")]), _vm._v(" "), _c("input", {
+  }, [_vm._v("Mostrar " + _vm._s(_vm.filter.nro_results) + " resultados por\n                                página")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
@@ -16680,7 +16709,7 @@ var render = function render() {
     staticClass: "row"
   }, [_c("table", {
     staticClass: "table table-hover table-sm table-bordered"
-  }, [_vm._m(0), _vm._v(" "), _c("tbody", _vm._l(_vm.listado, function (alimento, index) {
+  }, [_vm._m(0), _vm._v(" "), _c("tbody", _vm._l(_vm.listado.data, function (alimento, index) {
     return _c("tr", {
       key: index
     }, [_c("th", {
@@ -16694,12 +16723,37 @@ var render = function render() {
       domProps: {
         textContent: _vm._s(alimento.alimento)
       }
-    }), _vm._v(" "), _c("td", {
-      domProps: {
-        textContent: _vm._s(alimento.costo_kg)
-      }
-    }), _vm._v(" "), _c("td", [_vm._v(_vm._s(alimento.category ? alimento.category.category : ""))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(alimento.cantidad))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(alimento.cantidad_minima))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(alimento.cantidad_maxima))]), _vm._v(" "), _c("td", [_vm._v("\n                                     opciojnes\n                                    ")])]);
-  }), 0)])])])])])])]);
+    }), _vm._v(" "), _c("td", [_vm._v(_vm._s(_vm._f("numeral")(alimento.costo_kg, "$0,0.00")))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(alimento.category ? alimento.category.category : ""))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(alimento.cantidad))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(alimento.cantidad_minima))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(alimento.cantidad_maxima))]), _vm._v(" "), _c("td", [alimento.activo ? _c("span", [_vm._v(" Activo")]) : _c("span", [_vm._v("Inactivo")])])]);
+  }), 0)])]), _vm._v(" "), _c("pagination", {
+    attrs: {
+      align: "center",
+      data: _vm.listado,
+      limit: 8
+    },
+    on: {
+      "pagination-change-page": _vm.listFoods
+    }
+  }, [_c("span", {
+    attrs: {
+      slot: "prev-nav"
+    },
+    slot: "prev-nav"
+  }, [_c("i", {
+    staticClass: "fa fa-angle-left",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })]), _vm._v(" "), _c("span", {
+    attrs: {
+      slot: "next-nav"
+    },
+    slot: "next-nav"
+  }, [_c("i", {
+    staticClass: "fa fa-angle-right",
+    attrs: {
+      "aria-hidden": "true"
+    }
+  })])])], 1)])])])]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
@@ -16722,7 +16776,7 @@ var staticRenderFns = [function () {
     attrs: {
       scope: "col"
     }
-  }, [_vm._v("Opciones")])])]);
+  }, [_vm._v("Estado")])])]);
 }];
 render._withStripped = true;
 
