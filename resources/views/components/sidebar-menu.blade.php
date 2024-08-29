@@ -124,7 +124,7 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <router-link class="dropdown-item" to="/food-inventory">Alimentos</router-link>
-                            <router-link class="dropdown-item" to="/foods">Recursos</router-link>                           
+                            <router-link class="dropdown-item" to="/resource-inventory">Recursos</router-link>                           
                         </div>
                     </li>
                     <li class="nav-item col-nav-item dropdown">

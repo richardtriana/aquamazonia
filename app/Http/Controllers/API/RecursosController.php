@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Recursos;
 use App\HistorialRecurso;
+use App\Http\Controllers\GetReportTotalController;
 
 class RecursosController extends Controller
 {
@@ -19,6 +20,47 @@ class RecursosController extends Controller
         $recursos = Recursos::orderBy('recurso', 'asc')->get();
         return $recursos;
     }
+
+    
+  /**
+   * Display a listing of the resource for inventory.
+   *
+   * @return \Illuminate\Http\Response
+   */
+  public function list(Request $request)
+  {
+    $nro_results = $request->nro_results ?? 15;
+    $category_id = $request->resource_category_id;
+    $brand_id = $request->brand_id;
+    $warehouse_id = $request->warehouse_id;
+
+    $resources = Recursos::orderBy('recurso', 'asc')
+      ->where(function ($query) use ($category_id) {
+        if (!is_null($category_id) && $category_id != '' && $category_id != 'all') {
+          $query->where('category_id', 'LIKE',  "%$category_id%");
+        }
+      })->where(function ($query) use ($brand_id) {
+        if (!is_null($brand_id) && $brand_id != '' && $brand_id != 'all') {
+          $query->where('brand_id', 'LIKE',  "%$brand_id%");
+        }
+      })->where(function ($query) use ($warehouse_id) {
+        if (!is_null($warehouse_id) && $warehouse_id != '' && $warehouse_id != 'all') {
+          $query->where('warehouse_id', 'LIKE',  "%$warehouse_id%");
+        }
+      })
+      ->paginate($nro_results);
+
+      $total_products = new GetReportTotalController();
+      $total_products = $total_products->reportTotalRecursos($request);
+
+    return response()->json([
+      'status' => 'success',
+      'code' => 200,
+      'resources' => $resources,
+      'totals' => $total_products
+    ], 200);
+  }
+
 
     /**
      * Store a newly created resource in storage.
