@@ -13,12 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('resource_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('category');
-            $table->boolean('state');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('resource_categories')) {
+            Schema::create('resource_categories', function (Blueprint $table) {
+                $table->id();
+                $table->string('category');
+                $table->boolean('state');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

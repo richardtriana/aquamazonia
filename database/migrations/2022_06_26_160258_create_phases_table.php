@@ -13,11 +13,13 @@ class CreatePhasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('phases', function (Blueprint $table) {
-            $table->id();
-            $table->string('phase');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('phases')) {
+            Schema::create('phases', function (Blueprint $table) {
+                $table->id();
+                $table->string('phase');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -13,15 +13,17 @@ class CreatePurchasesTable extends Migration
      */
     public function up()
     {
-        Schema::create('purchases', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('provider_id');
-            $table->foreignId('product_id');
-            $table->float('quantity', 20, 2)->default(0);
-            $table->float('price', 20, 2)->default(0);
-            $table->float('total_cost', 20, 2)->default(0);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('purchases')) {
+            Schema::create('purchases', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('provider_id');
+                $table->foreignId('product_id');
+                $table->float('quantity', 20, 2)->default(0);
+                $table->float('price', 20, 2)->default(0);
+                $table->float('total_cost', 20, 2)->default(0);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

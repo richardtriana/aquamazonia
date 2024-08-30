@@ -13,16 +13,18 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('historial_costos_alimentos', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('id_alimento')->nullable();
-            $table->float("costo")->default(0);
-            $table->date("fecha_registro")->nullable();
-            $table->foreign('id_alimento')
-                ->references('id')
-                ->on('alimentos');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('historial_costos_alimentos')) {
+            Schema::create('historial_costos_alimentos', function (Blueprint $table) {
+                $table->id();
+                $table->foreignId('id_alimento')->nullable();
+                $table->float("costo")->default(0);
+                $table->date("fecha_registro")->nullable();
+                $table->foreign('id_alimento')
+                    ->references('id')
+                    ->on('alimentos');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

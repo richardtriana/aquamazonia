@@ -13,12 +13,14 @@ class CreateWarehousesTable extends Migration
      */
     public function up()
     {
-        Schema::create('warehouses', function (Blueprint $table) {
-            $table->id();
-            $table->string('warehouse');
-            $table->boolean('state')->default(1);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('warehouses')) {
+            Schema::create('warehouses', function (Blueprint $table) {
+                $table->id();
+                $table->string('warehouse');
+                $table->boolean('state')->default(1);
+                $table->timestamps();
+            });
+        }
     }
 
     /**

@@ -13,12 +13,14 @@ class CreateProvidersTable extends Migration
      */
     public function up()
     {
-        Schema::create('providers', function (Blueprint $table) {
-            $table->id();
-            $table->string('provider');
-            $table->boolean('state')->default(1);
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('providers')) {
+            Schema::create('providers', function (Blueprint $table) {
+                $table->id();
+                $table->string('provider');
+                $table->boolean('state')->default(1);
+                $table->timestamps();
+            });
+        }
     }
 
     /**
