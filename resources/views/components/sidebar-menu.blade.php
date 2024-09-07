@@ -124,7 +124,11 @@
                         </a>
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
                             <router-link class="dropdown-item" to="/food-inventory">Alimentos</router-link>
-                            <router-link class="dropdown-item" to="/resource-inventory">Recursos</router-link>                           
+                            <router-link class="dropdown-item" to="/resource-inventory">Recursos</router-link>      
+                            <router-link class="dropdown-item" to="/stock/foods">Stock Alimentos</router-link>         
+                            <router-link class="dropdown-item" to="/stock/resources">Stock Recursos</router-link>                              
+                            <!-- <router-link class="dropdown-item" to="/purchases">Compras</router-link>                            -->
+                            <!-- <router-link class="dropdown-item" to="/kardex/foods">Compras</router-link>                            -->
                         </div>
                     </li>
                     <li class="nav-item col-nav-item dropdown">

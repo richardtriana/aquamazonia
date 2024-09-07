@@ -65,6 +65,9 @@ let routes = [
     //inventario
     { path: '/food-inventory', component: require('./components/inventory/food-inventory.vue').default },
     { path: '/resource-inventory', component: require('./components/inventory/resource-inventory.vue').default },
+    { path: '/kardex/foods', component: require('./components/kardex/food-kardex.vue').default },
+    { path: '/stock/foods', component: require('./components/stock/food-stock.vue').default },
+    { path: '/stock/resources', component: require('./components/stock/resource-stock.vue').default },
 
 ]
 

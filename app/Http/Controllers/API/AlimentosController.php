@@ -33,6 +33,10 @@ class AlimentosController extends Controller
     $category_id = $request->food_category_id;
     $brand_id = $request->brand_id;
     $warehouse_id = $request->warehouse_id;
+    $warehouse_id = $request->warehouse_id;
+    $quantity_sign = $request->quantity_sign;
+    $quantity = $request->quantity;
+    $food = $request->food;
 
     $foods = Alimento::orderBy('alimento', 'asc')
       ->where(function ($query) use ($category_id) {
@@ -47,11 +51,20 @@ class AlimentosController extends Controller
         if (!is_null($warehouse_id) && $warehouse_id != '' && $warehouse_id != 'all') {
           $query->where('warehouse_id', 'LIKE',  "%$warehouse_id%");
         }
+      })->where(function ($query) use ($food) {
+        if (!is_null($food) && $food != '' && $food != 'all') {
+          $query->where('alimento', 'LIKE',  "%$food%");
+        }
+      })
+      ->where(function ($query) use ($quantity_sign, $quantity) {
+        if (!is_null($quantity_sign) && $quantity_sign != '' && $quantity_sign != 'all') {
+          $query->where('cantidad', "$quantity_sign", "$quantity");
+        }
       })
       ->paginate($nro_results);
 
-      $total_products = new GetReportTotalController();
-      $total_products = $total_products->reportTotalAlimentos($request);
+    $total_products = new GetReportTotalController();
+    $total_products = $total_products->reportTotalAlimentos($request);
 
     return response()->json([
       'status' => 'success',
@@ -130,6 +143,18 @@ class AlimentosController extends Controller
 
     return $alimento;
   }
+
+	/** food/stock-update/{alimento} */
+	public function updateStockById(Request $request, Alimento $alimento)
+	{
+		// $product = Product::findOrFail($id);
+		$alimento->cantidad = $alimento->cantidad + $request->cantidad;
+		$alimento->save();
+
+		// $kardexController = new KardexController();
+		// $subject = $request->subject ?: "Actualización de stock";
+		// $kardexController->storeKardex($product->id, 'REINGRESO', $request->quantity, $subject);
+	}
 
   /**
    * Remove the specified resource from storage.
