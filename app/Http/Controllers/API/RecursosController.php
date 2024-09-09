@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Recursos;
 use App\HistorialRecurso;
 use App\Http\Controllers\GetReportTotalController;
+use App\Http\Controllers\KardexController;
 
 class RecursosController extends Controller
 {
@@ -150,13 +151,35 @@ class RecursosController extends Controller
   /** resource/stock-update/{recurso} */
   public function updateStockById(Request $request, Recursos $recurso)
   {
-    // $product = Product::findOrFail($id);
-    $recurso->cantidad = $recurso->cantidad + $request->cantidad;
-    $recurso->save();
+    try {
+      $recurso->cantidad = $recurso->cantidad + $request->cantidad;
+      $recurso->save();
 
-    // $kardexController = new KardexController();
-    // $subject = $request->subject ?: "Actualización de stock";
-    // $kardexController->storeKardex($product->id, 'REINGRESO', $request->quantity, $subject);
+      // $request->merge(['add_amount' => $amount]);
+      $dataStock = (object)[
+        'recurso_id' => $recurso->id,
+        'alimento_id' => null,
+        'tipo' => 'REINGRESO',
+        'cantidad' => $request->cantidad,
+        'descripcion' => $request->descripcion ?: "Actualización de stock"
+      ];
+      $kardexController = new KardexController();
+      $kardexController->storeKardex($dataStock);
+
+      return response()->json([
+        'status' => 'success',
+        'code' => 200,
+        'message' => 'Datos guardados exitosamente'
+      ], 200);
+
+    } catch (\Throwable $th) {
+      //throw $th;
+      return response()->json([
+        'status' => 'error',
+        'code' => 400,
+        'message' => $th->getMessage()
+      ], 400);
+    }
   }
 
 

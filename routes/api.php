@@ -51,7 +51,8 @@ Route::apiResources([
 	'resource-categories' => 'ResourceCategoryController',
 	'food-categories' => 'FoodCategoryController',
 	'providers' =>  'ProviderController',
-	'brands' =>  'BrandController'
+	'brands' =>  'BrandController',
+	'kardex' =>  'KardexController'
 ]);
 
 

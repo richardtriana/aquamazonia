@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Alimento;
 use App\HistorialAlimento;
 use App\Http\Controllers\GetReportTotalController;
+use App\Http\Controllers\KardexController;
 
 class AlimentosController extends Controller
 {
@@ -144,17 +145,38 @@ class AlimentosController extends Controller
     return $alimento;
   }
 
-	/** food/stock-update/{alimento} */
-	public function updateStockById(Request $request, Alimento $alimento)
-	{
-		// $product = Product::findOrFail($id);
-		$alimento->cantidad = $alimento->cantidad + $request->cantidad;
-		$alimento->save();
+  /** food/stock-update/{alimento} */
+  public function updateStockById(Request $request, Alimento $alimento)
+  {
+    try {
+      $alimento->cantidad = $alimento->cantidad + $request->cantidad;
+      $alimento->save();
 
-		// $kardexController = new KardexController();
-		// $subject = $request->subject ?: "Actualización de stock";
-		// $kardexController->storeKardex($product->id, 'REINGRESO', $request->quantity, $subject);
-	}
+      // $request->merge(['add_amount' => $amount]);
+      $dataStock = (object)[
+        'alimento_id' => $alimento->id,
+        'recurso_id' => null,
+        'tipo' => 'REINGRESO',
+        'cantidad' => $request->cantidad,
+        'descripcion' => $request->descripcion ?: "Actualización de stock"
+      ];
+      $kardexController = new KardexController();
+      $kardexController->storeKardex($dataStock);
+
+      return response()->json([
+        'status' => 'success',
+        'code' => 200,
+        'message' => 'Datos guardados exitosamente'
+      ], 200);
+    } catch (\Throwable $th) {
+      //throw $th;
+      return response()->json([
+        'status' => 'error',
+        'code' => 400,
+        'message' => $th->getMessage()
+      ], 400);
+    }
+  }
 
   /**
    * Remove the specified resource from storage.

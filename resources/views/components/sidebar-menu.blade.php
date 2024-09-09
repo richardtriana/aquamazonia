@@ -128,7 +128,8 @@
                             <router-link class="dropdown-item" to="/stock/foods">Stock Alimentos</router-link>         
                             <router-link class="dropdown-item" to="/stock/resources">Stock Recursos</router-link>                              
                             <!-- <router-link class="dropdown-item" to="/purchases">Compras</router-link>                            -->
-                            <!-- <router-link class="dropdown-item" to="/kardex/foods">Compras</router-link>                            -->
+                            <router-link class="dropdown-item" to="/kardex/foods">Kardex Alimentos</router-link>                           
+                            <router-link class="dropdown-item" to="/kardex/resources">Kardex Recursos</router-link>                           
                         </div>
                     </li>
                     <li class="nav-item col-nav-item dropdown">
