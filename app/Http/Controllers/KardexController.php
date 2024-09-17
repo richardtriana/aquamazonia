@@ -152,8 +152,8 @@ class KardexController extends Controller
     {
 
         $kardex = Kardex::create([
-            'recurso_id' => $request->recurso_id,
-            'alimento_id' => $request->alimento_id,
+            'recurso_id' => $request->recurso_id ?? null,
+            'alimento_id' => $request->alimento_id ?? null,
             'cantidad' => $request->cantidad,
             'tipo' => $request->tipo,
             'descripcion' => $request->descripcion,

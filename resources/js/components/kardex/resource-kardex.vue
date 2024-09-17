@@ -12,7 +12,7 @@
                                 <label for="filter.product">Recurso</label>
                                 <input type="text" v-model="filter.product" class="form-control">
                             </div>
-                            
+
                             <div class="form-group col-md-3">
                                 <label for="from_date">Desde</label>
                                 <input type="datetime-local" class="form-control" id="from_date"
@@ -37,20 +37,20 @@
                         <div class="row">
                             <table class="table table-sm table-bordered table-hover" v-if="productData">
                                 <thead class=" thead-dark">
-                                  <tr>
-                                    <th>ID</th>
-                                    <th>Recurso</th>
-                                    <th>Cantidad actual</th>
-                                  </tr>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Recurso</th>
+                                        <th>Cantidad actual</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
-                                    <td> {{ productData.id }} </td>
-                                    <td> {{ productData.recurso }}</td>
-                                    <td> {{ productData.cantidad }}</td>
-                                  </tr>
+                                    <tr>
+                                        <td> {{ productData.id }} </td>
+                                        <td> {{ productData.recurso }}</td>
+                                        <td> {{ productData.cantidad }}</td>
+                                    </tr>
                                 </tbody>
-                              </table>
+                            </table>
                             <table class="table table-hover table-sm table-bordered">
                                 <thead class="thead-dark text-white">
                                     <tr>
@@ -72,7 +72,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <pagination :align="'center'" :data="listado" :limit="8" @pagination-change-page="listResources">
+                        <pagination :align="'center'" :data="listado" :limit="8"
+                            @pagination-change-page="listResources">
                             <span slot="prev-nav"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
                             <span slot="next-nav"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
                         </pagination>

@@ -51,6 +51,7 @@ Route::apiResources([
 	'resource-categories' => 'ResourceCategoryController',
 	'food-categories' => 'FoodCategoryController',
 	'providers' =>  'ProviderController',
+	'purchases' =>  'PurchaseController',
 	'brands' =>  'BrandController',
 	'kardex' =>  'KardexController'
 ]);
@@ -77,6 +78,7 @@ Route::namespace('API')->group(function () {
 	Route::get('traer-existencias-detalle', 'InformeController@traerExistenciasDetalle');
 	Route::get('parametros-contenedores', 'ParametroCalidadController@listadoParametrosContenedores');
 	Route::get('food/list', 'AlimentosController@list');
+	Route::get('food/search-item', 'AlimentosController@searchFood');
 	Route::post('food/stock-update/{alimento}', 'AlimentosController@updateStockById');
 	Route::post('resource/stock-update/{recurso}', 'RecursosController@updateStockById');
 	Route::get('resource/list', 'RecursosController@list');

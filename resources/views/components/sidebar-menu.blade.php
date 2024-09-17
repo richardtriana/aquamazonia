@@ -77,6 +77,35 @@
                             <router-link class="dropdown-item" to="/informe-actividades">Informe muestreo y
                                 pesca</router-link>
                         </div>
+                        <li class="nav-item col-nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            Almacen<span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <router-link class="dropdown-item" to="/food-inventory">Alimentos</router-link>
+                            <router-link class="dropdown-item" to="/resource-inventory">Recursos</router-link>      
+                            <router-link class="dropdown-item" to="/stock/foods">Ajustes de inv. Alimentos</router-link>         
+                            <router-link class="dropdown-item" to="/stock/resources">Ajustes de inv. Recursos</router-link>                              
+                            <router-link class="dropdown-item" to="/purchases/foods">Compras</router-link>                           
+                            <router-link class="dropdown-item" to="/kardex/foods">Kardex Alimentos</router-link>                           
+                            <router-link class="dropdown-item" to="/kardex/resources">Kardex Recursos</router-link>                           
+                        </div>
+                    </li>
+                        </li>
+                    <li class="nav-item col-nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            Configuracion Almacen<span class="caret"></span>
+                        </a>
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <router-link class="dropdown-item" to="/warehouses">Bodegas</router-link>
+                            <router-link class="dropdown-item" to="/providers">Proveedores</router-link>
+                            <router-link class="dropdown-item" to="/brands">Marcas</router-link>
+                            <router-link class="dropdown-item" to="/food-categories">Categorias alimentos</router-link>
+                            <router-link class="dropdown-item" to="/resource-categories">Categorias recursos</router-link>
+                        </div>
+                    </li>
                     </li>
                     <li class="nav-item col-nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
@@ -88,9 +117,6 @@
                             <router-link class="dropdown-item" to="/especies">Especies</router-link>
                             <router-link class="dropdown-item" to="/usuarios">Usuarios</router-link>
                             <router-link class="dropdown-item" to="/phases">Fases</router-link>
-                            <router-link class="dropdown-item" to="/warehouses">Bodegas</router-link>
-                            <router-link class="dropdown-item" to="/providers">Proveedores</router-link>
-                            <router-link class="dropdown-item" to="/brands">Marcas</router-link>
                         </div>
                     </li>
                     <li class="nav-item col-nav-item dropdown">
@@ -117,21 +143,7 @@
                             <router-link class="dropdown-item" to="/resource-categories">Tipo de recursos</router-link>
                         </div>
                     </li>
-                    <li class="nav-item col-nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Inventario<span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="/food-inventory">Alimentos</router-link>
-                            <router-link class="dropdown-item" to="/resource-inventory">Recursos</router-link>      
-                            <router-link class="dropdown-item" to="/stock/foods">Stock Alimentos</router-link>         
-                            <router-link class="dropdown-item" to="/stock/resources">Stock Recursos</router-link>                              
-                            <!-- <router-link class="dropdown-item" to="/purchases">Compras</router-link>                            -->
-                            <router-link class="dropdown-item" to="/kardex/foods">Kardex Alimentos</router-link>                           
-                            <router-link class="dropdown-item" to="/kardex/resources">Kardex Recursos</router-link>                           
-                        </div>
-                    </li>
+
                     <li class="nav-item col-nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

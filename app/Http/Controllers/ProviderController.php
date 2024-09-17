@@ -18,11 +18,17 @@ class ProviderController extends Controller
     public function index(Request $request)
     {
         $provider = $request->provider;
+        $state = $request->state ?? 1;
 
         $providers = Provider::orderBy('provider', 'asc')
         ->where(function ($query) use ($provider) {
 			if (!is_null($provider) && $provider != '' && $provider != 'all') {
 				$query->where('provider', 'LIKE',  "%$provider%");
+			}
+		})
+        ->where(function ($query) use ($state) {
+			if (!is_null($state) && $state != '' && $state != 'all') {
+				$query->where('state', $state);
 			}
 		})
         ->paginate(10);

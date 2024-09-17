@@ -34,10 +34,10 @@ class AlimentosController extends Controller
     $category_id = $request->food_category_id;
     $brand_id = $request->brand_id;
     $warehouse_id = $request->warehouse_id;
-    $warehouse_id = $request->warehouse_id;
-    $quantity_sign = $request->quantity_sign;
-    $quantity = $request->quantity;
+    $quantity_sign = $request->quantity_sign ?? ">";
+    $quantity = $request->quantity ?? 0;
     $food = $request->food;
+    $state = $request->state;
 
     $foods = Alimento::orderBy('alimento', 'asc')
       ->where(function ($query) use ($category_id) {
@@ -60,6 +60,11 @@ class AlimentosController extends Controller
       ->where(function ($query) use ($quantity_sign, $quantity) {
         if (!is_null($quantity_sign) && $quantity_sign != '' && $quantity_sign != 'all') {
           $query->where('cantidad', "$quantity_sign", "$quantity");
+        }
+      })
+      ->where(function ($query) use ($state) {
+        if (!is_null($state) && $state != '' && $state != 'all') {
+          $query->where('activo', $state);
         }
       })
       ->paginate($nro_results);
@@ -178,6 +183,18 @@ class AlimentosController extends Controller
     }
   }
 
+  public function updatePriceById($type, $purchased_food)
+  {
+    $food = Alimento::find($purchased_food->food_id);
+    $food->costo_kg  =  $purchased_food->price;
+    if ($type == 'add') {
+      $food->cantidad += $purchased_food->quantity;
+    } else {
+      $food->cantidad -= $purchased_food->quantity;
+    }
+    $food->save();
+  }
+
   /**
    * Remove the specified resource from storage.
    *
@@ -191,5 +208,28 @@ class AlimentosController extends Controller
     HistorialAlimento::where('id_alimento', $id)->delete();
 
     return 'eliminado';
+  }
+
+
+  public function searchFood(Request $request)
+  {
+    $is_order = $request->is_order ??  $request->is_order;
+    $food = Alimento::select()
+      ->where(function ($query) use ($request) {
+        $query->where('id', $request->food);
+      });
+
+    if ((bool) $is_order) {
+      // $food = $food->where(function ($query) {
+      // 	$query->where(function ($query) { $query->where('stock', false);
+      // 	})->orWhere(function ($query) { $query->where(function ($query) { $query->where('type', 1)->where('quantity', '>', 0);
+      // 		})->orWhere(function ($query) { $query->where('type', 3)->where('quantity', '>', 0);});
+      // 	})});
+      $food = $food->where("activo", 1);
+    }
+
+    $food = $food->first();
+
+    return ['food' => $food];
   }
 }

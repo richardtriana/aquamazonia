@@ -25,6 +25,8 @@
 	<link href="{{ asset('css/fontawesome.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/brands.css') }}" rel="stylesheet">
 	<link href="{{ asset('css/solid.css') }}" rel="stylesheet">
+    <script src="{{ asset('js/shortcut.js') }} "></script>
+
 </head>
 
 <body>

@@ -183,6 +183,18 @@ class RecursosController extends Controller
   }
 
 
+  public function updatePriceById($type, $purchased_resource)
+  {
+    $resource = Recursos::find($purchased_resource->resource_id);
+    $resource->costo  =  $purchased_resource->price;
+    if ($type == 'add') {
+      $resource->cantidad += $purchased_resource->quantity;
+    } else {
+      $resource->cantidad -= $purchased_resource->quantity;
+    }
+    $resource->save();
+  }
+
   /**
    * Remove the specified resource from storage.
    *
