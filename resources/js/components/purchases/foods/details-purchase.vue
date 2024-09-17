@@ -71,7 +71,7 @@
             <td>$ {{ i.price_tax_exc }}</td>
             <td>$ {{ i.price_tax_inc }}</td>
             <td>{{ i.discount_percentage }} %</td>
-            <td>$ {{ i.discount_price }}</td>
+            <td>$ {{ i.discount_value }}</td>
             <td class="text-right">$ {{ i.price_tax_inc_total }}</td>
           </tr>
         </tbody>

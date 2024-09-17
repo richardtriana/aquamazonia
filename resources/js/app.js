@@ -70,7 +70,7 @@ let routes = [
     { path: '/stock/foods', component: require('./components/stock/food-stock.vue').default },
     { path: '/stock/resources', component: require('./components/stock/resource-stock.vue').default },
     { path: '/purchases/foods', component: require('./components/purchases/foods/purchases.vue').default },
-    { path: '/create-edit-purchase/:purchase_id', component: require('./components/purchases/foods/create-edit-purchase.vue').default, props: true, name:'create-edit-purchase' },
+    { path: '/purchase-food/:purchase_id', component: require('./components/purchases/foods/create-edit-purchase.vue').default, props: true, name:'purchase-food' },
 
 ]
 

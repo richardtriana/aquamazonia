@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\API\AlimentosController;
 use App\Http\Controllers\API\RecursosController;
 use App\Purchase;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -15,13 +16,54 @@ class PurchaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
+        // $user_id =  Auth::user()->id;
+
+        $type = $request->type ?? 'alimentos';
+
+        $purchases = Purchase::whereHas('provider', function (Builder $query) use ($request) {
+            if ($request->provider != '') {
+                $query->where('name', 'like', "%$request->provider%");
+            }
+        }) ->whereHas('detailPurchase', function (Builder $query) use ($type) {
+                if ($type == 'alimentos') {
+                    $query->whereNotNull('alimento_id');
+                } else {
+                    $query->whereNotNull('recurso_id');
+                }
+            });
+
+        $today = date('Y-m-d');
+        $from = $request->from;
+        $to = $request->to;
+
+        if ($from != '' && $from != 'undefined') {
+            $purchases = $purchases
+                ->whereDate('created_at', '>=', $from);
+        }
+
+        if ($to != '' && $to != 'undefined') {
+            $purchases = $purchases
+                ->whereDate('created_at', '<=', $to);
+        }
+
+        // if ($from == '' && $to == '') {
+        //     $purchases = $purchases
+        //         ->where('created_at', '>=', $today);
+        // }
+        if ($request->id != '') {
+			$purchases = $purchases->where('id', $request->id);
+		}
+
+        $purchases = $purchases
+            ->paginate(10);
+
         return response()->json([
             'status' => 'success',
             'code' => 200,
-            'purchases' => (object)[]
-        ], 200);
+            'purchases' => $purchases,
+        ]);
     }
 
     /**
@@ -62,7 +104,7 @@ class PurchaseController extends Controller
                 $itemController = new RecursosController;
             }
 
-            $itemController->updatePriceById('add',(object) $details_purchase);
+            $itemController->updatePriceById('add', (object) $details_purchase);
         }
 
         return response()->json([
@@ -80,7 +122,8 @@ class PurchaseController extends Controller
      */
     public function show(Purchase $purchase)
     {
-        //
+        $details  = $purchase;
+		return ['purchase_information' => $details, 'purchase_details' => $details->detailPurchase()->get()];
     }
 
     /**

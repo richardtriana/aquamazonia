@@ -6884,7 +6884,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
     total_discount: function total_discount() {
       var total = 0.0;
       this.itemsPurchaseList.forEach(function (food) {
-        total += parseFloat(food.discount_price);
+        total += parseFloat(food.discount_value);
       });
       return total;
     },
@@ -6957,7 +6957,7 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
           food_id: new_food.id,
           id: new_food.id,
           discount_percentage: 0,
-          discount_price: 0,
+          discount_value: 0,
           quantity: 1,
           item: new_food.alimento,
           price: new_food.costo_kg
@@ -7080,6 +7080,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
+function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -7087,9 +7093,9 @@ __webpack_require__.r(__webpack_exports__);
       PurchaseList: {},
       filter: {
         provider: "",
-        no_invoice: "",
         from: "",
-        to: ""
+        to: "",
+        type: "alimentos"
       }
     };
   },
@@ -7100,7 +7106,10 @@ __webpack_require__.r(__webpack_exports__);
     getPurchases: function getPurchases() {
       var page = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       var me = this;
-      axios.get("api/purchases?page=".concat(page, "&provider=").concat(me.filter.provider, "&from=").concat(me.filter.from, "&to=").concat(me.filter.to)).then(function (response) {
+      var data = _objectSpread({}, this.filter);
+      axios.get("api/purchases", {
+        params: data
+      }).then(function (response) {
         me.PurchaseList = response.data.purchases;
       });
     },
@@ -19572,20 +19581,20 @@ var render = function render() {
       },
       attrs: {
         type: "number",
-        name: "discount_price",
-        id: "discount_price",
+        name: "discount_value",
+        id: "discount_value",
         step: "2",
         placeholder: "Descuento"
       },
       domProps: {
-        value: p.discount_price = (p.quantity * p.price * (p.discount_percentage / 100)).toFixed(0)
+        value: p.discount_value = (p.quantity * p.price * (p.discount_percentage / 100)).toFixed(0)
       }
     }) : _c("input", {
       directives: [{
         name: "model",
         rawName: "v-model",
-        value: p.discount_price,
-        expression: "p.discount_price"
+        value: p.discount_value,
+        expression: "p.discount_value"
       }],
       staticClass: "form-control form-control-sm",
       staticStyle: {
@@ -19593,17 +19602,17 @@ var render = function render() {
       },
       attrs: {
         type: "number",
-        name: "discount_price",
-        id: "discount_price",
+        name: "discount_value",
+        id: "discount_value",
         step: "2"
       },
       domProps: {
-        value: p.discount_price
+        value: p.discount_value
       },
       on: {
         input: function input($event) {
           if ($event.target.composing) return;
-          _vm.$set(p, "discount_price", $event.target.value);
+          _vm.$set(p, "discount_value", $event.target.value);
         }
       }
     })]), _vm._v(" "), _c("td", [_c("input", {
@@ -19633,7 +19642,7 @@ var render = function render() {
           _vm.$set(p, "price", $event.target.value);
         }
       }
-    })]), _vm._v(" "), _c("td", [p.discount_percentage != 0 ? _c("span", [_vm._v("\n\t\t\t\t\t\t\t\t\t$\n\t\t\t\t\t\t\t\t\t" + _vm._s(p.total_cost = p.quantity * p.price - p.quantity * p.price * (p.discount_percentage / 100)) + "\n\t\t\t\t\t\t\t\t")]) : _c("span", [_vm._v("\n\t\t\t\t\t\t\t\t\t$\n\t\t\t\t\t\t\t\t\t" + _vm._s((p.total_cost = p.quantity * p.price - p.discount_price).toFixed(2)) + "\n\t\t\t\t\t\t\t\t")])])]);
+    })]), _vm._v(" "), _c("td", [p.discount_percentage != 0 ? _c("span", [_vm._v("\n\t\t\t\t\t\t\t\t\t$\n\t\t\t\t\t\t\t\t\t" + _vm._s(p.total_cost = p.quantity * p.price - p.quantity * p.price * (p.discount_percentage / 100)) + "\n\t\t\t\t\t\t\t\t")]) : _c("span", [_vm._v("\n\t\t\t\t\t\t\t\t\t$\n\t\t\t\t\t\t\t\t\t" + _vm._s((p.total_cost = p.quantity * p.price - p.discount_value).toFixed(2)) + "\n\t\t\t\t\t\t\t\t")])])]);
   }), 0) : _c("tbody", [_vm._m(4)])])])])]), _vm._v(" "), _c("div", {
     staticClass: "col-md-3"
   }, [_c("div", {}, [_c("section", {
@@ -19842,7 +19851,7 @@ var render = function render() {
     staticClass: "btn btn-primary",
     attrs: {
       to: {
-        name: "create-edit-purchase",
+        name: "purchase-food",
         params: {
           purchase_id: 0
         }
@@ -19860,27 +19869,27 @@ var render = function render() {
     attrs: {
       "for": "nro_factura"
     }
-  }, [_vm._v("Nro Factura")]), _vm._v(" "), _c("input", {
+  }, [_vm._v("Nro Compra")]), _vm._v(" "), _c("input", {
     directives: [{
       name: "model",
       rawName: "v-model",
-      value: _vm.filter.no_invoice,
-      expression: "filter.no_invoice"
+      value: _vm.filter.id,
+      expression: "filter.id"
     }],
     staticClass: "form-control",
     attrs: {
       type: "text",
       name: "nro_factura",
       id: "nro_factura",
-      placeholder: "Nro Factura"
+      placeholder: "Nro Compra"
     },
     domProps: {
-      value: _vm.filter.no_invoice
+      value: _vm.filter.id
     },
     on: {
       input: function input($event) {
         if ($event.target.composing) return;
-        _vm.$set(_vm.filter, "no_invoice", $event.target.value);
+        _vm.$set(_vm.filter, "id", $event.target.value);
       }
     }
   })]), _vm._v(" "), _c("div", {
@@ -19984,49 +19993,22 @@ var render = function render() {
       attrs: {
         scope: "row"
       }
-    }, [_vm._v(_vm._s(o.id) + " - " + _vm._s(o.no_invoice))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(o.total_paid))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(o.total_iva_exc))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(o.total_discount))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(o.provider.name))]), _vm._v(" "), _c("td", [o.state == 0 ? _c("span", [_vm._v("Desechada")]) : _vm._e(), _vm._v(" "), o.state == 1 ? _c("span", [_vm._v("Abierta")]) : _vm._e(), _vm._v(" "), o.state == 2 ? _c("span", [_vm._v("Registrada")]) : _vm._e(), _vm._v(" "), o.state == 3 ? _c("span", [_vm._v("Cotización")]) : _vm._e()]), _vm._v(" "), _c("td", [_c("router-link", {
-      staticClass: "btn",
+    }, [_vm._v(_vm._s(o.id))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(_vm._f("numeral")(o.total_cost, "$0,0.00")))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(_vm._f("numeral")(o.total_discount, "$0,0.00")))]), _vm._v(" "), _c("td", [_vm._v(_vm._s(o.provider.provider))]), _vm._v(" "), _c("td", [o.state == 0 ? _c("span", [_vm._v("Desechada")]) : _vm._e(), _vm._v(" "), o.state == 1 ? _c("span", [_vm._v("Abierta")]) : _vm._e(), _vm._v(" "), o.state == 2 ? _c("span", [_vm._v("Registrada")]) : _vm._e(), _vm._v(" "), o.state == 3 ? _c("span", [_vm._v("Cotización")]) : _vm._e()]), _vm._v(" "), _c("td", [_c("router-link", {
+      staticClass: "btn btn",
       attrs: {
         to: {
-          name: "details-purchase",
+          name: "purchase-food",
           params: {
             purchase_id: o.id
           }
         }
       }
     }, [_c("i", {
-      staticClass: "bi bi-eye"
-    })])], 1), _vm._v(" "), _c("td", [_c("button", {
-      staticClass: "btn text-danger",
-      on: {
-        click: function click($event) {
-          return _vm.generatePdf(o.id);
-        }
-      }
-    }, [_c("i", {
-      staticClass: "bi bi-file-earmark-pdf-fill"
-    })])]), _vm._v(" "), _c("td", [_c("router-link", {
-      staticClass: "btn",
+      staticClass: "fa fa-pen",
       attrs: {
-        to: {
-          name: "create-edit-purchase",
-          params: {
-            purchase_id: o.id
-          }
-        }
+        "aria-hidden": "true"
       }
-    }, [_c("i", {
-      staticClass: "bi bi-pencil-square"
-    })])], 1), _vm._v(" "), _c("td", [_c("button", {
-      staticClass: "btn",
-      on: {
-        click: function click($event) {
-          return _vm.deletePurchase(o.id);
-        }
-      }
-    }, [_c("i", {
-      staticClass: "bi bi-trash"
-    })])])]);
+    })])], 1)]);
   }), 0)])]), _vm._v(" "), _c("pagination", {
     attrs: {
       align: "center",
@@ -20042,20 +20024,26 @@ var render = function render() {
     },
     slot: "prev-nav"
   }, [_c("i", {
-    staticClass: "bi bi-chevron-double-left"
+    staticClass: "fa fa-angle-left",
+    attrs: {
+      "aria-hidden": "true"
+    }
   })]), _vm._v(" "), _c("span", {
     attrs: {
       slot: "next-nav"
     },
     slot: "next-nav"
   }, [_c("i", {
-    staticClass: "bi bi-chevron-double-right"
+    staticClass: "fa fa-angle-right",
+    attrs: {
+      "aria-hidden": "true"
+    }
   })])])], 1)]);
 };
 var staticRenderFns = [function () {
   var _vm = this,
     _c = _vm._self._c;
-  return _c("thead", [_c("tr", [_c("th", [_vm._v("#")]), _vm._v(" "), _c("th", [_vm._v("Total Pago")]), _vm._v(" "), _c("th", [_vm._v("Total Sin Iva")]), _vm._v(" "), _c("th", [_vm._v("Total Descuento")]), _vm._v(" "), _c("th", [_vm._v("Proveedor")]), _vm._v(" "), _c("th", [_vm._v("Estado")]), _vm._v(" "), _c("th", [_vm._v("Ver")]), _vm._v(" "), _c("th", [_vm._v("Imprimir")]), _vm._v(" "), _c("th", [_vm._v("Editar")]), _vm._v(" "), _c("th", [_vm._v("Eliminar")])])]);
+  return _c("thead", [_c("tr", [_c("th", [_vm._v("#")]), _vm._v(" "), _c("th", [_vm._v("Total Pago")]), _vm._v(" "), _c("th", [_vm._v("Total Descuento")]), _vm._v(" "), _c("th", [_vm._v("Proveedor")]), _vm._v(" "), _c("th", [_vm._v("Estado")]), _vm._v(" "), _c("th", [_vm._v("Editar")])])]);
 }];
 render._withStripped = true;
 
@@ -24820,10 +24808,10 @@ var routes = [{
   path: '/purchases/foods',
   component: (__webpack_require__(/*! ./components/purchases/foods/purchases.vue */ "./resources/js/components/purchases/foods/purchases.vue")["default"])
 }, {
-  path: '/create-edit-purchase/:purchase_id',
+  path: '/purchase-food/:purchase_id',
   component: (__webpack_require__(/*! ./components/purchases/foods/create-edit-purchase.vue */ "./resources/js/components/purchases/foods/create-edit-purchase.vue")["default"]),
   props: true,
-  name: 'create-edit-purchase'
+  name: 'purchase-food'
 }];
 var router = new vue_router__WEBPACK_IMPORTED_MODULE_7__["default"]({
   routes: routes // short for `routes: routes`

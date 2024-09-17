@@ -41,7 +41,7 @@ class DetailPurchaseController extends Controller
         $detail->alimento_id = $detailPurchase['food_id'] ?? null;
         $detail->recurso_id = $detailPurchase['resource_id'] ?? null;
         $detail->discount_percentage = $detailPurchase['discount_percentage'];
-        $detail->discount_value = $detailPurchase['discount_price'];
+        $detail->discount_value = $detailPurchase['discount_value'];
         $detail->price = $detailPurchase['price'];
         $detail->total_cost = $detailPurchase['total_cost'];
         $detail->quantity = $detailPurchase['quantity'];

@@ -100,16 +100,16 @@
 								</td>
 								<td>
 									<input v-if="p.discount_percentage != 0" type="number"
-										class="form-control form-control-sm" name="discount_price" id="discount_price"
+										class="form-control form-control-sm" name="discount_value" id="discount_value"
 										step="2" placeholder="Descuento" :value="
-											(p.discount_price = (
+											(p.discount_value = (
 												p.quantity *
 												p.price *
 												(p.discount_percentage / 100)
 											).toFixed(0))
 										" style="max-width: 100px" />
-									<input v-else type="number" class="form-control form-control-sm" name="discount_price"
-										id="discount_price" step="2" v-model="p.discount_price" style="max-width: 100px" />
+									<input v-else type="number" class="form-control form-control-sm" name="discount_value"
+										id="discount_value" step="2" v-model="p.discount_value" style="max-width: 100px" />
 								</td>
 								<td>
 									<input type="number" name="price" id="price" step="any"
@@ -131,7 +131,7 @@
 										$
 										{{
 											(p.total_cost =
-												p.quantity * p.price - p.discount_price).toFixed(2)
+												p.quantity * p.price - p.discount_value).toFixed(2)
 										}}
 									</span>
 								</td>
@@ -250,7 +250,7 @@ export default {
 		total_discount: function () {
 			var total = 0.0;
 			this.itemsPurchaseList.forEach(food => {
-				total += parseFloat(food.discount_price);
+				total += parseFloat(food.discount_value);
 			});
 			return total;
 		},
@@ -336,7 +336,7 @@ export default {
 					food_id: new_food.id,
 					id: new_food.id,
 					discount_percentage: 0,
-					discount_price: 0,
+					discount_value: 0,
 					quantity: 1,				
 					item: new_food.alimento,
 					price: new_food.costo_kg
