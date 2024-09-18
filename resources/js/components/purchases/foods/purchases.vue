@@ -121,6 +121,7 @@ export default {
 		getPurchases(page = 1) {
 			let me = this;
 			let data = {
+				page,
                 ...this.filter
             }
 			axios

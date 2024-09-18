@@ -87,7 +87,8 @@
                             <router-link class="dropdown-item" to="/resource-inventory">Recursos</router-link>      
                             <router-link class="dropdown-item" to="/stock/foods">Ajustes de inv. Alimentos</router-link>         
                             <router-link class="dropdown-item" to="/stock/resources">Ajustes de inv. Recursos</router-link>                              
-                            <router-link class="dropdown-item" to="/purchases/foods">Compras</router-link>                           
+                            <router-link class="dropdown-item" to="/purchases/foods">Compras Alimentos</router-link>                           
+                            <router-link class="dropdown-item" to="/purchases/resources">Compras Recursos</router-link>                           
                             <router-link class="dropdown-item" to="/kardex/foods">Kardex Alimentos</router-link>                           
                             <router-link class="dropdown-item" to="/kardex/resources">Kardex Recursos</router-link>                           
                         </div>

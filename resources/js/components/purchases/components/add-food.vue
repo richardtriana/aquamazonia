@@ -39,7 +39,7 @@
                   <td>{{ food.id }}</td>
                   <td>{{ food.alimento }}</td>
                   <td>
-                    {{ food.category ? food.category : "" }}
+                    {{ food.category ? food.category.category : "" }}
                   </td>
                   <td class="text-right">$ {{ food.costo_kg }}</td>
                   <td>{{ food.cantidad }}</td>
