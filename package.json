@@ -11,7 +11,7 @@
     },
     "devDependencies": {
         "axios": "^0.21.4",
-        "bootstrap": "^4.6.2",
+        "bootstrap": "^5.3.3",
         "cross-env": "^7.0.3",
         "jquery": "^3.6.1",
         "laravel-mix": "^6.0.49",
@@ -27,7 +27,7 @@
         "vuejs-validators": "^1.1.8"
     },
     "dependencies": {
-        "admin-lte": "^3.2.0",
+        "admin-lte": "^4.0.0-beta2",
         "laravel-vue-pagination": "^2.3.1",
         "numeral": "^2.0.6",
         "sweetalert": "^2.1.2",
