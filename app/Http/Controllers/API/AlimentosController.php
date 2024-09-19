@@ -34,8 +34,8 @@ class AlimentosController extends Controller
     $category_id = $request->food_category_id;
     $brand_id = $request->brand_id;
     $warehouse_id = $request->warehouse_id;
-    $quantity_sign = $request->quantity_sign ?? ">";
-    $quantity = $request->quantity ?? 0;
+    $quantity_sign = $request->quantity_sign ?? null;
+    $quantity = $request->quantity ?? null;
     $food = $request->food;
     $state = $request->state;
 

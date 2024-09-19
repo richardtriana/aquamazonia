@@ -24,7 +24,7 @@
               @keyup="searchProvider()" />
             <div class="input-group-append" id="button-addon4">
               <button class="btn btn-outline-secondary" type="button" @click="searchProvider()">
-                Buscar Providere
+                Buscar Proveedor
               </button>
             </div>
           </div>
