@@ -12,7 +12,7 @@
                                 <label for="filter.product">Alimento</label>
                                 <input type="text" v-model="filter.product" class="form-control">
                             </div>
-                            
+
                             <div class="form-group col-md-3">
                                 <label for="from_date">Desde</label>
                                 <input type="datetime-local" class="form-control" id="from_date"
@@ -27,30 +27,35 @@
                                     página</label>
                                 <input type="number" v-model="filter.nro_results" class="form-control">
                             </div>
-                            <div class="form-group col-md-2">
-                                <button class="btn btn-primary" @click="listFoods()">
+                            <div class="form-group col-md-3 col-12">
+                                <button class="btn btn-primary w-100" @click="listFoods()">
                                     Filtrar resultados
                                 </button>
                             </div>
-
+                            <div class="form-group col-md-3 col-12">
+                                <downloadexcel class="btn btn-success form-control w-100" :data="listado.data"
+                                    :fields="json_fields" name="informe-kardex-alimentos.xls" type="xls">
+                                    <i class="fa fa-fw fa-download"></i> Generar Excel
+                                </downloadexcel>
+                            </div>
                         </div>
                         <div class="row">
                             <table class="table table-sm table-bordered table-hover" v-if="productData">
                                 <thead class=" thead-dark">
-                                  <tr>
-                                    <th>ID</th>
-                                    <th>Alimento</th>
-                                    <th>Cantidad actual</th>
-                                  </tr>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Alimento</th>
+                                        <th>Cantidad actual</th>
+                                    </tr>
                                 </thead>
                                 <tbody>
-                                  <tr>
-                                    <td> {{ productData.id }} </td>
-                                    <td> {{ productData.alimento }}</td>
-                                    <td> {{ productData.cantidad }}</td>
-                                  </tr>
+                                    <tr>
+                                        <td> {{ productData.id }} </td>
+                                        <td> {{ productData.alimento }}</td>
+                                        <td> {{ productData.cantidad }}</td>
+                                    </tr>
                                 </tbody>
-                              </table>
+                            </table>
                             <table class="table table-hover table-sm table-bordered">
                                 <thead class="thead-dark text-white">
                                     <tr>
@@ -86,6 +91,7 @@
 
 <script>
 
+import downloadexcel from "vue-json-excel";
 
 export default {
     data() {
@@ -98,10 +104,47 @@ export default {
             filter: {
                 nro_results: 15,
                 type: "alimento"
+            },
+            json_fields: {
+
+                "ID alimento": {
+                    field: "alimento_id",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+
+                "Cantidad ": {
+                    field: "cantidad",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+
+                "Tipo Afectacion ": {
+                    field: "tipo",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+                "Descripcion Afectacion": {
+                    field: "descripcion",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+                "Fecha": {
+                    field: "fecha",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
             }
         };
     },
-
+    components: {
+        downloadexcel,
+    },
     methods: {
         listFoods(page = 1) {
             let me = this;

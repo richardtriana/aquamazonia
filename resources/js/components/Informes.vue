@@ -157,18 +157,7 @@
                     </th>
                   </tr>
                 </tbody>
-                <tfoot>
-                  <!-- <tr>
-                    <th colspan="4" class="text-right">TOTAL: </th>
-                    <td colspan="2" class="text-right">Costo minutos: </td>
-                    <th>{{ calcularTotalMinutos }}</th>
-                    <td colspan="2" v-if="tipoActividad != 'Alimentación'" class="text-right">Costo recursos: </td>
-                    <th v-if="tipoActividad != 'Alimentación'">{{ calcularTotalRecursos }}</th>
-                    <td colspan="3" v-if="tipoActividad == 'Alimentación'">Costo alimentos: </td>
-                    <th v-if="tipoActividad == 'Alimentación'">{{ calcularTotalAlimentos }}</th>
-                    <th>Costo total actividades: <br> {{ calcularTotalActividades }}</th>
-                  </tr> -->
-                </tfoot>
+              
               </table>
             </div>
             <nav v-show="showPagination" class="mt-5 navigation">

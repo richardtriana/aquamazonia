@@ -168,4 +168,39 @@ class KardexController extends Controller
             'kardex' => $kardex
         ], 200);
     }
+
+    public function  updateKardexAndItem($request)
+    {
+        $kardex = Kardex::create([
+            'recurso_id' => $request->recurso_id ?? null,
+            'alimento_id' => $request->alimento_id ?? null,
+            'cantidad' => $request->cantidad,
+            'tipo' => $request->tipo,
+            'descripcion' => $request->descripcion,
+            // 'user_id' => Auth::user()->id,
+            'fecha' => Carbon::now()
+        ]);
+
+        $cantidad = $request->cantidad;
+        if($request->process = 'sub'){
+            $cantidad = $request->cantidad * -1;
+        }
+        if ($request->alimento_id) {
+            $alimento = Alimento::find( $request->alimento_id);
+            $alimento->cantidad = $alimento->cantidad + $cantidad;
+            $alimento->save();
+        }
+        if ($request->recurso_id) {
+            $recurso = Recursos::find( $request->recurso_id);            
+            $recurso->cantidad = $recurso->cantidad + $cantidad;
+            $recurso->save();
+        }
+
+        return response()->json([
+            'status' => 'success',
+            'code' => 200,
+            'message' => 'Registro exitoso',
+            'kardex' => $kardex
+        ], 200);
+    }
 }

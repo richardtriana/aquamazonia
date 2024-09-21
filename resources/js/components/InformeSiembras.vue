@@ -310,11 +310,11 @@ export default {
     fechaDescanso(id) {
       let me = this;
       if (this.ini_descanso != '') {
-        if (this.fin_descanso != '') {
           const data = {
             'id': this.id_finalizar,
             'ini_descanso': this.ini_descanso,
-            'fin_descanso': this.fin_descanso
+            'fin_descanso': this.fin_descanso ?? '',
+            estado:0
           }
           axios.post('api/actualizarEstado/' + this.id_finalizar, data)
             .then(({ response }) => {
@@ -324,22 +324,8 @@ export default {
               $('#modalFinalizar').modal('hide');
               this.listar();
             });
-        } else {
-          const data = {
-            'id': this.id_finalizar,
-            'ini_descanso': this.ini_descanso,
-          }
-
-          axios.post('api/actualizarEstado/' + this.id_finalizar, data)
-            .then(({ response }) => {
-              this.id_finalizar = '';
-              this.ini_descanso = '';
-              $('#modalFinalizar').modal('hide');
-              this.listar();
-            });
-        }
       } else {
-        Swal.fire("Advertencia", "Por favor, diligencia los datos restantes", "warning");
+        Swal.fire("Advertencia", "Por favor, diligencia los datos faltantes", "warning");
       }
 
     },

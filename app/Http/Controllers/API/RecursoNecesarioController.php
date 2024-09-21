@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Alimento;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\KardexController;
 use Illuminate\Http\Request;
 use App\RecursoNecesario;
 use App\RecursoSiembra;
@@ -378,6 +379,17 @@ class RecursoNecesarioController extends Controller
 				}
 			}
 		}
+
+		  $dataStock = (object)[
+			'alimento_id' =>$request['id_alimento'],
+			'recurso_id' => $request['id_recurso'],
+			'tipo' => $request['tipo'] ,
+			'cantidad' =>  $request['cantidad_recurso'] + $request['cant_manana'] + $request['cant_tarde'],
+			'descripcion' => $request['descripcion'] ?: "Actualización de stock",
+			'proccess' => 'sub'
+		  ];
+		  $kardexController = new KardexController();
+		  $kardexController->updateKardexAndItem($dataStock);
 
 		return ($request);
 	}

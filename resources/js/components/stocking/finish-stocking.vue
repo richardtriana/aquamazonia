@@ -48,11 +48,11 @@ export default {
     fechaDescanso() {
       let me = this;
       if (this.ini_descanso != '') {
-        if (this.fin_descanso != '') {
           const data = {
             'id': this.id,
             'ini_descanso': this.ini_descanso,
-            'fin_descanso': this.fin_descanso
+            'fin_descanso': this.fin_descanso ?? '',
+            estado:0
           }
           axios.post('api/actualizarEstado/' + this.id, data)
             .then(({ response }) => {
@@ -61,19 +61,7 @@ export default {
               $('#modalFinalizar').modal('hide');
              this.$emit('list-stocking')
             });
-        } else {
-          const data = {
-            'id': this.id,
-            'ini_descanso': this.ini_descanso,
-          }
-
-          axios.post('api/actualizarEstado/' + this.id, data)
-            .then(({ response }) => {
-              this.ini_descanso = '';
-              $('#modalFinalizar').modal('hide');
-             this.$emit('list-stocking')
-            });
-        }
+        //
       } else {
         swal("Advertencia", "Por favor, diligencia los datos restantes", "warning");
       }

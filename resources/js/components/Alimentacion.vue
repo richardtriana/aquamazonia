@@ -415,7 +415,11 @@ export default {
     },
     guardarRecursos() {
       let me = this;
-      this.form.post("api/recursos-necesarios")
+      let data = {
+        tipo: 'ALIMENTACION',
+        descripcion: 'ALIMENTACION SIEMBRAS'
+      }
+      this.form.post("api/recursos-necesarios", data )
         .then(({ data }) => {
           me.listar();
           $('#modalRecursos').modal('hide');

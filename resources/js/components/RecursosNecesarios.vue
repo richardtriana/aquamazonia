@@ -524,7 +524,11 @@ export default {
     },
     guardarRecursos() {
       let me = this;
-      this.form.post("api/recursos-necesarios").then(({ data }) => {
+      let data = {
+        tipo: 'RECURSOS NECESARIOS',
+        descripcion: 'RECURSOS NECESARIOS SIEMBRAS'
+      }
+      this.form.post("api/recursos-necesarios", data).then(({ data }) => {
         me.listar();
         $("#modalRecursos").modal("hide");
       });

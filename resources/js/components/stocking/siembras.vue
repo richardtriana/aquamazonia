@@ -180,7 +180,7 @@
                     <td>
                       <button class="btn btn-success" @click="editarSiembra(siembra)">
                         <i class="fas fa-edit"></i>
-                      </button>
+                      </button>zs
                     </td>
                     <td>
                       <button class="btn btn-danger" @click="eliminarSiembra(siembra.id)">
@@ -192,10 +192,10 @@
                         title="Finalizar siembra" data-placement="top" @click="finalizarSiembra(siembra.id)">
                         <i class="fas fa-power-off"></i> Desactivar
                       </button>
-                      <button v-if="siembra.estado == 0" class="btn btn-success text-white" data-toggle="tooltip"
+                      <!-- <button v-if="siembra.estado == 0" class="btn btn-success text-white" data-toggle="tooltip"
                         title="Finalizar siembra" data-placement="top" @click="activarSiembra(siembra.id)">
                         <i class="fas fa-power-on"></i> Activar
-                      </button>
+                      </button> -->
                     </td>
                     <td>
                       {{ siembra.ini_descanso }} - <br />
@@ -260,7 +260,7 @@ export default {
       contenedor_id: "-1",
       search_phase: "",
       search_type: "",
-      search_nro_results:"15"
+      search_nro_results: "15"
     };
   },
   computed: {
@@ -303,7 +303,7 @@ export default {
       this.$refs.dialogFishFood.listarRecursosAlimentos(id);
     },
 
-    listar(page=1) {
+    listar(page = 1) {
       let me = this;
       let data = {
         estado_siembra: me.estado_siembra,
@@ -312,7 +312,7 @@ export default {
         phase: this.search_phase,
         page: page,
         type: this.search_type,
-        nro_results:this.search_nro_results
+        nro_results: this.search_nro_results
       }
 
       axios
@@ -350,7 +350,11 @@ export default {
     },
 
     activarSiembra(id) {
-      axios.post(`api/siembras/cambiar-estado/${id}`, null)
+      const data = {
+        'id': this.id,
+        estado: 1
+      }
+      axios.post(`api/actualizarEstado/${id}`, data)
         .then(({ response }) => {
           Swal.fire({
             title: "Exitoso",

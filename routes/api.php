@@ -60,7 +60,7 @@ Route::apiResources([
 Route::namespace('API')->group(function () {
 	Route::post('registros-siembra/{id}', 'RegistroController@registrosxSiembra');
 	Route::post('actualizarEstado/{id}', 'SiembraController@actualizarEstado');
-	Route::post('siembras/cambiar-estado/{id}', 'SiembraController@changeStatus');
+	// Route::post('siembras/cambiar-estado/{id}', 'SiembraController@changeStatus');
 	Route::post('filtro-siembras', 'InformeSiembraController@filtroSiembras');
 	Route::post('searchResults', 'RecursoNecesarioController@searchResults');
 	Route::post('informe-recursos-totales', 'InformeController@informeRecursosTotales');

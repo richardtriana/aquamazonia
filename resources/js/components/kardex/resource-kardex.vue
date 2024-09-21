@@ -27,12 +27,17 @@
                                     página</label>
                                 <input type="number" v-model="filter.nro_results" class="form-control">
                             </div>
-                            <div class="form-group col-md-2">
+                            <div class="form-group col-md-3 col-12">
                                 <button class="btn btn-primary" @click="listResources()">
                                     Filtrar resultados
                                 </button>
                             </div>
-
+                            <div class="form-group col-md-3 col-12">
+                                <downloadexcel class="btn btn-success form-control w-100" :data="listado.data"
+                                    :fields="json_fields" name="informe-kardex-recursos.xls" type="xls">
+                                    <i class="fa fa-fw fa-download"></i> Generar Excel
+                                </downloadexcel>
+                            </div>
                         </div>
                         <div class="row">
                             <table class="table table-sm table-bordered table-hover" v-if="productData">
@@ -87,6 +92,7 @@
 
 <script>
 
+import downloadexcel from "vue-json-excel";
 
 export default {
     data() {
@@ -99,10 +105,47 @@ export default {
             filter: {
                 nro_results: 15,
                 type: "recurso"
+            },
+            json_fields: {
+
+                "ID recurso": {
+                    field: "recurso_id",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+
+                "Cantidad ": {
+                    field: "cantidad",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+
+                "Tipo Afectacion ": {
+                    field: "tipo",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+                "Descripcion Afectacion": {
+                    field: "descripcion",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+                "Fecha": {
+                    field: "fecha",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
             }
         };
     },
-
+    components: {
+        downloadexcel,
+    },
     methods: {
         listResources(page = 1) {
             let me = this;

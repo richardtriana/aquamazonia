@@ -221,17 +221,7 @@ class SiembraController extends Controller
 		if (isset($request['fin_descanso'])) {
 			$siembra->fin_descanso = $request['fin_descanso'];
 		}
-		$siembra->estado = 0;
-		$siembra->save();
-
-		return $request;
-	}
-
-	public function changeStatus(Request $request, $id)
-	{
-		$siembra = Siembra::findOrFail($id);
-		$siembra->fin_descanso = date('Y-m-d');
-		$siembra->estado = 1;
+		$siembra->estado = $request['estado'];
 		$siembra->save();
 
 		return $request;

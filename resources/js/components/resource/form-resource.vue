@@ -65,12 +65,12 @@
               <label class="col-sm-12 col-md-4 col-form-label" for="inventario">Inventario</label>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="inlineInventarioOptions" id="inlineRadio1"
-                  value="true" v-model="form.inventario">
+                  value="1" v-model="form.inventario">
                 <label class="form-check-label" for="inlineRadio1">Si</label>
               </div>
               <div class="form-check form-check-inline">
                 <input class="form-check-input" type="radio" name="inlineInventarioOptions" id="inlineRadio2"
-                  value="false" v-model="form.inventario">
+                  value="0" v-model="form.inventario">
                 <label class="form-check-label" for="inlineRadio2">No</label>
               </div>
             </div>
