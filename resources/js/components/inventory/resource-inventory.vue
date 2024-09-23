@@ -77,8 +77,8 @@
                                 <label for="resource_category" class="col-form-label">Categoría
                                 </label>
                                 <v-select label="resource_category" class="w-100" v-model="filter.resource_category_id"
-                                    :reduce="(option) => option.id" :filterable="false" :options="listResourceCategories"
-                                    @search="onSearchResourceCategory">
+                                    :reduce="(option) => option.id" :filterable="false"
+                                    :options="listResourceCategories" @search="onSearchResourceCategory">
                                     <template slot="no-options">
                                         Escribe para iniciar la búsqueda
                                     </template>
@@ -100,12 +100,17 @@
                                     página</label>
                                 <input type="number" v-model="filter.nro_results" class="form-control">
                             </div>
-                            <div class="form-group col-md-2">
-                                <button class="btn btn-primary" @click="listResources()">
+                            <div class="form-group offset-md-6 col-md-3">
+                                <button class="btn btn-primary  w-100" @click="listResources()">
                                     Filtrar resultados
                                 </button>
                             </div>
-
+                            <div class="form-group  col-md-3 col-12">
+                                <downloadexcel class="btn btn-success form-control w-100" :data="listado.data"
+                                    :fields="json_fields" name="informe-inventario-recursos.xls" type="xls">
+                                    <i class="fa fa-fw fa-download"></i> Generar Excel
+                                </downloadexcel>
+                            </div>
                         </div>
                         <div class="row">
                             <table class="table table-hover table-sm table-bordered">
@@ -138,7 +143,8 @@
                                 </tbody>
                             </table>
                         </div>
-                        <pagination :align="'center'" :data="listado" :limit="8" @pagination-change-page="listResources">
+                        <pagination :align="'center'" :data="listado" :limit="8"
+                            @pagination-change-page="listResources">
                             <span slot="prev-nav"><i class="fa fa-angle-left" aria-hidden="true"></i></span>
                             <span slot="next-nav"><i class="fa fa-angle-right" aria-hidden="true"></i></span>
                         </pagination>
@@ -151,7 +157,7 @@
 </template>
 
 <script>
-
+import downloadexcel from "vue-json-excel";
 
 export default {
     data() {
@@ -163,10 +169,66 @@ export default {
             listResourceCategories: [],
             filter: {
                 nro_results: 15
+            },
+
+            json_fields: {
+
+                "ID recurso": {
+                    field: "id",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+                "Recurso": {
+                    field: "recurso",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+
+                "Costo ": {
+                    field: "costo",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+                "Categoría": {
+                    field: "category.category",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+
+                "Cantidad ": {
+                    field: "cantidad",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+                "Cantidad Minima": {
+                    field: "cantidad_minima",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+                "Cantidad Maxima": {
+                    field: "cantidad_maxima",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+                "Estado": {
+                    field: "activo",
+                    callback: (value) => {
+                        return value;
+                    }
+                }
             }
         };
     },
-
+    components: {
+        downloadexcel,
+    },
     methods: {
         listResources(page = 1) {
             let me = this;

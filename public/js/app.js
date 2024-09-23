@@ -5996,12 +5996,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vue_json_excel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-json-excel */ "./node_modules/vue-json-excel/dist/vue-json-excel.esm.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -6012,8 +6014,61 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       listFoodCategories: [],
       filter: {
         nro_results: 15
+      },
+      json_fields: {
+        "ID alimento": {
+          field: "id",
+          callback: function callback(value) {
+            return value;
+          }
+        },
+        "Alimento": {
+          field: "alimento",
+          callback: function callback(value) {
+            return value;
+          }
+        },
+        "Costo KG ": {
+          field: "costo_kg",
+          callback: function callback(value) {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Categoría": {
+          field: "category.category",
+          callback: function callback(value) {
+            return value;
+          }
+        },
+        "Cantidad ": {
+          field: "cantidad",
+          callback: function callback(value) {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Cantidad Minima": {
+          field: "cantidad_minima",
+          callback: function callback(value) {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Cantidad Maxima": {
+          field: "cantidad_maxima",
+          callback: function callback(value) {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Estado": {
+          field: "activo",
+          callback: function callback(value) {
+            return value;
+          }
+        }
       }
     };
+  },
+  components: {
+    downloadexcel: vue_json_excel__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   methods: {
     listFoods: function listFoods() {
@@ -6099,12 +6154,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var vue_json_excel__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue-json-excel */ "./node_modules/vue-json-excel/dist/vue-json-excel.esm.js");
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(t) { var i = _toPrimitive(t, "string"); return "symbol" == _typeof(i) ? i : String(i); }
 function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e = t[Symbol.toPrimitive]; if (void 0 !== e) { var i = e.call(t, r || "default"); if ("object" != _typeof(i)) return i; throw new TypeError("@@toPrimitive must return a primitive value."); } return ("string" === r ? String : Number)(t); }
+
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   data: function data() {
     return {
@@ -6115,8 +6172,61 @@ function _toPrimitive(t, r) { if ("object" != _typeof(t) || !t) return t; var e 
       listResourceCategories: [],
       filter: {
         nro_results: 15
+      },
+      json_fields: {
+        "ID recurso": {
+          field: "id",
+          callback: function callback(value) {
+            return value;
+          }
+        },
+        "Recurso": {
+          field: "recurso",
+          callback: function callback(value) {
+            return value;
+          }
+        },
+        "Costo ": {
+          field: "costo",
+          callback: function callback(value) {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Categoría": {
+          field: "category.category",
+          callback: function callback(value) {
+            return value;
+          }
+        },
+        "Cantidad ": {
+          field: "cantidad",
+          callback: function callback(value) {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Cantidad Minima": {
+          field: "cantidad_minima",
+          callback: function callback(value) {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Cantidad Maxima": {
+          field: "cantidad_maxima",
+          callback: function callback(value) {
+            return numeral(value).format('0.00');
+          }
+        },
+        "Estado": {
+          field: "activo",
+          callback: function callback(value) {
+            return value;
+          }
+        }
       }
     };
+  },
+  components: {
+    downloadexcel: vue_json_excel__WEBPACK_IMPORTED_MODULE_0__["default"]
   },
   methods: {
     listResources: function listResources() {
@@ -18209,15 +18319,27 @@ var render = function render() {
       }
     }
   })]), _vm._v(" "), _c("div", {
-    staticClass: "form-group col-md-2"
+    staticClass: "form-group offset-md-6 col-md-3"
   }, [_c("button", {
-    staticClass: "btn btn-primary",
+    staticClass: "btn btn-primary w-100",
     on: {
       click: function click($event) {
         return _vm.listFoods();
       }
     }
-  }, [_vm._v("\n                                Filtrar resultados\n                            ")])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                Filtrar resultados\n                            ")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group col-md-3 col-12"
+  }, [_c("downloadexcel", {
+    staticClass: "btn btn-success form-control w-100",
+    attrs: {
+      data: _vm.listado.data,
+      fields: _vm.json_fields,
+      name: "informe-inventario-alimentos.xls",
+      type: "xls"
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-fw fa-download"
+  }), _vm._v(" Generar Excel\n                            ")])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "row"
   }, [_c("table", {
     staticClass: "table table-hover table-sm table-bordered"
@@ -18509,15 +18631,27 @@ var render = function render() {
       }
     }
   })]), _vm._v(" "), _c("div", {
-    staticClass: "form-group col-md-2"
+    staticClass: "form-group offset-md-6 col-md-3"
   }, [_c("button", {
-    staticClass: "btn btn-primary",
+    staticClass: "btn btn-primary w-100",
     on: {
       click: function click($event) {
         return _vm.listResources();
       }
     }
-  }, [_vm._v("\n                                Filtrar resultados\n                            ")])])]), _vm._v(" "), _c("div", {
+  }, [_vm._v("\n                                Filtrar resultados\n                            ")])]), _vm._v(" "), _c("div", {
+    staticClass: "form-group col-md-3 col-12"
+  }, [_c("downloadexcel", {
+    staticClass: "btn btn-success form-control w-100",
+    attrs: {
+      data: _vm.listado.data,
+      fields: _vm.json_fields,
+      name: "informe-inventario-recursos.xls",
+      type: "xls"
+    }
+  }, [_c("i", {
+    staticClass: "fa fa-fw fa-download"
+  }), _vm._v(" Generar Excel\n                            ")])], 1)]), _vm._v(" "), _c("div", {
     staticClass: "row"
   }, [_c("table", {
     staticClass: "table table-hover table-sm table-bordered"

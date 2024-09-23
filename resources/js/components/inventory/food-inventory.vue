@@ -100,12 +100,17 @@
                                     página</label>
                                 <input type="number" v-model="filter.nro_results" class="form-control">
                             </div>
-                            <div class="form-group col-md-2">
-                                <button class="btn btn-primary" @click="listFoods()">
+                            <div class="form-group offset-md-6 col-md-3">
+                                <button class="btn btn-primary  w-100" @click="listFoods()">
                                     Filtrar resultados
                                 </button>
                             </div>
-
+                            <div class="form-group  col-md-3 col-12">
+                                <downloadexcel class="btn btn-success form-control w-100" :data="listado.data"
+                                    :fields="json_fields" name="informe-inventario-alimentos.xls" type="xls">
+                                    <i class="fa fa-fw fa-download"></i> Generar Excel
+                                </downloadexcel>
+                            </div>
                         </div>
                         <div class="row">
                             <table class="table table-hover table-sm table-bordered">
@@ -151,7 +156,7 @@
 </template>
 
 <script>
-
+import downloadexcel from "vue-json-excel";
 
 export default {
     data() {
@@ -163,10 +168,65 @@ export default {
             listFoodCategories: [],
             filter: {
                 nro_results: 15
+            },
+            json_fields: {
+
+                "ID alimento": {
+                    field: "id",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+                "Alimento": {
+                    field: "alimento",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+
+                "Costo KG ": {
+                    field: "costo_kg",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+                "Categoría": {
+                    field: "category.category",
+                    callback: (value) => {
+                        return value;
+                    }
+                },
+
+                "Cantidad ": {
+                    field: "cantidad",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+                "Cantidad Minima": {
+                    field: "cantidad_minima",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+                "Cantidad Maxima": {
+                    field: "cantidad_maxima",
+                    callback: (value) => {
+                        return numeral(value).format('0.00');
+                    }
+                },
+                "Estado": {
+                    field: "activo",
+                    callback: (value) => {
+                        return value;
+                    }
+                }
             }
         };
     },
-
+    components: {
+        downloadexcel,
+    },
     methods: {
         listFoods(page = 1) {
             let me = this;
