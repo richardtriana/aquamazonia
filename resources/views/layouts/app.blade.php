@@ -31,18 +31,25 @@
 
 <body>
 	<div id="app">
-		@component('components.sidebar-menu')
-		@endcomponent
+		<!-- Mostrar la barra de navegación solo si el usuario está autenticado -->
+		@auth
+			<!-- Aquí se coloca el código de la barra o el menú -->
+			@component('components.sidebar-menu')
+			@endcomponent
+		@endauth
 
 		<main class="py-4">
 			@yield('content')
 		</main>
 
+		<!-- Mostrar el pie de página solo si el usuario está autenticado -->
+		@auth
 		<footer class="text-primary text-center">
 			<small>
-				Desarrollado por <b>FRACTAL AGENCIA DIGITAL 💙</b>
+				Desarrollado por <b> ING RICHARD PEÑA By ING ISABEL SALAZAR </b>
 			</small>
 		</footer>
+		@endauth
 	</div>
 </body>
 
