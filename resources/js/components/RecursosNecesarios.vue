@@ -47,10 +47,10 @@
                       <option value="-1" selected>
                         Seleccionar</option>
                       <template v-for="(actividad,
-                      index) in listadoActividades">
+                        index) in listadoActividades">
                         <option :key="index" :value="actividad.id" v-if="actividad.actividad != 'Alimentación'">
                           {{
-                              actividad.actividad
+                            actividad.actividad
                           }}</option>
                       </template>
 
@@ -62,7 +62,7 @@
                       <option value="-1">
                         Seleccionar</option>
                       <option v-for="(recurso,
-                      index) in listadoRecursos" :key="index" v-bind:value="recurso.id">
+                        index) in listadoRecursos" :key="index" v-bind:value="recurso.id">
                         {{ recurso.recurso }}
                       </option>
                     </select>
@@ -142,7 +142,7 @@
                     <td>
                       <button class="btn btn-danger" @click="
                         eliminarRegistro(item.id)
-                      ">
+                        ">
                         <i class="fas fa-trash"></i>
                       </button>
                       <button class="btn btn-success" @click="editarRegistro(item)">
@@ -179,7 +179,7 @@
                     cambiarPagina(
                       pagination.current_page - 1
                     )
-                  ">Ant</a>
+                    ">Ant</a>
                 </li>
                 <li class="page-item" v-for="page in pagesNumber" :key="page"
                   :class="[page == isActived ? 'active' : '']">
@@ -193,7 +193,7 @@
                     cambiarPagina(
                       pagination.current_page + 1
                     )
-                  ">Sig</a>
+                    ">Sig</a>
                 </li>
               </ul>
             </nav>
@@ -222,9 +222,9 @@
                   <select class="form-control" id="tipo_actividad" v-model="form.tipo_actividad">
                     <option selected>--Seleccionar--</option>
                     <option v-for="(actividad,
-                    index) in listadoActividades" :key="index" v-bind:value="actividad.id">{{
-      actividad.actividad
-  }}</option>
+                      index) in listadoActividades" :key="index" v-bind:value="actividad.id">{{
+                      actividad.actividad
+                      }}</option>
                   </select>
                 </div>
                 <div class="form-group">
@@ -243,9 +243,9 @@
                   <select class="form-control" id="recurso" v-model="form.id_recurso">
                     <option selected>--Seleccionar--</option>
                     <option v-for="(recurso,
-                    index) in listadoRecursos" :key="index" v-bind:value="recurso.id">{{
-      recurso.recurso
-  }}</option>
+                      index) in listadoRecursos" :key="index" v-bind:value="recurso.id">{{
+                      recurso.recurso
+                      }}</option>
                   </select>
                 </div>
                 <div class="form-row my-2" style="background:#f0ffff;" v-show="form.tipo_actividad == 12">
@@ -448,7 +448,7 @@ export default {
       let fecha_ra1 = this.fecha_ra1 == "" ? "-3" : this.fecha_ra1;
       let fecha_ra2 = this.fecha_ra2 == "" ? "-1" : this.fecha_ra2;
 
-   
+
       if (this.recurso_s == "") {
         this.rec = "-1";
       } else {
@@ -461,7 +461,7 @@ export default {
         f_estado: f_estado,
         tipo_actividad: search_activity,
         recurso_s: recurso_s,
-        fecha_ra1:fecha_ra1,
+        fecha_ra1: fecha_ra1,
         fecha_ra2: fecha_ra2,
         see_all: see_all
       };
@@ -525,10 +525,11 @@ export default {
     guardarRecursos() {
       let me = this;
       let data = {
+        ...this.form,
         tipo: 'RECURSOS NECESARIOS',
         descripcion: 'RECURSOS NECESARIOS SIEMBRAS'
       }
-      this.form.post("api/recursos-necesarios", data).then(({ data }) => {
+      axios.post("api/recursos-necesarios", data).then(({ data }) => {
         me.listar();
         $("#modalRecursos").modal("hide");
       });

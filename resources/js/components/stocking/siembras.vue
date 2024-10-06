@@ -180,7 +180,7 @@
                     <td>
                       <button class="btn btn-success" @click="editarSiembra(siembra)">
                         <i class="fas fa-edit"></i>
-                      </button>zs
+                      </button>
                     </td>
                     <td>
                       <button class="btn btn-danger" @click="eliminarSiembra(siembra.id)">

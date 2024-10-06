@@ -161,13 +161,14 @@ export default {
     },
     guardarRecursos() {
       let me = this;
+      let data = {
+        ...this.form,
+        tipo: 'ALIMENTACION',
+        descripcion: 'ALIMENTACION SIEMBRAS'
+      }
       if (this.editandoAlimento == 0) {
         this.form.id_siembra = this.siembra_id;
-        let data = {
-          ...this.form,
-          tipo: 'ALIMENTACION',
-          descripcion: 'ALIMENTACION SIEMBRAS'
-        }
+
         axios.post("api/recursos-necesarios", data).then(({ data }) => {
 
           Swal.fire(
@@ -179,8 +180,8 @@ export default {
           me.listarRecursosAlimentos(this.siembra_id);
         });
       } else {
-        this.form
-          .put("api/recursos-necesarios/" + this.form.id_registro)
+        axios
+          .put("api/recursos-necesarios/" + this.form.id_registro, data)
           .then(({ data }) => {
             this.form.reset();
             this.editandoAlimento = 0;

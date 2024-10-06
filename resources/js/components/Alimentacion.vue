@@ -416,10 +416,11 @@ export default {
     guardarRecursos() {
       let me = this;
       let data = {
+        ...this.form,
         tipo: 'ALIMENTACION',
         descripcion: 'ALIMENTACION SIEMBRAS'
       }
-      this.form.post("api/recursos-necesarios", data )
+      axios.post("api/recursos-necesarios", data)
         .then(({ data }) => {
           me.listar();
           $('#modalRecursos').modal('hide');
