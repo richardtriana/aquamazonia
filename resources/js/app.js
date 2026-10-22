@@ -16,20 +16,21 @@ import 'vue-select/dist/vue-select.css';
 // import 'vue-select/dist/vue-select'
 import JsonExcel from 'vue-json-excel'
 import vueNumeralFilterInstaller from 'vue-numeral-filter';
-import {  HasError, AlertError } from 'vform'
+import { HasError, AlertError } from 'vform'
 
 Vue.component('downloadExcel', JsonExcel)
 Vue.component("pagination", require("laravel-vue-pagination"));
 Vue.component('v-select', vSelect)
+//Vue.component('app-notifications', require('./components/Sync/AppNotifications.vue').default);
+Vue.component('registrador-app', require('./components/public/RegistradorApp.vue').default);
+Vue.component('feeding-prelogs-badge', require('./components/Sync/FeedingPrelogsBadge.vue').default);
 
 Vue.component(HasError.name, HasError)
 Vue.component(AlertError.name, AlertError)
 
-
 window.Swal = Swal
 Vue.use(VueRouter)
 Vue.use(vueNumeralFilterInstaller, { locale: 'es' });
-
 
 let routes = [
     { path: '/', component: require('./components/Dashboard.vue').default },
@@ -41,11 +42,13 @@ let routes = [
     { path: '/usuarios', component: require('./components/users/users.vue').default },
     { path: '/siembras', component: require('./components/stocking/siembras.vue').default },
     // { path: '/siembras', component: require('./components/Siembras.vue').default },
+    // 👉 NUEVA RUTA: Sincronización de preregistros de alimentación
+    { path: '/sync-feedings', component: require('./components/Sync/FeedingsSync.vue').default },
     { path: '/recursos-necesarios', component: require('./components/RecursosNecesarios.vue').default },
     { path: '/informes', component: require('./components/Informes.vue').default },
     { path: '/alimentacion', component: require('./components/Alimentacion.vue').default },
     { path: '/ciclo-productivo', component: require('./components/InformeCicloProductivo.vue').default },
-    { path: '/calidad-agua', component: require('./components/CalidadAgua.vue').default },
+    { path: '/calidad-agua', component: require('./components/CalidadAgua/CalidadAgua.vue').default },
     { path: '/informe-siembras', component: require('./components/InformeSiembras.vue').default },
     { path: '/informes-parametros', component: require('./components/InformeParametros.vue').default },
     { path: '/informe-actividades', component: require('./components/InformeActividades.vue').default },
@@ -56,6 +59,7 @@ let routes = [
     { path: '/historial-costos-alimentos', component: require('./components/HistorialCostosAlimentos.vue').default },
     { path: '/historial-costos-recursos', component: require('./components/HistorialCostosRecursos.vue').default },
     { path: '/informe-consolidado-alimentos', component: require('./components/InformeConsolidadoAlimentos.vue').default },
+    { path: '/reporte-grafico-muestra', component: require('./components/ReporteGraficoMuestra.vue').default },
     { path: '/phases', component: require('./components/phase/phases.vue').default },
     { path: '/warehouses', component: require('./components/warehouse/warehouses.vue').default },
     { path: '/resource-categories', component: require('./components/resource-category/resource-categories.vue').default },
@@ -71,8 +75,19 @@ let routes = [
     { path: '/stock/resources', component: require('./components/stock/resource-stock.vue').default },
     { path: '/purchases/foods', component: require('./components/purchases/foods/purchases.vue').default },
     { path: '/purchases/resources', component: require('./components/purchases/resources/purchases.vue').default },
-    { path: '/purchase-food/:purchase_id', component: require('./components/purchases/foods/create-edit-purchase.vue').default, props: true, name:'purchase-food' },
-    { path: '/purchase-resource/:purchase_id', component: require('./components/purchases/resources/create-edit-purchase.vue').default, props: true, name:'purchase-resource' },
+    {
+        path: '/purchase-food/:purchase_id',
+        component: require('./components/purchases/foods/create-edit-purchase.vue').default,
+        props: true,
+        name: 'purchase-food'
+    },
+    {
+        path: '/purchase-resource/:purchase_id',
+        component: require('./components/purchases/resources/create-edit-purchase.vue').default,
+        props: true,
+        name: 'purchase-resource'
+    },
+    { path: '/backup', component: require('./components/Backup.vue').default },
 
 ]
 
@@ -103,3 +118,10 @@ const app = new Vue({
     el: '#app',
     router,
 });
+
+// 👉 Instancia separada para la vista pública del registrador
+if (document.getElementById('registrador-app')) {
+    new Vue({
+        el: '#registrador-app',
+    });
+}

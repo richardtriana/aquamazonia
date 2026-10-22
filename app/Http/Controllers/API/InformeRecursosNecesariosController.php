@@ -83,7 +83,12 @@ class InformeRecursosNecesariosController extends Controller
       $recursoNecesario->costo_alimento = $recursoNecesario->c_manana_costo + $recursoNecesario->c_tarde_costo;
       $recursoNecesario->costo_total_actividad = $recursoNecesario->costo_recurso + $recursoNecesario->costo_minutos + $recursoNecesario->costo_alimento;
       $recursoNecesario->costo_total_siembra = $this->costoTotalSiembra($recursoNecesario->siembra_id);
-      $recursoNecesario->porcentaje_total_produccion = ($recursoNecesario->costo_total_actividad * 100) / $recursoNecesario->costo_total_siembra;
+      if ($recursoNecesario->costo_total_siembra > 0) {
+      $recursoNecesario->porcentaje_total_produccion =
+        ($recursoNecesario->costo_total_actividad * 100) / $recursoNecesario->costo_total_siembra;
+      } else {
+          $recursoNecesario->porcentaje_total_produccion = 0;
+      }
     }
 
     return ['recursosNecesarios' => $recursosNecesarios];

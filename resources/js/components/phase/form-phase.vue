@@ -1,36 +1,50 @@
 <template>
-  <!-- Modal para creacion y edicion de impuestos -->
-  <div class="modal fade" id="phaseModal" tabindex="-1" aria-labelledby="phaseModalLabel" aria-hidden="true"
-    data-backdrop="static">
+  <div
+    class="modal fade"
+    id="phaseModal"
+    tabindex="-1"
+    aria-labelledby="phaseModalLabel"
+    aria-hidden="true"
+    data-backdrop="static"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
+
         <div class="modal-header">
-          <h5 class="modal-title" id="phaseModalLabel">Fase</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
+          <h5 class="modal-title">
+            {{ edit ? "Editar fase" : "Crear fase" }}
+          </h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
           </button>
         </div>
+
         <div class="modal-body">
-          <div class="container">
-            <div class="row justify-content-center">
-              <form>
-                <div class="form-group">
-                  <label for="name">Fase</label>
-                  <input type="text" class="form-control" id="name" placeholder="" v-model="formPhase.phase" />
-                  <small class="form-text text-danger">{{ formErrors.phase }}</small>
-                </div>
-              </form>
+          <form @submit.prevent="SavePhase()">
+
+            <div class="form-group">
+              <label>Fase</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="formPhase.phase"
+              />
+              <small class="form-text text-danger">{{ formErrors.phase }}</small>
             </div>
-          </div>
+
+          </form>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" @click="closeModal()">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
             Cerrar
           </button>
-          <button type="button" class="btn btn-outline-primary" @click="SavePhase()">
-            Guardar
+
+          <button type="button" class="btn btn-primary" @click="SavePhase">
+            {{ edit ? "Actualizar" : "Guardar" }}
           </button>
         </div>
+
       </div>
     </div>
   </div>
@@ -41,82 +55,73 @@ export default {
   data() {
     return {
       edit: false,
+
       formPhase: {
-        phase: 0,
+        id: "",
+        phase: "",
       },
+
       formErrors: {
-        errors: "",
+        phase: "",
       },
     };
   },
-  methods: {
-    CreatePhase() {
-      let me = this;
-      this.assignErrors(false);
 
+  methods: {
+    // NUEVO: limpiar modal + errores
+    ResetData() {
+      this.edit = false;
+      this.formPhase = { id: "", phase: "" };
+      this.formErrors = { phase: "" };
+
+      $("#phaseModal").modal("show");
+    },
+
+    OpenEditPhase(phase) {
+      this.edit = true;
+
+      this.formPhase = {
+        id: phase.id,
+        phase: phase.phase,
+      };
+
+      this.formErrors = { phase: "" };
+
+      $("#phaseModal").modal("show");
+    },
+
+    SavePhase() {
+      if (!this.edit) this.CreatePhase();
+      else this.EditPhase();
+    },
+
+    CreatePhase() {
       axios
         .post("api/phases", this.formPhase, this.$root.config)
-        .then(function () {
+        .then(() => {
           $("#phaseModal").modal("hide");
-          me.formPhase = {};
-          me.$emit('list-phases');
+          this.$emit("list-phases");
         })
-        .catch((response) => {
-          this.assignErrors(response);
-        });
+        .catch(err => this.assignErrors(err));
     },
-    OpenEditPhase(phase) {
-      let me = this;
-      me.edit = true;
-      $("#phaseModal").modal("show");
-      me.formPhase = phase;
-    },
-    SavePhase: function () {
-      let me = this;
-      if (this.edit == false) {
-        this.CreatePhase();
-      } else {
-        this.EditPhase();
-      }
-    },
-
 
     EditPhase() {
-      let me = this;
-      this.assignErrors(false);
-
       axios
-        .put("api/phases/" + this.formPhase.id, this.formPhase, this.$root.config)
-        .then(function () {
+        .put(`api/phases/${this.formPhase.id}`, this.formPhase, this.$root.config)
+        .then(() => {
           $("#phaseModal").modal("hide");
-          me.formPhase = {};
-
-          me.$emit('list-phases');
+          this.$emit("list-phases");
         })
-        .catch((response) => {
-          this.assignErrors(response);
-        });
+        .catch(err => this.assignErrors(err));
     },
 
-    ResetData() {
-      let me = this;
-      $("#phaseModal").modal("hide");
-      me.formPhase = {};
-      this.assignErrors(false);
+    assignErrors(error) {
+      if (!error.response) return;
+
+      let errs = error.response.data.errors || {};
+
+      this.formErrors.phase = errs.phase ? errs.phase[0] : "";
     },
-    closeModal() {
-      this.edit = false;
-      this.ResetData();
-      this.$emit("list-phases");
-    },
-    assignErrors(response) {
-      if (response) {
-        var errors = response.response.data.errors;
-      } else { }
-    },
-  },
-  mounted() {
-    console.log("Component mounted.");
   },
 };
 </script>

@@ -1,127 +1,1025 @@
-//Etiquetas generales
-h1, h2, h3, h4 {
+// ===============================
+//  ESTILOS GENERALES
+// ===============================
+
+// Títulos
+h1,
+h2,
+h3,
+h4 {
   color: $primary;
 }
 
+// Encabezados de tabla
 thead {
   background-color: $background-light-blue-medium;
 }
 
-// Medias
-
-@media (min-width: 992px) {  
-	main > .container, 
-	nav > .container {
-    min-width: 90% !important;
-    max-width: 90% !important;
+// Contenedores principales: que usen todo el ancho disponible
+@media (min-width: 992px) {
+  main > .container,
+  nav > .container {
+    width: 100% !important;
+    max-width: 100% !important;
   }
 }
 
+// ===============================
+//  SPINNER GLOBAL AQUAMAZONIA
+// ===============================
+
+.global-spinner {
+  position: fixed;
+  inset: 0;
+  /* Fondo más TRANSPARENTE, dejando ver el contenido detrás */
+  background: radial-gradient(
+    circle at top,
+    rgba(14, 165, 233, 0.20) 0%,   // azul clarito con transparencia
+    rgba(15, 23, 42, 0.55) 40%,    // fondo oscuro pero semi-transparente
+    rgba(15, 23, 42, 0.75) 100%    // un poco más oscuro en la parte baja
+  );
+  backdrop-filter: blur(1px);      // ligero blur, opcional (puedes quitarlo si no te gusta)
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.global-spinner-inner {
+  text-align: center;
+  color: #e5e7eb;
+}
+
+.global-spinner-ring {
+  width: 80px;
+  height: 80px;
+  border-radius: 999px;
+  border: 4px solid rgba(148, 163, 184, 0.35);
+  border-top-color: #22c55e;   // verde de acento
+  border-right-color: #0ea5e9; // azul de acento
+  animation: global-spin 0.9s linear infinite;
+  margin: 0 auto 1rem auto;
+  box-shadow: 0 0 24px rgba(15, 23, 42, 0.6);
+}
+
+.global-spinner-logo {
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  color: #f9fafb;
+}
+
+.global-spinner-text {
+  margin-top: 0.25rem;
+  font-size: 0.85rem;
+  color: #9ca3af;
+}
+
+@keyframes global-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// ===============================
+//  TABLAS ANCHAS CON SCROLL
+// ===============================
+
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.table-container--wide .table {
+  min-width: 1600px; // fuerza que aparezca scroll horizontal en informes grandes
+}
+
+// ===============================
+//  INPUTS Y SELECTS ESTILO AQUAMAZONIA
+// ===============================
+
+.custom-select,
+.form-control {
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  box-shadow: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.08s ease;
+  font-size: 0.9rem;
+}
+
+.custom-select:focus,
+.form-control:focus {
+  border-color: $primary;
+  box-shadow: 0 0 0 0.15rem rgba(14, 165, 233, 0.25);
+  transform: translateY(-1px);
+}
+
+/* v-select (vue-select) con tema Aquamazonia */
+.v-select .vs__dropdown-toggle {
+  border-radius: 0.75rem;
+  border: 1px solid #e5e7eb;
+  padding: 0.25rem 0.5rem;
+  min-height: 38px;
+}
+
+.v-select .vs__dropdown-toggle:focus,
+.v-select .vs__dropdown-toggle.vs__dropdown-toggle--open {
+  border-color: $primary;
+  box-shadow: 0 0 0 0.15rem rgba(14, 165, 233, 0.25);
+}
+
+.v-select .vs__selected,
+.v-select .vs__search {
+  font-size: 0.9rem;
+}
+
+.v-select .vs__open-indicator {
+  fill: $primary;
+}
+
+
+// Tarjetas Bootstrap
 .card {
+  border-radius: 1rem;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
+  overflow: hidden;
+
   .card-header {
-    text-transform: uppercase;
+    background-color: #ffffff;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.06);
     text-align: center;
+    text-transform: uppercase;
     font-size: $font-header-medium;
     color: $primary;
+
+    h3 {
+      margin-bottom: 0.1rem;
+      font-weight: 700;
+    }
+
+    h5 {
+      margin: 0;
+      font-weight: 400;
+      color: #6b7280;
+      text-transform: none;
+    }
+  }
+
+  .card-body {
+    background-color: #ffffff;
   }
 }
 
+// Título de la app (por si se usa en alguna vista)
 #title-app {
-	color: transparent !important;
-	-webkit-text-stroke-width: 1px;
-	-webkit-text-stroke-color: #19191c;
-	-webkit-transition: all 0.3s ease-in-out;
-	transition: all 0.3s ease-in-out;
-  text-transform: uppercase;
-}
-#title-app-shadow {
-	text-shadow: 0.03em 0.03em 0 $primary;
+  color: transparent !important;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #19191c;
+  -webkit-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
   text-transform: uppercase;
 }
 
-input[type="checkbox"] {
- display: none;
+#title-app-shadow {
+  text-shadow: 0.03em 0.03em 0 $primary;
+  text-transform: uppercase;
 }
+// ===============================
+//  LOGIN AQUAMAZONIA
+//  Fondo animado + tarjeta
+// ===============================
+
+.auth-login-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1rem;
+  position: relative;
+  overflow: hidden;
+
+  // Fondo base suave
+  background: radial-gradient(circle at top, #0ea5e9 0, #e0f2fe 36%, #f9fafb 100%);
+}
+
+// blobs animados
+.auth-login-wrapper::before,
+.auth-login-wrapper::after {
+  content: "";
+  position: absolute;
+  border-radius: 999px;
+  filter: blur(40px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.auth-login-wrapper::before {
+  width: 420px;
+  height: 420px;
+  top: -140px;
+  left: -80px;
+  background: rgba(34, 197, 94, 0.75); // verde
+  animation: aqua-orbit-1 26s ease-in-out infinite;
+}
+
+.auth-login-wrapper::after {
+  width: 520px;
+  height: 520px;
+  bottom: -200px;
+  right: -120px;
+  background: rgba(37, 99, 235, 0.65); // azul
+  animation: aqua-orbit-2 32s ease-in-out infinite;
+}
+
+@keyframes aqua-orbit-1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  40%  { transform: translate(40px, 20px) scale(1.08); }
+  70%  { transform: translate(-20px, 10px) scale(1.02); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+@keyframes aqua-orbit-2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  35%  { transform: translate(-30px, -25px) scale(1.06); }
+  75%  { transform: translate(25px, -10px) scale(1.03); }
+  100% { transform: translate(0, 0) scale(1); }
+}
+
+// ===============================
+//  LOGIN AQUAMAZONIA (LIMPIO, MODERNO, SIN PARTÍCULAS)
+// ===============================
+
+.login-page {
+  position: relative;
+  min-height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  padding: 2rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #e5e7eb;
+
+  background:
+    radial-gradient(circle at 12% 0%, rgba(16, 185, 129, 0.22) 0, transparent 40%),
+    radial-gradient(circle at 82% 100%, rgba(59, 130, 246, 0.40) 0, transparent 50%),
+    #020617;
+}
+
+/* Eliminamos completamente las partículas */
+.login-bg-particles {
+  display: none !important;
+}
+
+.login-card {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  padding: 2.5rem 2.25rem 2rem;
+  border-radius: 22px;
+
+  background:
+    radial-gradient(circle at top, rgba(59, 130, 246, 0.35), transparent 65%),
+    rgba(15, 23, 42, 0.94);
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  box-shadow:
+    0 24px 60px rgba(15, 23, 42, 0.90),
+    0 0 0 1px rgba(15, 23, 42, 0.85);
+  backdrop-filter: blur(22px);
+}
+
+/* Títulos */
+.login-title-wrapper {
+  .login-title {
+    font-size: 1.6rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #f9fafb;
+    margin-bottom: 0.25rem;
+  }
+
+  .login-subtitle {
+    font-size: 0.86rem;
+    color: #9ca3af;
+    margin: 0;
+  }
+}
+
+/* Labels */
+.login-label {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: #9ca3af;
+  margin-bottom: 0.35rem;
+}
+
+/* =============================
+   INPUTS CLAROS (BLANCOS)
+   ============================= */
+.login-input {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.4);
+  background: rgba(255, 255, 255, 0.98);   /* <-- FONDO CLARO */
+  color: #111827;
+  font-size: 0.95rem;
+  padding: 0.65rem 1rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &::placeholder {
+    color: #6b7280;
+  }
+
+  &:focus {
+    outline: 0;
+    border-color: #2563eb;
+    box-shadow:
+      0 0 0 1px rgba(56, 189, 248, 0.9),
+      0 0 18px rgba(56, 189, 248, 0.45);
+    background: #ffffff;
+  }
+}
+
+/* autofill */
+input.login-input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #111827 !important;
+}
+
+/* wrapper del ojo */
+.password-wrapper {
+  position: relative;
+
+  .login-input {
+    padding-right: 2.8rem;
+  }
+}
+
+/* ojo */
+.toggle-password {
+  position: absolute;
+  top: 50%;
+  right: 0.9rem;
+  transform: translateY(-50%);
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  color: #4b5563;
+
+  i {
+    font-size: 1rem;
+  }
+
+  &:hover {
+    color: #111827;
+  }
+}
+
+/* botón principal */
+.login-btn {
+  border-radius: 999px;
+  border: none;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+
+  background: linear-gradient(90deg, #2563eb, #3b82f6, #22c55e);
+  color: #f9fafb;
+  box-shadow:
+      0 10px 30px rgba(37, 99, 235, 0.7),
+      0 0 35px rgba(59, 130, 246, 0.65);
+
+  transition: transform 0.08s ease, box-shadow 0.12s ease, filter 0.12s ease;
+
+  &:hover {
+    filter: brightness(1.06);
+    transform: translateY(-1px);
+    box-shadow:
+      0 14px 36px rgba(37, 99, 235, 0.85),
+      0 0 40px rgba(59, 130, 246, 0.85);
+  }
+}
+
+/* footer */
+.login-footer {
+  font-size: 0.78rem;
+  color: #9ca3af;
+
+  strong {
+    color: #e5e7eb;
+    font-weight: 600;
+  }
+}
+
+/* Responsive */
+@media (max-width: 575.98px) {
+  .login-card {
+    padding: 2rem 1.5rem 1.75rem;
+  }
+  .login-title-wrapper .login-title {
+    font-size: 1.3rem;
+  }
+}
+
+// Título grande fuera del modal
+.login-page-title {
+  position: absolute;
+  top: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1; // por encima del fondo, detrás de la tarjeta
+
+  h1 {
+    margin: 0;
+    font-size: 1.9rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: #e5f3ff;
+    text-shadow: 0 0 18px rgba(15, 23, 42, 0.9);
+    white-space: nowrap;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .login-page-title h1 {
+    font-size: 1.4rem;
+    letter-spacing: 0.08em;
+    white-space: normal;
+  }
+}
+
+
+
+// ===============================
+//  LOGOS
+// ===============================
+
+/* Logo grande en el sitio (otras vistas) */
+img[src*="logo-aquamazonia"] {
+  max-width: 260px;
+  height: auto;
+  display: block;
+  margin: 0 auto 1rem;
+}
+
+/* Logo circular del sidebar */
+#logo-app {
+  width: 80px;
+  height: 80px;
+  max-width: 80px;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  margin: 0 auto;
+}
+
+// ===============================
+//  CHECKBOX PERSONALIZADOS
+// ===============================
+
+input[type="checkbox"] {
+  display: none;
+}
+
 input[type="checkbox"] + label span {
   background-color: rgb(241, 241, 241);
-  display:inline-block;
-  width:20px;
-  height:20px;
-  margin:-1px 4px 0 0;
-  vertical-align:middle;  
-  cursor:pointer;
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  margin: -1px 4px 0 0;
+  vertical-align: middle;
+  cursor: pointer;
 }
+
 input[type="checkbox"]:checked + label span {
   background-color: $primary;
 }
 
-.form-check-label{
+.form-check-label {
   font-size: 1rem;
 }
 
-ul#main-navigation {
-  
-  @media (min-width:768px) {
-    flex-direction: row;
-    justify-content: flex-end;    
+// ===============================
+//  MENÚ LATERAL AQUAMAZONIA
+//  (estilo Tecnoplus: oscuro + acento verde/azul)
+// ===============================
+
+#aquamazonia-sidebar {
+  width: 260px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 1000;
+  background: #111827; // gris muy oscuro
+  color: #e5e7eb;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 0.75rem;
+  box-shadow: 4px 0 16px rgba(15, 23, 42, 0.35);
+
+  .sidebar-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
   }
 
-  li.col-nav-item {
-    a.nav-link {
-      color: $primary;
-      background-color: $background-light-blue;
-      border-radius: 1rem;
-      margin: 5px;
-      border-bottom: 1px solid #5bbcf0;
+  // --- Logo + textos superiores
+  .sidebar-logo {
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0 0.25rem 0.5rem 0.25rem;
+    border-bottom: 1px solid rgba(15, 23, 42, 0.7);
+
+    img#logo-app {
+      width: 52px !important;
+      height: 52px !important;
+      max-width: 52px !important;
+      object-fit: cover;
+      border-radius: 50%;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4);
+    }
+
+    .sidebar-brand-text {
+      display: flex;
+      flex-direction: column;
+
+      h2 {
+        font-size: 1.25rem;
+        margin: 0;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: #f9fafb;
+      }
+
+      small {
+        font-size: 0.75rem;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+        color: #9ca3af;
+      }
+    }
+  }
+
+  // --- Scroll del menú
+  .sidebar-menu-scroll {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 0.75rem;
+    padding-right: 0.15rem;
+  }
+
+  // --- Títulos de sección (Principal, Informes, Configuración, etc.)
+  .menu-section-title {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    color: #6b7280;
+    margin-top: 0.75rem;
+    margin-bottom: 0.25rem;
+    padding-left: 0.8rem;
+  }
+
+  // Lista principal
+  ul#main-navigation {
+    display: flex;
+    flex-direction: column;
+    padding-left: 0;
+    margin-bottom: 0;
+
+    li {
+      list-style: none;
+    }
+  }
+
+  // --- Links generales
+  .nav-link {
+    padding-top: 0.4rem;
+    padding-bottom: 0.4rem;
+    padding-left: 1.1rem; // espacio para la barra activa
+    padding-right: 0.9rem;
+    font-size: 0.94rem;
+    color: #e5e7eb;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    transition: background-color 0.15s ease, color 0.15s ease,
+      box-shadow 0.15s ease, transform 0.1s ease;
+
+    span {
+      display: inline-block;
+    }
+
+    &:hover {
+      background-color: rgba(55, 65, 81, 0.9);
+      color: #ffffff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+      text-decoration: none;
+      transform: translateX(2px);
+    }
+
+    // Barra verde tipo Tecnoplus cuando el enlace está activo
+    &.router-link-exact-active,
+    &.router-link-active {
+      font-weight: 600;
+      background: linear-gradient(
+        90deg,
+        rgba(16, 185, 129, 0.16) 0%,
+        rgba(16, 185, 129, 0.05) 100%
+      );
+      color: #ecfdf5 !important;
+      box-shadow: 0 10px 24px rgba(16, 185, 129, 0.35);
+
+      &::before {
+        content: "";
+        position: absolute;
+        left: 0.35rem;
+        top: 6px;
+        bottom: 6px;
+        width: 3px;
+        border-radius: 999px;
+        background: linear-gradient(180deg, #22c55e, #16a34a);
+      }
+    }
+  }
+
+  // --- Toggles de submenú
+  .submenu-toggle {
+    cursor: pointer;
+    font-weight: 500;
+
+    .chevron {
+      margin-left: 0.5rem;
+      transition: transform 0.2s ease;
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    &[aria-expanded="true"] {
+      background-color: rgba(55, 65, 81, 0.9);
+      color: #ecfdf5;
+
+      .chevron {
+        transform: rotate(90deg);
+      }
+    }
+  }
+
+  // --- Submenús
+  .submenu {
+    padding-left: 0.5rem;
+    margin-top: 0.2rem;
+    margin-bottom: 0.35rem;
+
+    .nav-link {
+      font-size: 0.88rem;
+      border-radius: 999px;
+      padding-left: 1.4rem;
+
+      &::before {
+        // por defecto no mostrar barra
+        content: none;
+      }
+
+      &.router-link-exact-active,
+      &.router-link-active {
+        background: rgba(16, 185, 129, 0.16);
+        color: #ecfdf5 !important;
+
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0.8rem;
+          top: 6px;
+          bottom: 6px;
+          width: 2px;
+          border-radius: 999px;
+          background: linear-gradient(180deg, #22c55e, #16a34a);
+        }
+      }
+    }
+  }
+
+  // --- Bloque del usuario al final del menú
+  .user-section {
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px dashed rgba(75, 85, 99, 0.8);
+
+    .nav-link {
+      font-size: 0.9rem;
+      color: #e5e7eb;
+
+      .user-name {
+        font-weight: 500;
+      }
     }
   }
 }
 
+// Responsive: en móvil un poco más estrecho
+@media (max-width: 767.98px) {
+  #aquamazonia-sidebar {
+    width: 230px;
+  }
+}
+
+// ===============================
+//  DASHBOARD / CUADROS DE OPCIÓN
+// ===============================
 
 .container {
   .content-dashboard {
     display: grid;
-    grid-template-columns: repeat(2, 48% );
-    grid-column-gap: 2%;
-    grid-row-gap: 1cm;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-column-gap: 1rem;
+    grid-row-gap: 1rem;
+    margin-top: 0.5rem;
 
-    @media (min-width:768px) {
-      grid-template-columns: repeat(3, 30% );
-      grid-column-gap: 3%;
+    @media (min-width: 768px) {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
     }
-    @media (min-width:1024px) {
-      grid-template-columns: repeat(5, 18% );
-      grid-column-gap: 2%;
+
+    @media (min-width: 1200px) {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
     }
-    // grid-template-rows: repeat(3, minmax(200px, 400px));
-    .box-option {
-      width: 100%;
-      height: 100%;
-      align-content: stretch;
-      display: grid;
-      grid-template-columns: 100%;
 
-      .cover-option {
-        align-self: center;
-        padding: 1rem;
+    .card {
+      border-radius: 1rem;
+      border: none;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      overflow: hidden;
+      background-color: #ffffff;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
 
-        img {
-          max-width: 80%;
-          max-height: 6rem;
-          margin: auto;
-        }
+      &:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 35px rgba(15, 23, 42, 0.16);
       }
 
-      .description-option {
-        padding: 0.5rem;
-        background: linear-gradient(to right, #158d99, #155799);
-        min-height: 2rem;
+      .box-option {
+        width: 100%;
+        height: 100%;
+        display: grid;
+        grid-template-rows: auto 52px;
+        text-decoration: none;
 
-        h4 {
+        .cover-option {
           align-self: center;
+          padding: 1rem;
+          background-color: #f9fafb;
+
+          img {
+            max-width: 80%;
+            max-height: 6rem;
+            margin: auto;
+          }
+        }
+
+        .description-option {
+          padding: 0.4rem;
+          background: linear-gradient(to right, #0ea5e9, #0369a1);
+          min-height: 2.6rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+
+          h4 {
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #ffffff;
+          }
         }
       }
-
     }
   }
+}
+
+/* ============================================================================
+   FIX DEFINITIVO PARA COLLAPSE DEL SIDEBAR
+   ============================================================================ */
+
+/* Permitir que Bootstrap collapse funcione normalmente */
+#aquamazonia-sidebar .collapse {
+    display: none;
+    height: auto !important;
+    overflow: hidden;
+    transition: height .25s ease;
+}
+
+#aquamazonia-sidebar .collapse.show {
+    display: block;
+}
+
+/* Evitar interferencias específicas de AdminLTE */
+.sidebar-menu-scroll .nav-treeview,
+.nav-sidebar .nav-treeview {
+    display: block !important;
+    padding-left: 0 !important;
+}
+
+/* Para que el clic abra/cierre correctamente */
+#aquamazonia-sidebar .submenu-toggle {
+    cursor: pointer;
+}
+
+/* Asegurar que ningún estilo global tape el contenido */
+#aquamazonia-sidebar .submenu {
+    overflow: hidden;
+    padding-left: 0.25rem;
+}
+
+// ===============================
+//  TOGGLE SIDEBAR BUTTON - FIXED POSITION
+// ===============================
+
+.sidebar-toggle-btn {
+  position: fixed;
+  left: 260px; // Posición inicial: al lado derecho del sidebar
+  top: 20px;
+  z-index: 1001;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0ea5e9, #22c55e);
+  border: 2px solid #ffffff;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.3);
+  
+  i {
+    font-size: 0.9rem;
+    transition: transform 0.3s ease;
+  }
+  
+  &:hover {
+    transform: scale(1.08);
+    box-shadow: 0 6px 18px rgba(15, 23, 42, 0.4);
+  }
+  
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+// Cuando el sidebar está colapsado
+.sidebar-collapsed {
+  #aquamazonia-sidebar {
+    transform: translateX(-100%);
+    box-shadow: none;
+    transition: transform 0.3s ease;
+  }
+  
+  .sidebar-toggle-btn {
+    left: 20px !important; // IMPORTANTE: !important para forzar la posición
+    
+    i {
+      transform: rotate(180deg);
+    }
+  }
+  
+
+  
+  .container, .container-fluid {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+    transition: all 0.3s ease;
+  }
+  
+  // Asegurar que las tablas aprovechen el espacio
+  .table, table {
+    width: 100% !important;
+  }
+  
+  // Ajustar filtros y controles
+  .filter-section, .search-section, .card-header, .page-header {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+}
+
+// Responsive para el botón
+@media (max-width: 767.98px) {
+  .sidebar-toggle-btn {
+    left: 230px; // Ancho del sidebar en móvil
+  }
+  
+  .sidebar-collapsed .sidebar-toggle-btn {
+    left: 15px !important;
+  }
+  
+  #aquamazonia-sidebar {
+    width: 230px;
+  }
+  
+  .sidebar-collapsed .container,
+  .sidebar-collapsed .container-fluid {
+    padding-left: 1.5rem !important;
+    padding-right: 1.5rem !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .sidebar-toggle-btn {
+    width: 32px;
+    height: 32px;
+    top: 15px;
+  }
+  
+  .sidebar-collapsed .sidebar-toggle-btn {
+    left: 10px !important;
+  }
+  
+  .sidebar-collapsed .container,
+  .sidebar-collapsed .container-fluid {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+  }
+}
+
+// Asegurar que el sidebar tenga transición
+#aquamazonia-sidebar {
+  transition: transform 0.3s ease;
+}
+
+
+
+// ===============================
+//  FIX: ESPACIO EXCESIVO ENTRE SIDEBAR Y CONTENIDO
+// ===============================
+
+#app.app-with-sidebar-auth .app-content-wrapper {
+    margin-left: 260px !important;
+    width: calc(100% - 260px) !important;
+    padding: 0 1rem 0 0 !important; /* SIN padding izquierdo */
+}
+
+#app.app-with-sidebar-auth main {
+    padding-left: 1rem; /* Padding solo en el main */
+}
+
+/* Cuando el sidebar está colapsado */
+.sidebar-collapsed #app.app-with-sidebar-auth .app-content-wrapper {
+    margin-left: 0 !important;
+    width: 100% !important;
+    padding: 0 1rem !important; /* Padding regular cuando colapsado */
+}
+
+.sidebar-collapsed #app.app-with-sidebar-auth main {
+    padding-left: 0; /* Sin padding cuando colapsado */
+}
+
+/* Ajustar contenedores cuando sidebar colapsado */
+.sidebar-collapsed .container,
+.sidebar-collapsed .container-fluid {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+}
+
+/* Eliminar padding izquierdo innecesario en headers */
+.page-header, .content-header, .card-header {
+    padding-left: 0 !important;
+}
+
+/* Responsive */
+@media (max-width: 767.98px) {
+    #app.app-with-sidebar-auth .app-content-wrapper {
+        margin-left: 0 !important;
+        width: 100% !important;
+        padding: 0 1rem !important;
+    }
+    
+    #app.app-with-sidebar-auth main {
+        padding-left: 0;
+    }
+    
+    .sidebar-collapsed .container,
+    .sidebar-collapsed .container-fluid {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+    }
 }

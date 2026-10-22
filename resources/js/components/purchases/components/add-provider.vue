@@ -1,120 +1,112 @@
 <template>
-  <div class="modal fade" id="addProviderModal" tabindex="-1" aria-labelledby="addProviderModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
+  <div
+    class="modal fade"
+    id="addProviderModal"
+    tabindex="-1"
+    role="dialog"
+    data-backdrop="static"
+    aria-hidden="true"
+  >
+    <div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <div class="row w-100">
-            <h5 class="modal-title col-8" id="addProviderModalLabel">Proveedores</h5>
-            <div class="col-3">
-              <button type="reset" class="btn btn-primary" data-toggle="modal" data-target="#providerModal"
-                @click="edit = false" >
-                Crear Proveedor
-              </button>
-            </div>
-          </div>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
+
+        <!-- HEADER -->
+        <div class="modal-header bg-primary text-white">
+          <h5 class="modal-title">Seleccionar proveedor</h5>
+          <button type="button" class="close text-white" data-dismiss="modal">
+            <span>&times;</span>
           </button>
         </div>
+
+        <!-- BODY -->
         <div class="modal-body">
-          <div class="input-group">
-            <input type="text" class="form-control" placeholder="Documento | Nombre de proveedor"
-              aria-label=" with two button addons" aria-describedby="button-addon4" v-model="filters.provider"
-              @keyup="searchProvider()" />
-            <div class="input-group-append" id="button-addon4">
-              <button class="btn btn-outline-secondary" type="button" @click="searchProvider()">
-                Buscar Proveedor
-              </button>
-            </div>
+
+          <!-- BUSCADOR -->
+          <div class="form-group">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Buscar proveedor..."
+              v-model="search"
+              @keyup="loadProviders"
+            />
           </div>
-          <table class="table table-bordered table-sm table-responsive">
-            <thead>
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Nombres</th>
-                <th>NIT</th>
-                <th>Direccion</th>
-                <th>Contacto</th>
-                <th>Opciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="provider in providerList.data" v-bind:key="provider.id">
-                <th scope="row">{{ provider.id }}</th>
-                <td>{{ provider.provider }}</td>
-                <td>{{ provider.nit }}</td>
-                <td>{{ provider.address }}</td>
-                <td>{{ provider.tel }}</td>
-                <td>
-                  <button class="btn btn-outline-secondary" @click="$emit('add-provider', provider)"
-                    data-dismiss="modal">
-                    <i class="fa fa-plus-circle" aria-hidden="true"></i>
-                  </button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
+
+          <!-- TABLA -->
+          <div class="table-responsive" style="max-height: 400px; overflow-y: auto;">
+            <table class="table table-sm table-bordered table-hover">
+              <thead class="thead-dark">
+                <tr>
+                  <th>ID</th>
+                  <th>Proveedor</th>
+                  <th>Teléfono</th>
+                  <th>Seleccionar</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr v-for="p in providers" :key="p.id">
+                  <td>{{ p.id }}</td>
+                  <td>{{ p.provider }}</td>
+                  <td>{{ p.telefono || '-' }}</td>
+
+                  <td>
+                    <button class="btn btn-success btn-sm" @click="selectProvider(p)">
+                      <i class="fa fa-plus"></i> Elegir
+                    </button>
+                  </td>
+                </tr>
+
+                <tr v-if="providers.length === 0">
+                  <td colspan="4" class="text-center text-muted">Sin resultados</td>
+                </tr>
+              </tbody>
+
+            </table>
+          </div>
+
         </div>
+
+        <!-- FOOTER -->
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">
-            Cerrar
-          </button>
+          <button class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
         </div>
+
       </div>
     </div>
-     <create-edit-provider
-      ref="CreateEditProvider"
-      @list-providers="listProviders(1)"
-    />
   </div>
 </template>
 
 <script>
-import CreateEditProvider from "../../provider/form-provider.vue";
-
 export default {
-  components: { CreateEditProvider },
-  name: "add-provider",
   data() {
     return {
-      providerList: {},
-      filters: {
-        provider: "",
-      },
+      search: "",
+      providers: [],
     };
   },
-  created() {
-    this.listProviders();
-  },
+
   methods: {
-    listProviders() {
-      let me = this;
+    // Abre modal
+    open() {
+      this.search = "";
+      this.providers = [];
+      $("#addProviderModal").modal("show");
+    },
+
+    // Cargar proveedores
+    loadProviders() {
       axios
-        .get("api/providers", null, this.$root.config)
-        .then(function (response) {
-          me.providerList = response.data.providers;
-          console.log(response.data.providers)
+        .get("api/providers", { params: { provider: this.search } })
+        .then((res) => {
+          this.providers = res.data.providers.data || [];
         });
     },
-    searchProvider() {
-      let me = this;
-      if (me.filters.provider == "") {
-        return false;
-      }
-      var url = "api/providers?provider=" + me.filters.provider;
-      if (me.filters.provider.length >= 3) {
-        axios
-          .get(url, null, me.$root.config)
-          .then(function (response) {
-            me.providerList = response.data.providers;
-          })
-          .catch(function (error) {
-            $("#no-results").toast("show");
 
-            console.log(error);
-          });
-      }
+    // Enviar proveedor al componente padre
+    selectProvider(provider) {
+      this.$emit("add-provider", provider);
+      $("#addProviderModal").modal("hide");
     },
   },
 };

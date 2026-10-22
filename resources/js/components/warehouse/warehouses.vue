@@ -1,99 +1,134 @@
 <template>
   <div class="col-12 container">
-    <h3 class="page-header">Bodega</h3>
-    <section v-if="isLoading"> Cargando... </section>
-    <section v-if="!isLoading">
-      <div class="row justify-content-end mx-4">
-        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#warehouseModal"
-          @click="$refs.FormWarehouse.ResetData()">
-          Crear Bodega
+
+    <h3 class="page-header mb-4">Bodega</h3>
+
+    <!-- CARD DE INFORMACIÓN -->
+    <div class="row mb-3">
+      <div class="col-md-3">
+        <div class="card shadow-sm border-left-primary">
+          <div class="card-body py-2">
+            <h6 class="text-muted mb-1">Total bodegas</h6>
+            <h4 class="font-weight-bold">
+              {{ warehouseListing.total ? warehouseListing.total : 0 }}
+            </h4>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOTÓN CREAR -->
+      <div class="col-md-9 d-flex justify-content-end align-items-center">
+        <button 
+          type="button" 
+          class="btn btn-primary btn-sm px-4"
+          @click="$refs.FormWarehouse.abrir()">
+          <i class="fas fa-plus"></i> Crear Bodega
         </button>
       </div>
-      <div class="card-body table-responsive-sm">
-        <table class="table table-sm table-bordered">
-          <thead class="thead-primary">
-            <tr>
-              <th scope="col">#</th>
-              <th>Bodega</th>
-              <th>Descripción</th>
-              <th>Estado</th>
-              <th>Opciones</th>
-            </tr>
-          </thead>
-          <tbody v-if="warehouseListing.data">
-            <tr v-for="(warehouse, index) in warehouseListing.data" :key="warehouse.id">
-              <td scope="row">{{ index + 1 }}</td>
-              <td>{{ warehouse.warehouse }}</td>
-              <td>{{ warehouse.description }}</td>
-              <td>{{ warehouse.state ? 'Activo' : 'Inactivo' }}</td>
-              <td>
-                <button class="btn btn-outline-success" @click="ShowData(warehouse)">
-                  Editar
-                </button>
-              </td>
-            </tr>
-          </tbody>
-          <tbody v-else>
-            <tr>
-              <td>No hay datos registrados recientemente</td>
-            </tr>
-          </tbody>
-        </table>
+    </div>
+
+    <!-- LOADING -->
+    <section v-if="isLoading">Cargando...</section>
+
+    <!-- LISTADO -->
+    <section v-if="!isLoading">
+      <div class="card shadow-sm">
+        <div class="card-body table-responsive">
+          <table class="table table-bordered table-hover table-sm">
+
+            <thead class="thead-primary">
+              <tr>
+                <th>#</th>
+                <th>Bodega</th>
+                <th>Descripción</th>
+                <th>Estado</th>
+                <th>Opciones</th>
+              </tr>
+            </thead>
+
+            <tbody v-if="warehouseListing.data && warehouseListing.data.length">
+              <tr v-for="(warehouse, index) in warehouseListing.data" :key="warehouse.id">
+                <td>{{ index + 1 }}</td>
+                <td>{{ warehouse.warehouse }}</td>
+                <td>{{ warehouse.description }}</td>
+                <td>{{ warehouse.state ? 'Activo' : 'Inactivo' }}</td>
+
+                <td>
+                  <button 
+                    class="btn btn-sm btn-outline-success"
+                    @click="ShowData(warehouse)">
+                    <i class="fas fa-edit"></i> Editar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+
+            <tbody v-else>
+              <tr>
+                <td colspan="6" class="text-center text-muted py-3">
+                  No se encontraron bodegas registradas
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+        </div>
       </div>
     </section>
-    <!-- Modal para creacion y edicion de bodegas -->
-    <form-warehouse ref="FormWarehouse" @list-warehouses="listWarehouse(1)" />
+
+    <!-- MODAL -->
+    <form-warehouse 
+      ref="FormWarehouse" 
+      @list-warehouses="listWarehouse(1)" 
+    />
+
   </div>
 </template>
 
 <script>
 import FormWarehouse from "./form-warehouse.vue";
+
 export default {
   components: { FormWarehouse },
+
   data() {
     return {
       warehouseListing: {},
       isLoading: false,
     };
   },
+
   created() {
     this.listWarehouse(1);
   },
+
   methods: {
     listWarehouse(page = 1) {
-      let me = this;
-      me.isLoading = true;
+      this.isLoading = true;
       axios
         .get("api/warehouses?page=" + page, this.$root.config)
-        .then(function (response) {
-          me.warehouseListing = response.data.warehouses;
-        })
-        .catch(e => {
-          console.log(e)
+        .then(res => {
+          this.warehouseListing = res.data.warehouses;
         })
         .finally(() => {
-          me.isLoading = false;
+          this.isLoading = false;
         });
     },
 
-    ShowData: function (warehouse) {
+    ShowData(warehouse) {
       this.$refs.FormWarehouse.OpenEditWarehouse(warehouse);
     },
-    closeModal: function () {
-      let me = this;
+
+    closeModal() {
       this.$refs.FormWarehouse.ResetData();
-      me.listWarehouse(1);
-    },
-    changeState: function (id) {
-      let me = this;
-      axios
-        .post("api/warehouses/" + id + "/activate", null, me.$root.config)
-        .then(function () {
-          me.listWarehouse(1);
-        });
-    },
-  },
-  mounted() {
-  },
+      this.listWarehouse(1);
+    }
+  }
 };
 </script>
+
+<style scoped>
+.border-left-primary {
+  border-left: 4px solid #007bff !important;
+}
+</style>

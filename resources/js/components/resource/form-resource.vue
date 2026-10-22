@@ -3,178 +3,151 @@
     aria-labelledby="modalResourcesLabel" aria-hidden="true">
     <div class="modal-dialog">
       <div class="modal-content">
+
         <div class="modal-header">
-          <h5 class="modal-title" id="modalrecursosLabel" v-text="edit == 0 ? 'Crear recurso' : 'Actualizar recurso'">
-          </h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+          <h5 class="modal-title" v-text="edit == 0 ? 'Crear recurso' : 'Actualizar recurso'"></h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
           </button>
         </div>
+
         <div class="modal-body">
           <form @submit.prevent="SaveResource()">
+
             <div class="form-group row">
-              <label for="recurso" class="col-sm-12 col-md-4 col-form-label">Nombre recurso</label>
-              <div class="col-sm-12 col-md-8">
-                <input type="text" class="form-control" id="recurso" v-model="form.recurso" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="unidad" class="col-sm-12 col-md-4 col-form-label">Unidad
-              </label>
-              <div class="col-sm-12 col-md-8">
-                <input type="text" class="form-control" id="unidad" v-model="form.unidad"
-                  placeholder="Kg, Kl, Minuto, Lt" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="costo" class="col-sm-12 col-md-4 col-form-label">Costo Unidad
-              </label>
-              <div class="col-sm-12 col-md-8">
-                <input type="text" class="form-control" id="costo" v-model="form.costo" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="expiration_date" class="col-sm-12 col-md-4 col-form-label">Fecha de vencimiento
-              </label>
-              <div class="col-sm-12 col-md-8">
-                <input type="date" class="form-control" id="expiration_date" v-model="form.expiration_date" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="cantidad" class="col-sm-12 col-md-4 col-form-label">Cantidad
-              </label>
-              <div class="col-sm-12 col-md-8">
-                <input type="number" step="any" class="form-control" id="cantidad" v-model="form.cantidad" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="cantidad_minima" class="col-sm-12 col-md-4 col-form-label">Cantidad mínima
-              </label>
-              <div class="col-sm-12 col-md-8">
-                <input type="number" step="any" class="form-control" id="cantidad_minima" v-model="form.cantidad_minima" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label for="cantidad_maxima" class="col-sm-12 col-md-4 col-form-label">Cantidad máxima
-              </label>
-              <div class="col-sm-12 col-md-8">
-                <input type="number" step="any" class="form-control" id="cantidad_maxima" v-model="form.cantidad_maxima" />
-              </div>
-            </div>
-            <div class="form-group row">
-              <label class="col-sm-12 col-md-4 col-form-label" for="inventario">Inventario</label>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineInventarioOptions" id="inlineRadio1"
-                  value="1" v-model="form.inventario">
-                <label class="form-check-label" for="inlineRadio1">Si</label>
-              </div>
-              <div class="form-check form-check-inline">
-                <input class="form-check-input" type="radio" name="inlineInventarioOptions" id="inlineRadio2"
-                  value="0" v-model="form.inventario">
-                <label class="form-check-label" for="inlineRadio2">No</label>
+              <label class="col-md-4 col-form-label">Nombre recurso</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" v-model="form.recurso">
               </div>
             </div>
 
             <div class="form-group row">
-              <label for="categoria" class="col-sm-12 col-md-4 col-form-label">Categoría
-              </label>
-              <v-select label="category" class="col-sm-12 col-md-8" v-model="form.category_id"
-                :reduce="(option) => option.id" :filterable="false" :options="optCategories" @search="onSearchCategory">
-                <template slot="no-options">
-                  Escribe para iniciar la búsqueda
-                </template>
-                <template slot="option" slot-scope="option">
-                  <div class="d-center">
-                    {{ option.category }}
-                  </div>
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <div class="selected d-center">
-                    {{ option.category }}
-                  </div>
-                </template>
-              </v-select>
-            </div>
-            <div class="form-group row">
-              <label for="warehouse" class="col-sm-12 col-md-4 col-form-label">Bodega
-              </label>
-              <v-select label="warehouse" id="warehouse" class="col-sm-12 col-md-8" v-model="form.warehouse_id"
-                :reduce="(option) => option.id" :filterable="false" :options="optWarehouses" @search="onSearchWarehouse">
-                <template slot="no-options">
-                  Escribe para iniciar la búsqueda
-                </template>
-                <template slot="option" slot-scope="option">
-                  <div class="d-center">
-                    {{ option.warehouse }}
-                  </div>
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <div class="selected d-center">
-                    {{ option.warehouse }}
-                  </div>
-                </template>
-              </v-select>
-            </div>
-            <div class="form-group row">
-              <label for="provider" class="col-sm-12 col-md-4 col-form-label">Proveedor
-              </label>
-              <v-select label="provider" id="provider" class="col-sm-12 col-md-8" v-model="form.provider_id"
-                :reduce="(option) => option.id" :filterable="false" :options="optProviders" @search="onSearchProvider">
-                <template slot="no-options">
-                  Escribe para iniciar la búsqueda
-                </template>
-                <template slot="option" slot-scope="option">
-                  <div class="d-center">
-                    {{ option.provider }}
-                  </div>
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <div class="selected d-center">
-                    {{ option.provider }}
-                  </div>
-                </template>
-              </v-select>
-            </div>
-            <div class="form-group row">
-              <label for="brand" class="col-sm-12 col-md-4 col-form-label">Marca
-              </label>
-              <v-select label="brand" id="brand" class="col-sm-12 col-md-8" v-model="form.brand_id"
-                :reduce="(option) => option.id" :filterable="false" :options="optBrands" @search="onSearchBrand">
-                <template slot="no-options">
-                  Escribe para iniciar la búsqueda
-                </template>
-                <template slot="option" slot-scope="option">
-                  <div class="d-center">
-                    {{ option.brand }}
-                  </div>
-                </template>
-                <template slot="selected-option" slot-scope="option">
-                  <div class="selected d-center">
-                    {{ option.brand }}
-                  </div>
-                </template>
-              </v-select>
-            </div>
-            <div class="form-group row">
-              <div class="col-sm-12 text-right">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">
-                  Cancelar
-                </button>
-                <button type="submit" class="btn btn-primary" v-text="edit == 0 ? 'Crear' : 'Actualizar'"></button>
+              <label class="col-md-4 col-form-label">Unidad</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" placeholder="Kg, KL, Minuto, Lt" v-model="form.unidad">
               </div>
             </div>
+
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Costo Unidad</label>
+              <div class="col-md-8">
+                <input type="text" class="form-control" v-model="form.costo">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Fecha de vencimiento</label>
+              <div class="col-md-8">
+                <input type="date" class="form-control" v-model="form.expiration_date">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Cantidad</label>
+              <div class="col-md-8">
+                <input type="number" step="any" class="form-control" v-model="form.cantidad">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Cantidad mínima</label>
+              <div class="col-md-8">
+                <input type="number" step="any" class="form-control" v-model="form.cantidad_minima">
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Cantidad máxima</label>
+              <div class="col-md-8">
+                <input type="number" step="any" class="form-control" v-model="form.cantidad_maxima">
+              </div>
+            </div>
+
+            <!-- INVENTARIO -->
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Inventario</label>
+              <div class="col-md-8">
+
+                <label class="mr-3">
+                  <input type="radio" value="1" v-model="form.inventario"> Sí
+                </label>
+
+                <label>
+                  <input type="radio" value="0" v-model="form.inventario"> No
+                </label>
+
+              </div>
+            </div>
+
+            <!-- CATEGORÍA -->
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Categoría</label>
+              <v-select class="col-md-8"
+                v-model="form.category_id"
+                label="category"
+                :options="optCategories"
+                :reduce="option => option.id"
+                :filterable="false"
+                @search="onSearchCategory">
+              </v-select>
+            </div>
+
+            <!-- BODEGA -->
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Bodega</label>
+              <v-select class="col-md-8"
+                v-model="form.warehouse_id"
+                label="warehouse"
+                :options="optWarehouses"
+                :reduce="option => option.id"
+                :filterable="false"
+                @search="onSearchWarehouse">
+              </v-select>
+            </div>
+
+            <!-- PROVEEDOR -->
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Proveedor</label>
+              <v-select class="col-md-8"
+                v-model="form.provider_id"
+                label="provider"
+                :options="optProviders"
+                :reduce="option => option.id"
+                :filterable="false"
+                @search="onSearchProvider">
+              </v-select>
+            </div>
+
+            <!-- MARCA -->
+            <div class="form-group row">
+              <label class="col-md-4 col-form-label">Marca</label>
+              <v-select class="col-md-8"
+                v-model="form.brand_id"
+                label="brand"
+                :options="optBrands"
+                :reduce="option => option.id"
+                :filterable="false"
+                @search="onSearchBrand">
+              </v-select>
+            </div>
+
+            <!-- BOTONES -->
+            <div class="form-group row">
+              <div class="col-md-12 text-right">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" class="btn btn-primary">{{ edit == 0 ? 'Crear' : 'Actualizar' }}</button>
+              </div>
+            </div>
+
           </form>
         </div>
-        <div class="modal-footer">
-          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-        </div>
+
       </div>
     </div>
   </div>
 </template>
 
 <script>
-
 import { Form } from "vform";
 
 export default {
@@ -185,6 +158,7 @@ export default {
       optProviders: [],
       optCategories: [],
       edit: 0,
+
       form: new Form({
         id: "",
         recurso: "",
@@ -197,117 +171,142 @@ export default {
         expiration_date: "",
         cantidad: "",
         cantidad_maxima: "",
-        cantidad_minima: ""
+        cantidad_minima: "",
+        inventario: "1"
       }),
-    }
+    };
   },
+
   methods: {
-    CreateResource() {
-      let me = this;
-      axios
-        .post("api/recursos", me.form)
-        .then(({ data }) => {
-          $("#modalResources").modal("hide");
-          me.form = {};
-          me.$emit('list-resources')
-        })
-        .catch((response) => {
-          console.log(response.response)
-        });
-    },
-    OpenEditResource(resource) {
-      let me = this;
-      me.edit = true;
+
+    /* ------------------------- */
+    /* ABRIR MODAL - NUEVO       */
+    /* ------------------------- */
+    abrir() {
+      this.edit = 0;
+      this.form.reset();
+
+      this.loadWarehouses();
+      this.loadBrands();
+      this.loadCategories();
+      this.loadProviders();
+
       $("#modalResources").modal("show");
-      me.form = resource;
-      console.log(me.form)
     },
 
-    SaveResource: function () {
-      if (this.edit == false) {
-        this.CreateResource();
-      } else {
-        this.EditResource();
-      }
+    /* ------------------------- */
+    /* CARGAR CATÁLOGOS          */
+    /* ------------------------- */
+
+    loadWarehouses() {
+      axios.get("api/warehouses?page=1")
+        .then(res => this.optWarehouses = res.data.warehouses.data);
     },
-    EditResource() {
-      let me = this;
-      axios.put(`api/recursos/${this.form.id}`, this.form)
-        .then(data => {
+
+    loadBrands() {
+      axios.get("api/brands?page=1")
+        .then(res => this.optBrands = res.data.brands.data);
+    },
+
+    loadCategories() {
+      axios.get("api/resource-categories?page=1")
+        .then(res => this.optCategories = res.data.resourceCategories.data);
+    },
+
+    loadProviders() {
+      axios.get("api/providers?page=1")
+        .then(res => this.optProviders = res.data.providers.data);
+    },
+
+    /* ------------------------- */
+    /* EDITAR                    */
+    /* ------------------------- */
+    OpenEditResource(resource) {
+      this.edit = 1;
+
+      this.loadWarehouses();
+      this.loadBrands();
+      this.loadCategories();
+      this.loadProviders();
+
+      this.form = new Form(resource);
+
+      $("#modalResources").modal("show");
+    },
+
+    /* ------------------------- */
+    /* GUARDAR                   */
+    /* ------------------------- */
+    SaveResource() {
+      if (this.edit == 0) this.CreateResource();
+      else this.EditResource();
+    },
+
+    CreateResource() {
+      axios.post("api/recursos", this.form)
+        .then(() => {
           $("#modalResources").modal("hide");
-          me.form = {}
-          me.$emit('list-resources')
-        })
-        .catch((response) => {
-          console.log(response.response)
+          this.$emit("list-resources");
+        });
+    },
+
+    EditResource() {
+      axios.put(`api/recursos/${this.form.id}`, this.form)
+        .then(() => {
+          $("#modalResources").modal("hide");
+          this.$emit("list-resources");
         });
     },
 
     ResetData() {
-      let me = this;
       $("#modalResources").modal("hide");
-      me.form = {};
-      this.assignErrors(false);
-    },
-
-    closeModal() {
-      this.edit = false;
-      this.ResetData();
-      this.$emit("list-resources");
-    },
-
-    assignErrors(response) {
-      if (response) {
-        var errors = response.response.data.errors;
-      } else { }
+      this.form.reset();
     },
 
     onSearchWarehouse(search, loading) {
       if (search.length) {
         loading(true);
         axios.get(`api/warehouses?warehouse=${search}&page=1`)
-          .then((response) => {
-            this.optWarehouses = (response.data.warehouses.data);
-            loading(false)
-          })
-          .catch(e => console.log(e))
+          .then(res => {
+            this.optWarehouses = res.data.warehouses.data;
+            loading(false);
+          });
       }
     },
+
     onSearchBrand(search, loading) {
       if (search.length) {
         loading(true);
         axios.get(`api/brands?brand=${search}&page=1`)
-          .then((response) => {
-            this.optBrands = (response.data.brands.data);
-            loading(false)
-          })
-          .catch(e => console.log(e))
+          .then(res => {
+            this.optBrands = res.data.brands.data;
+            loading(false);
+          });
       }
     },
+
     onSearchCategory(search, loading) {
       if (search.length) {
         loading(true);
         axios.get(`api/resource-categories?category=${search}&page=1`)
-          .then((response) => {
-            this.optCategories = (response.data.resourceCategories.data);
-            loading(false)
-          })
-          .catch(e => console.log(e))
+          .then(res => {
+            this.optCategories = res.data.resourceCategories.data;
+            loading(false);
+          });
       }
     },
+
     onSearchProvider(search, loading) {
       if (search.length) {
         loading(true);
         axios.get(`api/providers?provider=${search}&page=1`)
-          .then((response) => {
-            this.optProviders = (response.data.providers.data);
-            loading(false)
-          })
-          .catch(e => console.log(e))
+          .then(res => {
+            this.optProviders = res.data.providers.data;
+            loading(false);
+          });
       }
     },
+
   }
-}
-
-
+};
 </script>

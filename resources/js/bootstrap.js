@@ -11,7 +11,7 @@ try {
     window.$ = window.jQuery = require('jquery');
     window.numeral = require('numeral');
 
-    require('bootstrap');
+    require('bootstrap/dist/js/bootstrap.bundle');
 
 
     //     npm install --save jszip

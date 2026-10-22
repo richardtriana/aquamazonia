@@ -1,176 +1,431 @@
 <template>
   <div class="container">
+    <!-- SPINNER GLOBAL PARA ESTA PÁGINA -->
+    <div v-if="isLoading" class="global-spinner">
+      <div class="global-spinner-inner">
+        <div class="global-spinner-ring"></div>
+        <div class="global-spinner-logo">
+          AQUAMAZONIA
+        </div>
+        <div class="global-spinner-text">
+          Cargando información, por favor espera...
+        </div>
+      </div>
+    </div>
+
     <div class="row justify-content-center">
       <div class="col-md-12">
         <div class="card">
-          <div class="card-header">
+          <div class="card-header text-center text-uppercase">
             Informes recursos y actividades Aquamazonia
           </div>
-          <!-- <a href="informe-excel"><button type="submit" class="btn btn-success" name="infoSiembras"><i class="fa fa-fw fa-download"></i> Generar Excel </button></a> -->
+
           <div class="card-body">
-            <div class="row mb-1">
-              <div class="col-md-12">
-                <h2>Filtrar por:</h2>
-                <form class="row" method="POST" action="informe-excel" target="_blank">
-                  <div class="form-group col-md-2">
-                    <label for="Estado">Estado siembra </label>
-                    <select class="form-control" id="estado_s" v-model="estado_s" name="estado_s">
-                      <option value="-1">Todos</option>
-                      <option value="0">Inactivo</option>
-                      <option value="1" selected>Activo</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-3">
-                    <label for="siembra_activa">Siembras
-                      {{ estado_s == 0 ? "inactivas" : "activas" }} :
-                    </label>
-                    <template v-if="estado_s != '-1'">
-                      <v-select :options="filteredItems" label="nombre_siembra" :reduce="(siembra) => siembra.id"
-                        v-model="f_siembra" />
-                    </template>
-                    <template v-if="estado_s == '-1'">
-                      <v-select :options="listadoSiembras" label="nombre_siembra" :reduce="(siembra) => siembra.id"
-                        v-model="f_siembra" />
-                    </template>
-                  </div>
+            <!-- TÍTULO FILTROS -->
+            <div class="row text-left mb-2">
+              <h5>Filtrar por:</h5>
+            </div>
 
+            <!-- FILTROS PRINCIPALES -->
+            <div class="row align-items-end mb-3">
+              <!-- Estado siembra -->
+              <div class="form-group col-md-2">
+                <label for="estado_s">Estado de siembra</label>
+                <select
+                  id="estado_s"
+                  name="estado_s"
+                  class="custom-select"
+                  v-model="estado_s"
+                >
+                  <option value="-1">Todos</option>
+                  <option value="1">Activas</option>
+                  <option value="0">Inactivas</option>
+                </select>
+              </div>
 
-                  <div class="form-group col-md-2">
-                    <label for="contenedor">Estanque:</label>
-                    <select class="custom-select" id="contenedor" v-model="f_contenedor">
-                      <option value="-1">Seleccionar</option>
-                      <option :value="cont.id" v-for="(cont, index) in listadoEstanques" :key="index">
-                        {{ cont.contenedor }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-2">
-                    <label for="actividad">Tipo actividad: </label>
-                    <select class="form-control" id="actividad" v-model="actividad_s" name="tipo_actividad"
-                      @click="cambiarActividad()">
-                      <option value="-1" selected>Seleccionar</option>
-                      <option v-for="(actividad, index) in listadoActividades" :key="index" v-bind:value="actividad.id">
-                        {{ actividad.actividad }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-2">
-                    <label for="alimento">Alimento: </label>
-                    <select class="form-control" id="alimento" v-model="alimento_s">
-                      <option value="-1" selected>Seleccionar</option>
-                      <option v-for="(alimento, index) in listadoAlimentos" :key="index" v-bind:value="alimento.id">
-                        {{ alimento.alimento }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-2">
-                    <label for="recurso">Recurso: </label>
-                    <select class="form-control" id="recurso" v-model="recurso_s">
-                      <option value="-1" selected>Seleccionar</option>
-                      <option v-for="(recurso, index) in listadoRecursos" :key="index" v-bind:value="recurso.id">
-                        {{ recurso.recurso }}
-                      </option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-2">
-                    <label for="search">Desde: </label>
-                    <input class="form-control" type="date" placeholder="Search" aria-label="fecha_ra1"
-                      v-model="fecha_ra1" />
-                  </div>
-                  <div class="form-group col-md-2">
-                    <label for="search">Hasta: </label>
-                    <input class="form-control" type="date" placeholder="Search" aria-label="fecha_ra2"
-                      v-model="fecha_ra2" />
-                  </div>
-                  <div class="form-group col-md-1">
-                    <label for="">Buscar</label>
-                    <button class="btn btn-primary form-control" type="button" @click="listar()">
-                      <i class="fas fa-search"></i>
-                    </button>
-                  </div>
-                  <div class="form-group col-md-2">
-                    <downloadexcel class="btn btn-success form-control" :fetch="fetchData" :fields="json_fields"
-                      name="informe-recursos.xls" type="xls">
-                      <i class="fa fa-fw fa-download"></i> Generar Excel
-                    </downloadexcel>
-                  </div>
-                </form>
+              <!-- Siembras -->
+              <div class="form-group col-md-3">
+                <label for="siembra_activa">
+                  Siembras
+                  {{
+                    estado_s === "-1"
+                      ? ""
+                      : estado_s === "0"
+                      ? "inactivas"
+                      : "activas"
+                  }}
+                  :
+                </label>
+
+                <template v-if="estado_s !== '-1'">
+                  <v-select
+                    :options="filteredItems"
+                    label="nombre_siembra"
+                    :reduce="siembra => siembra.id"
+                    v-model="f_siembra"
+                    placeholder="Todas las siembras"
+                  />
+                </template>
+                <template v-else>
+                  <v-select
+                    :options="listadoSiembras"
+                    label="nombre_siembra"
+                    :reduce="siembra => siembra.id"
+                    v-model="f_siembra"
+                    placeholder="Todas las siembras"
+                  />
+                </template>
+              </div>
+
+              <!-- Estanque -->
+              <div class="form-group col-md-2">
+                <label for="contenedor">Estanque</label>
+                <select
+                  id="contenedor"
+                  class="custom-select"
+                  v-model="f_contenedor"
+                >
+                  <option value="-1">Todos</option>
+                  <option
+                    v-for="(cont, index) in listadoEstanques"
+                    :key="index"
+                    :value="cont.id"
+                  >
+                    {{ cont.contenedor }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Tipo actividad -->
+              <div class="form-group col-md-2">
+                <label for="actividad">Tipo actividad</label>
+                <select
+                  id="actividad"
+                  class="custom-select"
+                  v-model="actividad_s"
+                  name="tipo_actividad"
+                  @change="cambiarActividad"
+                >
+                  <option value="-1">Todas</option>
+                  <option
+                    v-for="(actividad, index) in listadoActividades"
+                    :key="index"
+                    :value="actividad.id"
+                  >
+                    {{ actividad.actividad }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Alimento -->
+              <div class="form-group col-md-2">
+                <label for="alimento">Alimento</label>
+                <select
+                  id="alimento"
+                  class="custom-select"
+                  v-model="alimento_s"
+                >
+                  <option value="-1">Todos</option>
+                  <option
+                    v-for="(alimento, index) in listadoAlimentos"
+                    :key="index"
+                    :value="alimento.id"
+                  >
+                    {{ alimento.alimento }}
+                  </option>
+                </select>
               </div>
             </div>
-            <div class="table-responsive">
+
+            <!-- SEGUNDA FILA FILTROS -->
+            <div class="row align-items-end mb-3">
+              <!-- Recurso -->
+              <div class="form-group col-md-2">
+                <label for="recurso">Recurso</label>
+                <select
+                  id="recurso"
+                  class="custom-select"
+                  v-model="recurso_s"
+                >
+                  <option value="-1">Todos</option>
+                  <option
+                    v-for="(recurso, index) in listadoRecursos"
+                    :key="index"
+                    :value="recurso.id"
+                  >
+                    {{ recurso.recurso }}
+                  </option>
+                </select>
+              </div>
+
+              <!-- Fecha desde -->
+              <div class="form-group col-md-2">
+                <label for="fecha_ra1">Desde</label>
+                <input
+                  id="fecha_ra1"
+                  type="date"
+                  class="form-control"
+                  v-model="fecha_ra1"
+                >
+              </div>
+
+              <!-- Fecha hasta -->
+              <div class="form-group col-md-2">
+                <label for="fecha_ra2">Hasta</label>
+                <input
+                  id="fecha_ra2"
+                  type="date"
+                  class="form-control"
+                  v-model="fecha_ra2"
+                >
+              </div>
+
+              <!-- Botón filtrar -->
+              <div class="form-group col-md-2 d-flex">
+                <button
+                  type="button"
+                  class="btn btn-primary w-100"
+                  @click="listar(1)"
+                >
+                  Filtrar
+                </button>
+              </div>
+
+              <!-- Botón Excel -->
+              <div class="form-group col-md-2">
+                <downloadexcel
+                  class="btn btn-success w-100"
+                  :fetch="fetchData"
+                  :fields="json_fields"
+                  name="informe-recursos.xls"
+                  type="xls"
+                >
+                  <i class="fa fa-fw fa-download"></i> Generar Excel
+                </downloadexcel>
+              </div>
+
+              <!-- Botón columnas -->
+              <div class="form-group col-md-2 position-relative">
+                <button
+                  type="button"
+                  class="btn btn-light border w-100 d-flex justify-content-between align-items-center column-toggle-btn"
+                  @click="toggleColumnPanel"
+                >
+                  <span>
+                    <i class="fas fa-columns mr-1"></i>
+                    Mostrar / ocultar columnas
+                  </span>
+                  <i
+                    :class="[
+                      'fas',
+                      showColumnPanel ? 'fa-chevron-up' : 'fa-chevron-down'
+                    ]"
+                  ></i>
+                </button>
+
+                <!-- PANEL DESPLEGABLE COLUMNAS -->
+                <div
+                  v-if="showColumnPanel"
+                  class="column-panel-dropdown shadow-lg"
+                >
+                  <div class="d-flex justify-content-between align-items-center mb-2">
+                    <div>
+                      <div class="small text-muted">
+                        Marca / desmarca las columnas que deseas ver
+                      </div>
+                    </div>
+                    <div class="ml-2">
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-success mr-1"
+                        @click="selectAllColumns"
+                      >
+                        Todas
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-sm btn-outline-danger"
+                        @click="clearAllColumns"
+                      >
+                        Ninguna
+                      </button>
+                    </div>
+                  </div>
+
+                  <hr class="my-2">
+
+                  <div class="column-panel-list">
+                    <div
+                      v-for="item in columnList"
+                      :key="item.key"
+                      class="column-panel-item"
+                    >
+                      <label
+                        class="column-check-label"
+                        :for="'col-' + item.key"
+                      >
+                        <input
+                          :id="'col-' + item.key"
+                          type="checkbox"
+                          v-model="columnVisibility[item.key]"
+                        >
+                        <span class="column-check-box"></span>
+                        <span class="column-check-text">{{ item.label }}</span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- TABLA CON SCROLL HORIZONTAL -->
+            <div class="table-container table-container--wide">
               <table class="table table-bordered table-hover table-sticky table-sm">
                 <thead class="thead-primary">
                   <tr>
                     <th>#</th>
-                    <th>Siembra</th>
-                    <th>Estado siembras</th>
-                    <th>Tipo <br />actividad</th>
-                    <th>Fecha</th>
-                    <th>Minutos <br />hombre</th>
-                    <th>Costo minutos</th>
 
-                    <template v-if="tipoActividad != 'Alimentación'">
-                      <th>Recursos</th>
-                      <th>Cantidad</th>
-                      <th>Costo Recurso</th>
-                      <!-- <th >Costo acumulado Recurso</th> -->
-                    </template>
-                    <template v-if="tipoActividad == 'Alimentación'">
-                      <th>Alimentos</th>
-                      <th>Cantidad Mañana (KG)</th>
-                      <th>Cantidad Tarde (KG)</th>
-                      <th>Costo Alimento</th>
-                      <!-- <th>Costo <br>Acumulado</th> -->
-                    </template>
-                    <th>Costo actividad</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="(lrn, index) in listadorn" :key="index">
-                    <th v-text="index + 1"></th>
-                    <td v-text="lrn.nombre_siembra"></td>
-                    <td>{{ estados[lrn.estado] }}</td>
-                    <td>{{ lrn.actividad }}</td>
-                    <td>{{ lrn.fecha_ra }}</td>
-                    <td>{{ lrn.minutos_hombre + 'min' }}</td>
-                    <td>{{ lrn.costo_minutosh | numeral("$0,0.00") }}</td>
-                    <template v-if="tipoActividad != 'Alimentación'">
-                      <td>{{ lrn.recurso }}</td>
-                      <td>{{ lrn.cantidad_recurso }}</td>
-                      <td>
-                        {{ lrn.costo_total_recurso | numeral("$0,0.00") }}
-                      </td>
-                      <!-- <th v-text="lrn.costo_r_acum"></th> -->
+                    <th v-if="columnVisibility.siembra">Siembra</th>
+                    <th v-if="columnVisibility.estado_siembra">Estado siembras</th>
+                    <th v-if="columnVisibility.tipo_actividad">Tipo actividad</th>
+                    <th v-if="columnVisibility.fecha">Fecha</th>
+                    <th v-if="columnVisibility.minutos_hombre">
+                      Minutos <br> hombre
+                    </th>
+                    <th v-if="columnVisibility.costo_minutos">
+                      Costo minutos
+                    </th>
+
+                    <!-- Recursos (cuando no es alimentación) -->
+                    <template v-if="tipoActividad !== 'Alimentación'">
+                      <th v-if="columnVisibility.recurso">Recursos</th>
+                      <th v-if="columnVisibility.cantidad_recurso">Cantidad</th>
+                      <th v-if="columnVisibility.costo_recurso">Costo Recurso</th>
                     </template>
 
-                    <template v-if="tipoActividad == 'Alimentación'">
-                      <td v-text="lrn.alimento"></td>
-                      <td v-text="lrn.cant_manana"></td>
-                      <td v-text="lrn.cant_tarde"></td>
-                      <td>
-                        {{ lrn.costo_total_alimento | numeral("$0,0.00") }}
-                      </td>
-                      <!-- <th v-text="lrn.costo_a_acum" ></th> -->
+                    <!-- Alimentación -->
+                    <template v-else>
+                      <th v-if="columnVisibility.alimento">Alimentos</th>
+                      <th v-if="columnVisibility.cant_manana">
+                        Cantidad Mañana (KG)
+                      </th>
+                      <th v-if="columnVisibility.cant_tarde">
+                        Cantidad Tarde (KG)
+                      </th>
+                      <th v-if="columnVisibility.costo_alimento">
+                        Costo Alimento
+                      </th>
                     </template>
-                    <th>
-                      {{ lrn.costo_total_actividad | numeral("$0,0.00") }}
+
+                    <th v-if="columnVisibility.costo_actividad">
+                      Costo actividad
                     </th>
                   </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="(lrn, index) in listadorn" :key="index">
+                    <th>{{ index + 1 }}</th>
+
+                    <td v-if="columnVisibility.siembra">
+                      {{ lrn.nombre_siembra }}
+                    </td>
+
+                    <td v-if="columnVisibility.estado_siembra">
+                      {{ estados[lrn.estado] }}
+                    </td>
+
+                    <td v-if="columnVisibility.tipo_actividad">
+                      {{ lrn.actividad }}
+                    </td>
+
+                    <td v-if="columnVisibility.fecha">
+                      {{ lrn.fecha_ra }}
+                    </td>
+
+                    <td v-if="columnVisibility.minutos_hombre">
+                      {{ lrn.minutos_hombre + "min" }}
+                    </td>
+
+                    <td v-if="columnVisibility.costo_minutos">
+                      {{ lrn.costo_minutosh | numeral("$0,0.00") }}
+                    </td>
+
+                    <!-- Recursos -->
+                    <template v-if="tipoActividad !== 'Alimentación'">
+                      <td v-if="columnVisibility.recurso">
+                        {{ lrn.recurso }}
+                      </td>
+                      <td v-if="columnVisibility.cantidad_recurso">
+                        {{ lrn.cantidad_recurso }}
+                      </td>
+                      <td v-if="columnVisibility.costo_recurso">
+                        {{ lrn.costo_total_recurso | numeral("$0,0.00") }}
+                      </td>
+                    </template>
+
+                    <!-- Alimentación -->
+                    <template v-else>
+                      <td v-if="columnVisibility.alimento">
+                        {{ lrn.alimento }}
+                      </td>
+                      <td v-if="columnVisibility.cant_manana">
+                        {{ lrn.cant_manana }}
+                      </td>
+                      <td v-if="columnVisibility.cant_tarde">
+                        {{ lrn.cant_tarde }}
+                      </td>
+                      <td v-if="columnVisibility.costo_alimento">
+                        {{ lrn.costo_total_alimento | numeral("$0,0.00") }}
+                      </td>
+                    </template>
+
+                    <td v-if="columnVisibility.costo_actividad">
+                      {{ lrn.costo_total_actividad | numeral("$0,0.00") }}
+                    </td>
+                  </tr>
                 </tbody>
-              
               </table>
             </div>
-            <nav v-show="showPagination" class="mt-5 navigation">
+
+            <!-- PAGINACIÓN -->
+            <nav v-show="showPagination" class="mt-4 navigation">
               <ul class="pagination justify-content-center">
-                <li class="page-item" v-if="pagination.current_page > 1">
-                  <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page - 1)">Ant</a>
+                <li
+                  class="page-item"
+                  v-if="pagination.current_page > 1"
+                >
+                  <a
+                    href="#"
+                    class="page-link"
+                    @click.prevent="cambiarPagina(pagination.current_page - 1)"
+                  >Ant</a>
                 </li>
-                <li class="page-item" v-for="page in pagesNumber" :key="page"
-                  :class="[page == isActived ? 'active' : '']">
-                  <a class="page-link" href="#" @click.prevent="cambiarPagina(page)" v-text="page"></a>
+
+                <li
+                  v-for="page in pagesNumber"
+                  :key="page"
+                  class="page-item"
+                  :class="{ active: page === isActived }"
+                >
+                  <a
+                    href="#"
+                    class="page-link"
+                    @click.prevent="cambiarPagina(page)"
+                  >
+                    {{ page }}
+                  </a>
                 </li>
-                <li class="page-item" v-if="pagination.current_page < pagination.last_page">
-                  <a class="page-link" href="#" @click.prevent="cambiarPagina(pagination.current_page + 1)">Sig</a>
+
+                <li
+                  class="page-item"
+                  v-if="pagination.current_page < pagination.last_page"
+                >
+                  <a
+                    href="#"
+                    class="page-link"
+                    @click.prevent="cambiarPagina(pagination.current_page + 1)"
+                  >Sig</a>
                 </li>
               </ul>
             </nav>
@@ -183,9 +438,16 @@
 
 <script>
 import downloadexcel from "vue-json-excel";
+
 export default {
+  components: {
+    downloadexcel
+  },
   data() {
     return {
+      // SPINNER
+      isLoading: false,
+
       json_fields: {
         "Nombre Siembra": "nombre_siembra",
         "Estado Siembra": "estado",
@@ -193,55 +455,40 @@ export default {
         "Fecha Registro": "fecha_ra",
         "Minutos hombre": {
           field: "minutos_hombre",
-          callback: (value) => {
-            return numeral(value).format('0.00');
-          }
+          callback: value => numeral(value).format("0.00")
         },
         "Costo minutos hombre": {
           field: "costo_minutosh",
-          callback: (value) => {
-            return numeral(value).format('0.00');
-          }
+          callback: value => numeral(value).format("0.00")
         },
         Recurso: "recurso",
         "Cantidad Recurso": {
           field: "cantidad_recurso",
-          callback: (value) => {
-            return numeral(value).format('0.00');
-          }
+          callback: value => numeral(value).format("0.00")
         },
         "Costo Recurso": {
           field: "costo_total_recurso",
-          callback: (value) => {
-            return numeral(value).format('0.00');
-          }
+          callback: value => numeral(value).format("0.00")
         },
         Alimento: "alimento",
         "Cantidad KG mañana": {
           field: "cant_manana",
-          callback: (value) => {
-            return numeral(value).format('0.00');
-          }
+          callback: value => numeral(value).format("0.00")
         },
         "Cantidad KG tarde": {
           field: "cant_tarde",
-          callback: (value) => {
-            return numeral(value).format('0.00');
-          }
+          callback: value => numeral(value).format("0.00")
         },
         "Costo Alimento": {
           field: "costo_total_alimento",
-          callback: (value) => {
-            return numeral(value).format('0.00');
-          }
+          callback: value => numeral(value).format("0.00")
         },
         "Costo Actividad": {
           field: "costo_total_actividad",
-          callback: (value) => {
-            return numeral(value).format('0.00');
-          }
-        },
+          callback: value => numeral(value).format("0.00")
+        }
       },
+
       listadorn: [],
       listadoActividades: [],
       listadoAlimentos: [],
@@ -250,17 +497,19 @@ export default {
       listadoEstanques: [],
       imprimirRecursos: [],
       estados: [],
+
+      // FILTROS
       f_siembra: "",
-      f_contenedor: "",
+      f_contenedor: "-1",
       estado_s: "1",
-      actividad_s: "",
-      alimento_s: "",
-      recurso_s: "",
+      actividad_s: "-1",
+      alimento_s: "-1",
+      recurso_s: "-1",
       fecha_ra1: "",
       fecha_ra2: "",
-      costo_acum: 0,
       tipoActividad: "",
-      //Paginación
+
+      // Paginación
       offset: 10,
       pagination: {
         total: 0,
@@ -268,35 +517,50 @@ export default {
         per_page: 0,
         last_page: 0,
         from: 0,
-        to: 0,
+        to: 0
       },
       showPagination: 1,
+
+      // Panel columnas
+      showColumnPanel: false,
+      columnVisibility: {
+        siembra: true,
+        estado_siembra: true,
+        tipo_actividad: true,
+        fecha: true,
+        minutos_hombre: true,
+        costo_minutos: true,
+        recurso: true,
+        cantidad_recurso: true,
+        costo_recurso: true,
+        alimento: true,
+        cant_manana: true,
+        cant_tarde: true,
+        costo_alimento: true,
+        costo_actividad: true
+      }
     };
   },
-  components: {
-    downloadexcel,
-  },
   computed: {
-    isActived: function () {
+    isActived() {
       return this.pagination.current_page;
     },
-    //Calcula los elementos de la paginación
-    pagesNumber: function () {
+    pagesNumber() {
       if (!this.pagination.to) {
         return [];
       }
 
-      var from = this.pagination.current_page - this.offset;
+      let from = this.pagination.current_page - this.offset;
       if (from < 1) {
         from = 1;
       }
 
-      var to = from + this.offset * 2;
+      let to = from + this.offset * 2;
       if (to >= this.pagination.last_page) {
         to = this.pagination.last_page;
       }
 
-      var pagesArray = [];
+      const pagesArray = [];
       while (from <= to) {
         pagesArray.push(from);
         from++;
@@ -304,116 +568,115 @@ export default {
       return pagesArray;
     },
     filteredItems() {
-      return this.listadoSiembras.filter((item) => item.estado == this.estado_s);
+      return this.listadoSiembras.filter(
+        item => String(item.estado) === String(this.estado_s)
+      );
+    },
+    columnList() {
+      return [
+        { key: "siembra", label: "Siembra" },
+        { key: "estado_siembra", label: "Estado siembras" },
+        { key: "tipo_actividad", label: "Tipo actividad" },
+        { key: "fecha", label: "Fecha" },
+        { key: "minutos_hombre", label: "Minutos hombre" },
+        { key: "costo_minutos", label: "Costo minutos" },
+        { key: "recurso", label: "Recurso" },
+        { key: "cantidad_recurso", label: "Cantidad recurso" },
+        { key: "costo_recurso", label: "Costo recurso" },
+        { key: "alimento", label: "Alimento" },
+        { key: "cant_manana", label: "Cantidad mañana (kg)" },
+        { key: "cant_tarde", label: "Cantidad tarde (kg)" },
+        { key: "costo_alimento", label: "Costo alimento" },
+        { key: "costo_actividad", label: "Costo actividad" }
+      ];
     }
   },
   methods: {
+    toggleColumnPanel() {
+      this.showColumnPanel = !this.showColumnPanel;
+    },
+    selectAllColumns() {
+      Object.keys(this.columnVisibility).forEach(key => {
+        this.columnVisibility[key] = true;
+      });
+    },
+    clearAllColumns() {
+      Object.keys(this.columnVisibility).forEach(key => {
+        this.columnVisibility[key] = false;
+      });
+    },
     async fetchData() {
       return this.listadorn;
     },
     cambiarActividad() {
-      if (this.actividad_s == 1) {
+      if (String(this.actividad_s) === "1") {
         this.tipoActividad = "Alimentación";
-      } else this.tipoActividad = "";
+      } else {
+        this.tipoActividad = "";
+      }
     },
-    listar(page) {
-      let me = this;
-      if (this.f_siembra == "") {
-        this.smb = "-1";
-      } else {
-        this.smb = this.f_siembra;
-      }
-      if (this.estado_s == "") {
-        this.est = "-1";
-      } else {
-        this.est = this.estado_s;
-      }
-      if (this.f_contenedor == "") {
-        this.cont = "-1";
-      } else {
-        this.cont = this.f_contenedor;
-      }
-      if (this.actividad_s == "") {
-        this.act = "-1";
-      } else {
-        this.act = this.actividad_s;
-      }
-      if (this.alimento_s == "") {
-        this.ali = "-1";
-      } else {
-        this.ali = this.alimento_s;
-      }
-      if (this.recurso_s == "") {
-        this.rec = "-1";
-      } else {
-        this.rec = this.recurso_s;
-      }
-      if (this.fecha_ra1 == "") {
-        this.fec1 = "-1";
-      } else {
-        this.fec1 = this.fecha_ra1;
-      }
-      if (this.fecha_ra2 == "") {
-        this.fec2 = "-1";
-      } else {
-        this.fec2 = this.fecha_ra2;
-      }
+    listar(page = 1) {
+      this.isLoading = true;
+
+      const params = {
+        f_siembra: this.f_siembra === "" ? "-1" : this.f_siembra,
+        estado_s: this.estado_s === "" ? "-1" : this.estado_s,
+        f_contenedor: this.f_contenedor === "-1" ? "-1" : this.f_contenedor,
+        actividad_s: this.actividad_s === "-1" ? "-1" : this.actividad_s,
+        alimento_s: this.alimento_s === "-1" ? "-1" : this.alimento_s,
+        recurso_s: this.recurso_s === "-1" ? "-1" : this.recurso_s,
+        fecha_ra1: this.fecha_ra1 === "" ? "-1" : this.fecha_ra1,
+        fecha_ra2: this.fecha_ra2 === "" ? "-1" : this.fecha_ra2,
+        page
+      };
 
       axios
-        .get("api/informes", {
-          params: {
-            f_siembra: this.smb,
-            estado_s: this.est,
-            f_contenedor: this.cont,
-            actividad_s: this.act,
-            alimento_s: this.ali,
-            recurso_s: this.rec,
-            fecha_ra1: this.fec1,
-            fecha_ra2: this.fec2,
-            page: page,
-          },
+        .get("api/informes", { params })
+        .then(response => {
+          this.listadorn = response.data.recursosNecesarios.data;
+          this.pagination = response.data.pagination;
         })
-        .then(function (response) {
-          me.listadorn = response.data.recursosNecesarios.data;
-          me.pagination = response.data.pagination;
+        .catch(error => {
+          console.error(error);
+          Swal.fire(
+            "Error",
+            "Ocurrió un problema cargando el informe",
+            "error"
+          );
+        })
+        .finally(() => {
+          this.isLoading = false;
         });
     },
     cambiarPagina(page) {
-      let me = this;
-      //Actualiza la página actual
-      me.pagination.current_page = page;
-      me.listar(page);
+      this.pagination.current_page = page;
+      this.listar(page);
     },
     listarActividades() {
-      let me = this;
-      axios.get("api/actividades").then(function (response) {
-        me.listadoActividades = response.data;
+      axios.get("api/actividades").then(response => {
+        this.listadoActividades = response.data;
       });
     },
     listarAlimentos() {
-      let me = this;
-      axios.get("api/alimentos").then(function (response) {
-        me.listadoAlimentos = response.data;
+      axios.get("api/alimentos").then(response => {
+        this.listadoAlimentos = response.data;
       });
     },
     listarRecursos() {
-      let me = this;
-      axios.get("api/recursos").then(function (response) {
-        me.listadoRecursos = response.data;
+      axios.get("api/recursos").then(response => {
+        this.listadoRecursos = response.data;
       });
     },
     listarSiembras() {
-      let me = this;
-      axios.get("api/siembras/listado").then(function (response) {
-        me.listadoSiembras = response.data;
+      axios.get("api/siembras/listado").then(response => {
+        this.listadoSiembras = response.data;
       });
     },
     listarEstanques() {
-      let me = this;
-      axios.get("api/contenedores").then(function (response) {
-        me.listadoEstanques = response.data;
+      axios.get("api/contenedores").then(response => {
+        this.listadoEstanques = response.data;
       });
-    },
+    }
   },
   mounted() {
     this.listar(1);
@@ -424,6 +687,80 @@ export default {
     this.listarEstanques();
     this.estados[0] = "Inactivo";
     this.estados[1] = "Activo";
-  },
+  }
 };
 </script>
+
+<style scoped>
+.table-container--wide {
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* Botón de columnas */
+.column-toggle-btn {
+  border-radius: 999px;
+  background-color: #ffffff;
+  font-size: 0.85rem;
+}
+
+/* Dropdown columnas */
+.column-panel-dropdown {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  margin-top: 0.35rem;
+  z-index: 30;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 0.75rem 1rem;
+  min-width: 280px;
+  max-width: 360px;
+  max-height: 280px;
+  overflow: hidden;
+  border: 1px solid #e5e7eb;
+}
+
+.column-panel-list {
+  max-height: 220px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+.column-panel-item + .column-panel-item {
+  margin-top: 0.25rem;
+}
+
+/* Checkbox personalizado (igual que en el otro informe) */
+.column-check-label {
+  display: flex;
+  align-items: center;
+  font-size: 0.85rem;
+  cursor: pointer;
+  user-select: none;
+}
+
+.column-check-label input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.column-check-box {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1px solid #9ca3af;
+  margin-right: 8px;
+  box-sizing: border-box;
+}
+
+.column-check-label input[type="checkbox"]:checked + .column-check-box {
+  background-color: #198754;
+  border-color: #198754;
+}
+
+.column-check-text {
+  line-height: 1.1;
+}
+</style>

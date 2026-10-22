@@ -3,3 +3,8 @@
 * {
   grid-template-rows: ;
 }
+
+/* SweetAlert2 siempre por encima de cualquier modal interno */
+.swal2-container {
+  z-index: 999999 !important;
+}

@@ -31,4 +31,24 @@ class Siembra extends Model
     public function peces() {
         return $this->hasMany(EspecieSiembra::class, 'id_siembra');
     }
+
+        public function alimentosPermitidos()
+    {
+        return $this->belongsToMany(
+            Alimento::class,
+            'siembra_alimentos',
+            'siembra_id',
+            'alimento_id'
+        )->withTimestamps()
+        ->withPivot('activo');
+    }
+
+    public function alimentosAsignados()
+    {
+        return $this->belongsToMany(Alimento::class, 'siembra_alimentos', 'siembra_id', 'alimento_id')
+            ->withPivot('activo')
+            ->withTimestamps();
+    }
+
+
 }

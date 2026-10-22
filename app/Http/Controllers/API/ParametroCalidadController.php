@@ -236,28 +236,35 @@ class ParametroCalidadController extends Controller
 	 */
 	public function store(Request $request)
 	{
-		//
-		foreach ($request->id_contenedor as $contenedor) {
+		// Puede venir un solo id (3) o un array ([3, 4, 5])
+		$idsContenedor = $request->id_contenedor;
+
+		// Si NO es array, lo envolvemos en uno
+		if (!is_array($idsContenedor)) {
+			$idsContenedor = [$idsContenedor];
+		}
+
+		foreach ($idsContenedor as $contenedor) {
 			$calidad_agua = new CalidadAgua();
 			$calidad_agua->fecha_parametro = $request['fecha_parametro'];
-			// $calidad_agua->id_contenedor = $request['id_contenedor'];
-			$calidad_agua->id_contenedor = $contenedor;
-			$calidad_agua->{'12_am'} = $request['12_am'];
-			$calidad_agua->{'4_am'} = $request['4_am'];
-			$calidad_agua->{'7_am'} = $request['7_am'];
-			$calidad_agua->{'4_pm'} = $request['4_pm'];
-			$calidad_agua->{'8_pm'} = $request['8_pm'];
-			$calidad_agua->temperatura = $request['temperatura'];
-			$calidad_agua->ph = $request['ph'];
-			$calidad_agua->amonio = $request['amonio'];
-			$calidad_agua->nitrito = $request['nitrito'];
-			$calidad_agua->nitrato = $request['nitrato'];
-			$calidad_agua->otros = $request['otros'];
+			$calidad_agua->id_contenedor   = $contenedor;
+			$calidad_agua->{'12_am'}       = $request['12_am'];
+			$calidad_agua->{'4_am'}        = $request['4_am'];
+			$calidad_agua->{'7_am'}        = $request['7_am'];
+			$calidad_agua->{'4_pm'}        = $request['4_pm'];
+			$calidad_agua->{'8_pm'}        = $request['8_pm'];
+			$calidad_agua->temperatura     = $request['temperatura'];
+			$calidad_agua->ph              = $request['ph'];
+			$calidad_agua->amonio          = $request['amonio'];
+			$calidad_agua->nitrito         = $request['nitrito'];
+			$calidad_agua->nitrato         = $request['nitrato'];
+			$calidad_agua->otros           = $request['otros'];
 			$calidad_agua->save();
 		}
 
-		return ($request);
+		return $request;
 	}
+
 
 	/**
 	 * Display the specified resource.
@@ -525,6 +532,7 @@ class ParametroCalidadController extends Controller
 		return ['calidad_agua' => $parametros_calidad, 'promedios' => $promedios];
 		// return $calidad_agua;
 	}
+
 	public function filtroParametrosExcel(Request $request)
 	{
 		$c1 = "calidad_agua.id";

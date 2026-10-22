@@ -1,54 +1,74 @@
 <template>
-  <!-- Modal para creacion y edicion de impuestos -->
-  <div class="modal fade" id="brandModal" tabindex="-1" aria-labelledby="brandModalLabel" aria-hidden="true"
-    data-backdrop="static">
+  <div
+    class="modal fade"
+    id="brandModal"
+    tabindex="-1"
+    aria-labelledby="brandModalLabel"
+    aria-hidden="true"
+    data-backdrop="static"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
+
         <div class="modal-header">
-          <h5 class="modal-title" id="brandModalLabel">Fase</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Cerrar">
-            <span aria-hidden="true">&times;</span>
+          <h5 class="modal-title">
+            {{ edit ? "Editar Marca" : "Crear Marca" }}
+          </h5>
+          <button type="button" class="close" data-dismiss="modal">
+            <span>&times;</span>
           </button>
         </div>
+
         <div class="modal-body">
-          <div class="container">
-            <div class="row justify-content-center">
-              <form>
-                <div class="form-group">
-                  <label for="name">Marca</label>
-                  <input type="text" class="form-control" id="brand" placeholder="" v-model="formBrand.brand" />
-                  <small class="form-text text-danger">{{ formErrors.brand }}</small>
-                </div>
-                <div class="form-group">
-                  <label for="name">Estado</label>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" v-model="formBrand.state" name="state" id="true"
-                      value="1" checked>
-                    <label class="form-check-label" for="true">
-                      Activo
-                    </label>
-                  </div>
-                  <div class="form-check">
-                    <input class="form-check-input" type="radio" v-model="formBrand.state" name="state" id="false"
-                      value="0">
-                    <label class="form-check-label" for="false">
-                      Desactivado
-                    </label>
-                  </div>
-                  <small class="form-text text-danger">{{ formErrors.state }}</small>
-                </div>
-              </form>
+          <form>
+
+            <div class="form-group">
+              <label>Marca</label>
+              <input
+                type="text"
+                class="form-control"
+                v-model="formBrand.brand"
+              />
+              <small class="text-danger">{{ formErrors.brand }}</small>
             </div>
-          </div>
+
+            <div class="form-group">
+              <label>Estado</label>
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="1"
+                  v-model="formBrand.state"
+                />
+                <label class="form-check-label">Activo</label>
+              </div>
+
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="radio"
+                  value="0"
+                  v-model="formBrand.state"
+                />
+                <label class="form-check-label">Desactivado</label>
+              </div>
+
+              <small class="text-danger">{{ formErrors.state }}</small>
+            </div>
+
+          </form>
         </div>
+
         <div class="modal-footer">
-          <button type="button" class="btn btn-outline-secondary" @click="closeModal()">
+          <button class="btn btn-outline-secondary" @click="closeModal()">
             Cerrar
           </button>
-          <button type="button" class="btn btn-outline-primary" @click="SaveBrand()">
+          <button class="btn btn-outline-primary" @click="SaveBrand()">
             Guardar
           </button>
         </div>
+
       </div>
     </div>
   </div>
@@ -59,79 +79,100 @@ export default {
   data() {
     return {
       edit: false,
+
       formBrand: {
-        brand: 0,
+        id: null,
+        brand: "",
+        state: "1",
       },
+
       formErrors: {
-        errors: "",
-      },
+        brand: "",
+        state: ""
+      }
     };
   },
+
   methods: {
-    CreateBrand() {
-      let me = this;
-      this.assignErrors(false);
+    abrir() {
+      this.edit = false;
 
-      axios
-        .post("api/brands", this.formBrand, this.$root.config)
-        .then(function () {
-          $("#brandModal").modal("hide");
-          me.formBrand = {};
-          me.$emit('list-brands');
-        })
-        .catch((response) => {
-          this.assignErrors(response);
-        });
-    },
-    OpenEditBrand(brand) {
-      let me = this;
-      me.edit = true;
+      this.formBrand = {
+        id: null,
+        brand: "",
+        state: "1",
+      };
+
+      this.assignErrors(false);
       $("#brandModal").modal("show");
-      me.formBrand = brand;
     },
-    SaveBrand: function () {
-      let me = this;
-      if (this.edit == false) {
-        this.CreateBrand();
-      } else {
-        this.EditBrand();
-      }
-    },
-    EditBrand() {
-      let me = this;
-      this.assignErrors(false);
 
-      axios
-        .put("api/brands/" + this.formBrand.id, this.formBrand, this.$root.config)
-        .then(function () {
+    CreateBrand() {
+      axios.post("api/brands", this.formBrand, this.$root.config)
+        .then(() => {
           $("#brandModal").modal("hide");
-          me.formBrand = {};
-          me.$emit('list-brands');
+          this.$emit("list-brands");
         })
-        .catch((response) => {
-          this.assignErrors(response);
-        });
+        .catch(res => this.assignErrors(res));
+    },
+
+    OpenEditBrand(brand) {
+      this.edit = true;
+
+      this.formBrand = {
+        id: brand.id,
+        brand: brand.brand,
+        state: brand.state ? "1" : "0"
+      };
+
+      this.assignErrors(false);
+      $("#brandModal").modal("show");
+    },
+
+    EditBrand() {
+      axios.put(`api/brands/${this.formBrand.id}`, this.formBrand, this.$root.config)
+        .then(() => {
+          $("#brandModal").modal("hide");
+          this.$emit("list-brands");
+        })
+        .catch(res => this.assignErrors(res));
+    },
+
+    SaveBrand() {
+      if (!this.edit) this.CreateBrand();
+      else this.EditBrand();
     },
 
     ResetData() {
-      let me = this;
-      $("#brandModal").modal("hide");
-      me.formBrand = {};
+      this.edit = false;
+      this.formBrand = {
+        id: null,
+        brand: "",
+        state: "1",
+      };
       this.assignErrors(false);
     },
+
     closeModal() {
-      this.edit = false;
+      $("#brandModal").modal("hide");
       this.ResetData();
       this.$emit("list-brands");
     },
+
     assignErrors(response) {
       if (response) {
-        var errors = response.response.data.errors;
-      } else { }
-    },
-  },
-  mounted() {
-    console.log("Component mounted.");
-  },
+        const e = response.response.data.errors;
+        this.formErrors = {
+          brand: e?.brand ?? "",
+          state: e?.state ?? ""
+        };
+      } else {
+        this.formErrors = {
+          brand: "",
+          state: ""
+        };
+      }
+    }
+  }
 };
 </script>

@@ -1,26 +1,37 @@
 <template>
 	<div class="row px-2">
+
+		<!-- 🔙 BOTÓN VOLVER -->
+        <div class="col-12 mb-3">
+            <router-link class="btn btn-secondary btn-sm" to="/purchases/foods">
+                <i class="fa fa-arrow-left"></i> Volver a compras de alimentos
+            </router-link>
+        </div>
+
+		<!-- ============================
+		    COLUMNA IZQUIERDA (ITEMS)
+		============================= -->
 		<div class="col-9 justify-content-center p-2">
-			<div class="sticky-top mb-2 text-uppercase w-50" style="z-index: 1022; left: 100%">
+
+			<!-- TOTAL SUPERIOR -->
+			<div class="sticky-top mb-2 text-uppercase w-50" style="z-index:1022; left:100%">
 				<table class="table table-borderless">
 					<tr class="h1 text-white bg-primary">
 						<td class="text-right">Total</td>
-						<td>
-							$
-							{{ (purchase.total_tax_inc = total_tax_inc).toFixed(0) }}
-						</td>
+						<td>$ {{ (purchase.total_tax_inc = total_tax_inc).toFixed(0) }}</td>
 					</tr>
 				</table>
-
-				<!-- </div> -->
 			</div>
-			<div class="position-fixed top-0 right-0 w-50" style="z-index: 3000">
-				<div class="toast fade hide border border-danger w-100 m-3" style="max-width: 90%" role="alert"
-					id="no-results" aria-live="assertive" aria-atomic="true" data-delay="3000">
+
+			<!-- ALERTA SIN RESULTADOS -->
+			<div class="position-fixed top-0 right-0 w-50" style="z-index:3000">
+				<div class="toast fade hide border border-danger w-100 m-3"
+					role="alert" id="no-results" aria-live="assertive" 
+					aria-atomic="true" data-delay="3000">
 					<div class="toast-header">
-						<strong class="mr-auto h3 text-danger">Advertencia</strong>
-						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
-							<span aria-hidden="true">&times;</span>
+						<strong class="mr-auto h4 text-danger">Advertencia</strong>
+						<button type="button" class="ml-2 mb-1 close" data-dismiss="toast">
+							<span>&times;</span>
 						</button>
 					</div>
 					<div class="toast-body text-dark h4">
@@ -28,182 +39,168 @@
 					</div>
 				</div>
 			</div>
-			<div class="row position-sticky sticky-top mb-2 bg-light p-1" style="top: 0.5rem">
-				<div class="input-group col-6">
-					<input type="text" class="form-control" placeholder="Código de barras"
-						aria-label=" with two button addons" aria-describedby="button-add-food" v-model="filter.food"
-						autofocus @keypress.enter="searchFood()" />
-					<div class="input-group-append" id="button-add-food">
-						<button class="btn btn-outline-secondary" type="button" @click="searchFood()">
-							Añadir Alimento
-						</button>
-						<button class="btn btn-outline-secondary" type="button" data-toggle="modal"
-							data-target="#addFoodModal">
-							<i class="fa fa-search" aria-hidden="true"></i>
 
+			<!-- ============================
+			    BARRA DE BÚSQUEDA 
+			============================= -->
+			<div class="row position-sticky sticky-top mb-2 bg-light p-2">
+
+				<!-- BUSCAR ALIMENTO -->
+				<div class="input-group col-6">
+					<input type="text" class="form-control" placeholder="Código / nombre alimento"
+						v-model="filter.food" @keypress.enter="searchFood()">
+
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" @click="searchFood()">
+							Añadir alimento
+						</button>
+
+						<button class="btn btn-outline-secondary" @click="openFoodModal()">
+							<i class="fa fa-search"></i>
 						</button>
 					</div>
 				</div>
+
+				<!-- BUSCAR PROVEEDOR -->
 				<div class="input-group col-6">
-					<input type="text" class="form-control" :placeholder="purchase.provider"
-						aria-label=" with two button addons" aria-describedby="button-addon4" v-model="filter.provider"
-						@keypress.enter="searchProvider()" />
-					<div class="input-group-append" id="button-addon4">
-						<button class="btn btn-outline-secondary" type="button" @click="searchProvider()">
-							Añadir Proveedor
+					<input type="text" class="form-control" placeholder="Proveedor"
+						v-model="filter.provider" @keypress.enter="searchProvider()">
+
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary" @click="searchProvider()">
+							Añadir proveedor
 						</button>
-						<button class="btn btn-outline-secondary" type="button" data-toggle="modal"
-							data-target="#addProviderModal">
-							<i class="fa fa-user" aria-hidden="true"></i>
+
+						<button class="btn btn-outline-secondary" @click="openProviderModal()">
+							<i class="fa fa-user"></i>
 						</button>
 					</div>
 				</div>
 			</div>
 
+			<!-- ============================
+			    TABLA DE ITEMS
+			============================= -->
 			<section>
-				<div>
-					<table class="
-		              table table-sm table-responsive-sm table-bordered table-hover
-		            ">
-						<thead class="bg-secondary text-white position-sticky sticky-top" style="top: 4rem">
-							<tr>
-								<th></th>
-								<th>ID</th>
-								<th>Alimento</th>
-								<th>Cantidad</th>
-								<th>Descuento %</th>
-								<th>Descuento $</th>
-								<th>Precio de venta <br> <small>IVA inc</small>
-								</th>
-								<th>Total</th>
-							</tr>
-						</thead>
-						<tbody v-if="itemsPurchaseList.length > 0">
-							<tr v-for="(p, index) in itemsPurchaseList" :key="p.id">
-								<td>
-									<button class="btn text-danger" @click="removeFood(index, p.id)">
-										<i class="bi bi-trash"></i>
-									</button>
-								</td>
+				<table class="table table-sm table-bordered table-hover">
+					<thead class="bg-secondary text-white position-sticky sticky-top" style="top:4rem">
+						<tr>
+							<th></th>
+							<th>ID</th>
+							<th>Alimento</th>
+							<th>Cantidad</th>
+							<th>Desc %</th>
+							<th>Desc $</th>
+							<th>Precio</th>
+							<th>Total</th>
+						</tr>
+					</thead>
 
-								<td>{{ p.id }}</td>
-								<td>{{ p.item }}</td>
-								<td>
-									<input type="number" name="quantity" id="quantity" step="any" placeholder="Cantidad"
-										class="form-control form-control-sm" v-model="p.quantity" style="max-width: 60px" />
-								</td>
-								
-								<td>
-									<input type="number" name="discount_percentage" id="discount_percentage" step="any"
-										placeholder="Descuento" class="form-control form-control-sm"
-										v-model="p.discount_percentage" style="max-width: 60px" />
-								</td>
-								<td>
-									<input v-if="p.discount_percentage != 0" type="number"
-										class="form-control form-control-sm" name="discount_value" id="discount_value"
-										step="2" placeholder="Descuento" :value="
-											(p.discount_value = (
-												p.quantity *
-												p.price *
-												(p.discount_percentage / 100)
-											).toFixed(0))
-										" style="max-width: 100px" />
-									<input v-else type="number" class="form-control form-control-sm" name="discount_value"
-										id="discount_value" step="2" v-model="p.discount_value" style="max-width: 100px" />
-								</td>
-								<td>
-									<input type="number" name="price" id="price" step="any"
-										placeholder="Precio de venta" v-model="p.price"
-										class="form-control form-control-sm" style="max-width: 100px" />
-								</td>
-								<td>
-									<span v-if="p.discount_percentage != 0">
-										$
-										{{
-											(p.total_cost =
-												p.quantity * p.price -
-												p.quantity *
-												p.price *
-												(p.discount_percentage / 100))
-										}}
-									</span>
-									<span v-else>
-										$
-										{{
-											(p.total_cost =
-												p.quantity * p.price - p.discount_value).toFixed(2)
-										}}
-									</span>
-								</td>
-							</tr>
-						</tbody>
-						<tbody v-else>
-							<tr>
-								<td colspan="8">No se han añadido alimentos</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+					<tbody v-if="itemsPurchaseList.length">
+						<tr v-for="(p,index) in itemsPurchaseList" :key="p.id">
+
+							<td>
+								<button class="btn text-danger" @click="removeFood(index, p.detail_id)">
+									<i class="fa fa-trash"></i>
+								</button>
+							</td>
+
+							<td>{{ p.id }}</td>
+							<td>{{ p.item }}</td>
+
+							<td>
+								<input type="number" class="form-control form-control-sm" 
+									v-model="p.quantity" style="max-width:70px">
+							</td>
+
+							<td>
+								<input type="number" class="form-control form-control-sm"
+									v-model="p.discount_percentage" style="max-width:70px">
+							</td>
+
+							<td>
+								<input type="number" class="form-control form-control-sm"
+									v-model="p.discount_value" style="max-width:90px">
+							</td>
+
+							<td>
+								<input type="number" class="form-control form-control-sm"
+									v-model="p.price" style="max-width:100px">
+							</td>
+
+							<td>
+								$
+								{{
+									(p.total_cost =
+										p.quantity * p.price - p.discount_value
+									).toFixed(2)
+								}}
+							</td>
+
+						</tr>
+					</tbody>
+
+					<tbody v-else>
+						<tr>
+							<td colspan="8" class="text-center">No se han añadido alimentos</td>
+						</tr>
+					</tbody>
+
+				</table>
 			</section>
 		</div>
-		<div class="col-md-3">
-			<div class="">
-				<section class="card">
-					<div>
-						<table class="table table-sm table-primary text-right">
-							<tr>
-								<th colspan="7">Total:</th>
-								<th>
-									$
-									{{ (purchase.total_cost = total_cost).toFixed(0) }}
-								</th>
-							</tr>
-							
-							<tr>
-								<th colspan="7">Descuento:</th>
-								<th>
-									$
-									{{ (purchase.total_discount = total_discount).toFixed(0) }}
-								</th>
-							</tr>
-							<tr class="bg-primary h5 text-white">
-								<th colspan="7">Pagar:</th>
-								<th>
-									$
-									{{ (purchase.total_tax_inc = total_tax_inc).toFixed(0) }}
-								</th>
-							</tr>
-							<tr class="">
-								<th colspan="7">Efectivo:</th>
-								<th>
-									<input type="number" value="0" step="any" v-model="purchase.cash" />
-								</th>
-							</tr>
-							<tr class="">
-								<th colspan="7">Cambio:</th>
-								<th>
-									<input type="text" :value="payment_return" readonly disabled />
-								</th>
-							</tr>
-						</table>
-					</div>
-				</section>
-				<div class="">
-					<button type="button" class="btn btn-outline-primary btn-block" @click="createOrUpdatePurchase(2)">
-						<!-- Facturar -->
 
-						<i class="bi bi-receipt"></i> <b>F1</b> Guardar
-					</button>
-					<router-link to="/purchases" type="button" class="btn btn-outline-secondary btn-block"
-						v-if="purchase_id != 0">
-						<i class="bi bi-receipt"></i> Cancelar
-					</router-link>
-				</div>
-			</div>
+		<!-- ============================
+		    COLUMNA DERECHA (TOTALES)
+		============================= -->
+		<div class="col-md-3">
+
+			<section class="card">
+				<table class="table table-sm table-primary text-right">
+
+					<tr>
+						<th>Total:</th>
+						<td>$ {{ (purchase.total_cost = total_cost).toFixed(0) }}</td>
+					</tr>
+
+					<tr>
+						<th>Descuento:</th>
+						<td>$ {{ (purchase.total_discount = total_discount).toFixed(0) }}</td>
+					</tr>
+
+					<tr class="bg-primary text-white">
+						<th>Pagar:</th>
+						<td>$ {{ (purchase.total_tax_inc = total_tax_inc).toFixed(0) }}</td>
+					</tr>
+
+					<tr>
+						<th>Efectivo:</th>
+						<td><input type="number" v-model="purchase.cash"></td>
+					</tr>
+
+					<tr>
+						<th>Cambio:</th>
+						<td><input type="text" :value="payment_return" disabled></td>
+					</tr>
+
+				</table>
+			</section>
+
+			<button class="btn btn-outline-primary btn-block mt-2"
+				@click="createOrUpdatePurchase(2)">
+				<i class="fa fa-save"></i> Guardar
+			</button>
+
+			<router-link v-if="purchase_id != 0" class="btn btn-outline-secondary btn-block"
+				:to="{ name:'purchases-foods' }">
+				Cancelar
+			</router-link>
 		</div>
 
-		<add-food @add-food="addFood($event)" />
-		<add-provider @add-provider="addProvider($event)" />
+		<!-- MODALES -->
+		<add-food @add-food="addFood"></add-food>
+		<add-provider @add-provider="addProvider"></add-provider>
+
 	</div>
 </template>
 
@@ -217,249 +214,205 @@ export default {
 
 	data() {
 		return {
-			// add food or provider with keyup
-			filter: {
-				food: "",
-				provider: "",
-				is_order:1
-			},
+			filter: { food: "", provider: "", is_order:1 },
+
 			itemsPurchaseList: [],
 
 			purchase: {
 				id_provider: 1,
 				provider: "Sin proveedor",
 				state: 1,
-				total_tax_inc: 0.0,
-				total_tax_exc: 0.0,
-				total_discount: 0.0,
-				itemsPurchase: [],
+				total_tax_inc: 0,
+				total_cost: 0,
+				total_discount: 0,
 				cash: 0,
-				change: 0
+				change: 0,
+				itemsPurchase:[]
 			}
 		};
 	},
+
 	computed: {
-		total_cost: function () {
-			var total = 0.0;
-			this.itemsPurchaseList.forEach(
-				food =>
-					(total += parseFloat(food.price * food.quantity))
-			);
-			return total;
+		total_cost() {
+			return this.itemsPurchaseList.reduce((t,p) =>
+				t + (p.quantity * p.price), 0);
 		},
-		total_discount: function () {
-			var total = 0.0;
-			this.itemsPurchaseList.forEach(food => {
-				total += parseFloat(food.discount_value);
-			});
-			return total;
+
+		total_discount() {
+			return this.itemsPurchaseList.reduce((t,p)=>
+				t + Number(p.discount_value), 0);
 		},
-		total_tax_inc: function () {
-			var total = 0.0;
-			this.itemsPurchaseList.forEach(food => {
-				total += parseFloat(
-					food.quantity * food.price -
-					food.quantity *
-					food.price *
-					(food.discount_percentage / 100)
-				);
-			});
-			return total;
+
+		total_tax_inc() {
+			return this.total_cost - this.total_discount;
 		},
-		payment_return: function () {
-			var value = 0.0;
-			if (this.purchase.cash > 0) {
-				value = (this.purchase.cash - this.total_tax_inc).toFixed(0);
-			}
-			return value;
+
+		payment_return() {
+			return this.purchase.cash > 0
+				? (this.purchase.cash - this.total_tax_inc).toFixed(0)
+				: 0;
 		}
 	},
+
 	methods: {
+
+		/* ================================
+		   LISTAR ITEMS SI ES EDICIÓN
+		================================*/
 		listItemsPurchase() {
-			if (this.purchase_id == 0) {
-				return false;
-			}
+			if (!this.purchase_id || this.purchase_id == 0) return;
 
-			let me = this;
-
-			axios
-				.get(`api/purchases/${me.purchase_id}`, this.$root.config)
-				.then(function (response) {
-					me.purchase.id_provider = response.data.purchase_information.provider_id;
-					me.purchase.provider = response.data.purchase_information.provider.name;
-					me.itemsPurchaseList = response.data.purchase_details;
+			axios.get(`api/purchases/${this.purchase_id}`, this.$root.config)
+				.then(res => {
+					this.purchase.id_provider = res.data.purchase_information.provider_id;
+					this.purchase.provider = res.data.purchase_information.provider.name;
+					this.itemsPurchaseList = res.data.purchase_details;
 				});
 		},
+
+		/* ================================
+		   BUSCAR ALIMENTO
+		================================*/
 		searchFood() {
-			let me = this;
-			if (me.filter.food == "") {
-				return false;
-			}
-            let data = {
-                ...this.filter
-            }
-			var url = "api/food/search-item" ;
-			axios
-				.get(url,  { params: data }, this.$root.config)
-				.then(function (response) {
-					var new_food = response.data.food;
-					if (!new_food) {
-						$("#no-results").toast("show");
-					} else {
-						me.addFood(new_food);
-					}
-				})
-				.catch(function (error) {
-					console.log(error);
+			if (!this.filter.food) return;
+
+			axios.get(`api/food/search-item`, { params: this.filter })
+				.then(res => {
+					if (!res.data.food) $("#no-results").toast("show");
+					else this.addFood(res.data.food);
 				});
-			me.filter.food = "";
+
+			this.filter.food = "";
 		},
-		addFood(new_food) {
-			console.log("....::: FOOD", new_food)
-			let me = this;
-			let result = false;
-			// Verifica si el alimento existe en la lista
-			me.itemsPurchaseList.filter(prod => {
-				if (new_food.id == prod.id) {
-					result = true;
-					if (result) {
-						// Añade cantidad
-						prod.quantity += 1;
-						prod.price = prod.costo_kg * prod.quantity;
-					}
-				}
+
+		addFood(food) {
+			let exists = this.itemsPurchaseList.find(p => p.id === food.id);
+
+			if (exists) {
+				exists.quantity++;
+				return;
+			}
+
+			this.itemsPurchaseList.push({
+				id: food.id,
+				item: food.alimento,
+				price: food.costo_kg,
+				quantity: 1,
+				discount_percentage: 0,
+				discount_value: 0,
+				total_cost: 0
 			});
+		},
 
-			if (!result) {
-				// Sino, lo añade al array
-				me.itemsPurchaseList.push({
-					food_id: new_food.id,
-					id: new_food.id,
-					discount_percentage: 0,
-					discount_value: 0,
-					quantity: 1,				
-					item: new_food.alimento,
-					price: new_food.costo_kg
-				});
-			}
-		},
-		removeFood(index, detail_id = null) {
-			this.itemsPurchaseList.splice(index, 1);
-			if (detail_id != null || detail_id != 0) {
-				axios.delete(`api/purchase-details/${detail_id}`, this.$root.config);
-			}
-		},
+		/* ================================
+		   BUSCAR PROVEEDOR
+		================================*/
 		searchProvider() {
-			let me = this;
-			if (me.filter.provider == "") {
-				return false;
-			}
-			var url = "api/providers?provider=" + me.filter.provider;
-			axios
-				.get(url, null, me.$root.config)
-				.then(function (response) {
-					var new_client = response.data;
-					if (!new_client) {
+			if (!this.filter.provider) return;
+
+			axios.get("api/providers", { params:{ provider:this.filter.provider } })
+				.then(res => {
+					if (!res.data.providers?.data?.length)
 						$("#no-results").toast("show");
-					} else {
-						me.addProvider(new_client);
-					}
-				})
-				.catch(function (error) {
-					console.log(error);
+					else
+						this.addProvider(res.data.providers.data[0]);
 				});
 		},
+
 		addProvider(provider) {
-			let me = this;
-			me.purchase.id_provider = provider.id;
-			me.purchase.provider = provider.provider;
-			me.filter.provider = provider.provider;
+			this.purchase.id_provider = provider.id;
+			this.purchase.provider = provider.provider;
+			this.filter.provider = provider.provider;
 		},
 
+		/* ================================
+		   MODALES
+		================================*/
+		openFoodModal() {
+			$("#addFoodModal").modal("show");
+		},
+
+		openProviderModal() {
+			$("#addProviderModal").modal("show");
+		},
+
+		removeFood(index, detail_id=null) {
+			this.itemsPurchaseList.splice(index,1);
+
+			if (detail_id)
+				axios.delete(`api/purchase-details/${detail_id}`, this.$root.config);
+		},
+
+		/* ================================
+		GUARDAR / ACTUALIZAR COMPRA
+		================================*/
 		createOrUpdatePurchase(state_purchase) {
 			this.purchase.state = state_purchase;
-			if (this.itemsPurchaseList.length > 0) {
-				this.purchase.itemsPurchase = this.itemsPurchaseList;
-				if (this.purchase_id != 0 && this.purchase_id != null) {
-					axios
-						.put(
-							`api/purchases/${this.purchase_id}`,
-							this.purchase,
-							this.$root.config
-						)
-						.then(
-							() => (
-								Swal.fire({
-									icon: 'success',
-									title: 'Excelente',
-									text: 'Los datos se han guardado correctamente',
-								})
-							)
-						)
-						.catch(function (error) {
-							// handle error
-							console.log('error', error)
-							if (error) {
-								Swal.fire({
-									icon: 'error',
-									title: 'Oops...',
-									text: 'Hubo un error al guardar los datos',
-								})
-							}
-						})
-						.finally(
-							// this.$router.push("/purchases")
-						);
-				} else {
-					axios
-						.post(`api/purchases`, this.purchase, this.$root.config)
-						.then((response) => {
-							Swal.fire({
-								icon: "success",
-								title: "Excelente",
-								text: "Los datos se han guardado correctamente",
-							});
-						})
-						.catch(function (error) {
-							// handle error
-							if (error) {
-								Swal.fire({
-									icon: "error",
-									title: "Oops...",
-									text: "Hubo un error al guardar los datos",
-								});
-							}
-						})
-						.finally(() =>
-							setTimeout(() => {
-								// this.$router.go(0)
-							}, 3000)
-						);
-				}
-			} else {
-				alert("No hay alimentos en la orden");
+
+			if (this.itemsPurchaseList.length === 0) {
+				Swal.fire("No hay alimentos en la compra");
+				return;
 			}
+
+			this.purchase.itemsPurchase = this.itemsPurchaseList;
+
+			// --- BLOQUE DE AUTENTICACIÓN ---
+			const token = localStorage.getItem('user_token'); 
+			const authConfig = {
+				headers: { 
+					'Authorization': `Bearer ${token}`,
+					'Accept': 'application/json'
+				}
+			};
+
+			// NUEVA COMPRA
+			if (!this.purchase_id || this.purchase_id == 0) {
+				axios.post("api/purchases", this.purchase, authConfig)
+					.then(() => {
+						Swal.fire("Excelente", "Compra guardada correctamente", "success")
+						.then(() => {
+							// REDIRECCIÓN POR PATH (Sin usar 'name')
+							this.$router.push("/purchases/foods"); 
+						});
+					})
+					.catch((error) => {
+						console.error(error);
+						if (error.response && error.response.status === 401) {
+							Swal.fire("Sesión Expirada", "Por favor, vuelve a iniciar sesión", "warning");
+						} else {
+							Swal.fire("Error", "No se pudo guardar la compra", "error");
+						}
+					});
+				return;
+			}
+
+			// EDITAR COMPRA
+			axios.put(`api/purchases/${this.purchase_id}`, this.purchase, authConfig)
+				.then(() => {
+					Swal.fire("Actualizado", "Compra actualizada correctamente", "success")
+					.then(() => {
+						// REDIRECCIÓN POR PATH (Sin usar 'name')
+						this.$router.push("/purchases/foods"); 
+					});
+				})
+				.catch((error) => {
+					if (error.response && error.response.status === 401) {
+						Swal.fire("Sesión Expirada", "Vuelve a loguearte", "warning");
+					} else {
+						Swal.fire("Error", "No se pudo actualizar", "error");
+					}
+				});
 		},
+
 		commands() {
-			let me = this;
-			shortcut.add("F1", function () {
-				me.createOrUpdatePurchase(2);
-			});
-
-			shortcut.add("F2", function () {
-				me.createOrUpdatePurchase(4);
-			});
-
-			shortcut.add("F10", function () {
-				$("#addFoodModal").modal("show");
-			});
+			shortcut.add("F1", () => this.createOrUpdatePurchase(2));
+			shortcut.add("F10", () => this.openFoodModal());
 		}
 	},
+
 	mounted() {
 		$("#no-results").toast("hide");
-		if (this.purchase_id != null || this.purchase_id != 0) {
-			this.listItemsPurchase();
-		}
+		this.listItemsPurchase();
 		this.commands();
 	}
 };

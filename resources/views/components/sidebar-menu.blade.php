@@ -1,24 +1,24 @@
-<nav class="navbar navbar-expand-md navbar-light border-bottom shadow-sm border" style="background-color: #e3f2fd;">
-    <div class="container">
-        <div class="text-center">
-            <img id="logo-app" src="{{ asset('img/logo-aquamazonia.jpg') }}" alt="Logo-aquamazonia"
-                style="width:70px; border-radius:50%">
-            <br>
-            <h2 id="title-app-shadow">{{ config('app.name', 'Aquamazonia') }}</h2>
+<!-- BOTÓN TOGGLE - Debe estar fuera del sidebar en el layout principal -->
+<div class="sidebar-toggle-btn" id="sidebarToggleBtn">
+    <i class="fas fa-chevron-left"></i>
+</div>
+
+<nav id="aquamazonia-sidebar" class="shadow-sm">
+    <div class="sidebar-inner">
+
+        <!-- Logo -->
+        <div class="sidebar-logo mb-2">
+            <img id="logo-app" src="{{ asset('img/logo-aquamazonia.jpg') }}" alt="Logo">
+            <div class="sidebar-brand-text">
+                <h5>{{ strtoupper(config('app.name', 'Aquamazonia')) }}</h5>
+                <small>Plataforma de producción</small>
+            </div>
         </div>
 
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-            <!-- Right Side Of Navbar -->
-            <ul class="navbar-nav row" id="main-navigation">
-                <!-- Authentication Links -->
-                @guest
-                    <li class="nav-item ">
+        @guest
+            <div class="sidebar-menu-scroll">
+                <ul class="nav flex-column mb-3">
+                    <li class="nav-item">
                         <a class="nav-link" href="{{ route('login') }}">{{ __('Ingresar') }}</a>
                     </li>
                     @if (Route::has('register'))
@@ -26,146 +26,409 @@
                             <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                         </li>
                     @endif
-                @else
-                    <li class="nav-item col-nav-item ">
-                        <router-link class="nav-link active" to="/dashboard">Panel principal</router-link>
+                </ul>
+            </div>
+        @else
+            <div class="sidebar-menu-scroll" id="sidebarMenuContent">
+
+                <!-- PRINCIPAL -->
+                <div class="menu-section-title">Principal</div>
+                <ul class="nav flex-column" id="main-navigation">
+
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/dashboard">Panel principal</router-link>
                     </li>
-                    <li class="nav-item col-nav-item ">
+
+                    <li class="nav-item">
                         <router-link class="nav-link" to="/siembras">Siembras</router-link>
                     </li>
 
-                    <li class="nav-item col-nav-item ">
-                        <router-link class="nav-link" to="/recursos-necesarios">Recursos necesarios</router-link>
+                    <li class="nav-item">
+                        <router-link class="nav-link d-flex align-items-center" to="/sync-feedings">
+                            <span>Sincronizar alimentación</span>
+                            <feeding-prelogs-badge class="ml-auto"></feeding-prelogs-badge>
+                        </router-link>
                     </li>
-                    <li class="nav-item col-nav-item ">
+
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/recursos-necesarios">
+                            Recursos necesarios
+                        </router-link>
+                    </li>
+
+                    <li class="nav-item">
                         <router-link class="nav-link" to="/alimentacion">Alimentación</router-link>
                     </li>
-                    <li class="nav-item col-nav-item ">
-                        <router-link class="nav-link" to="/informes-biomasa-alimento">Biomasa por Alimentación</router-link>
+
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/calidad-agua">
+                            Parámetros de agua
+                        </router-link>
                     </li>
-                    <li class="nav-item col-nav-item ">
-                        <router-link class="nav-link" to="/informe-costos">Informes Costos</router-link>
-                    </li>
-                    <li class="nav-item col-nav-item ">
-                        <router-link class="nav-link" to="/calidad-agua">Registrar parametros de calidad del
-                            Agua</router-link>
-                    </li>
-                    <!-- <li class="nav-item col-nav-item ">
-                                    <router-link class="nav-link" to="/informes">Informes</router-link>
-                                </li> -->
-                    <li class="nav-item col-nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Informes<span class="caret"></span>
+
+                    <!-- INFORMES -->
+                    <div class="menu-section-title">Informes</div>
+
+                    <li class="nav-item">
+                        <a class="nav-link submenu-toggle"
+                           href="#submenuInformes"
+                           role="button"
+                           aria-expanded="false"
+                           aria-controls="submenuInformes">
+
+                            <span>Informes de producción</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
                         </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="/informe-consolidado">Informe consolidado variables de
-                                producción
-                            </router-link>
-                            <router-link class="dropdown-item" to="/informes">Informe recursos </router-link>
-                            <router-link class="dropdown-item" to="/informes-recursos-necesarios">Informe consolidado
-                                recursos
-                                necesarios</router-link>
-                            <router-link class="dropdown-item" to="/informe-consolidado-alimentos">Informe consolidado
-                                alimentos
-                            </router-link>
-                            <router-link class="dropdown-item" to="/informes-parametros">Informe Párametros de calidad del
-                                agua
-                            </router-link>
-                            <!-- <router-link class="dropdown-item" to="/informe-siembras">Informe siembras</router-link>       -->
-                            <router-link class="dropdown-item" to="/ciclo-productivo">Informe ciclo productivo</router-link>
-                            <router-link class="dropdown-item" to="/informe-actividades">Informe muestreo y
-                                pesca</router-link>
-                        </div>
-                        <li class="nav-item col-nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Almacen<span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="/food-inventory">Alimentos</router-link>
-                            <router-link class="dropdown-item" to="/resource-inventory">Recursos</router-link>      
-                            <router-link class="dropdown-item" to="/stock/foods">Ajustes de inv. Alimentos</router-link>         
-                            <router-link class="dropdown-item" to="/stock/resources">Ajustes de inv. Recursos</router-link>                              
-                            <router-link class="dropdown-item" to="/purchases/foods">Compras Alimentos</router-link>                           
-                            <router-link class="dropdown-item" to="/purchases/resources">Compras Recursos</router-link>                           
-                            <router-link class="dropdown-item" to="/kardex/foods">Kardex Alimentos</router-link>                           
-                            <router-link class="dropdown-item" to="/kardex/resources">Kardex Recursos</router-link>                           
-                        </div>
-                    </li>
-                        </li>
-                    <li class="nav-item col-nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Configuracion Almacen<span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="/warehouses">Bodegas</router-link>
-                            <router-link class="dropdown-item" to="/providers">Proveedores</router-link>
-                            <router-link class="dropdown-item" to="/brands">Marcas</router-link>
-                            <router-link class="dropdown-item" to="/food-categories">Categorias alimentos</router-link>
-                            <router-link class="dropdown-item" to="/resource-categories">Categorias recursos</router-link>
-                        </div>
-                    </li>
-                    </li>
-                    <li class="nav-item col-nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Configuracion general<span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="/contenedores">Estanques</router-link>
-                            <router-link class="dropdown-item" to="/especies">Especies</router-link>
-                            <router-link class="dropdown-item" to="/usuarios">Usuarios</router-link>
-                            <router-link class="dropdown-item" to="/phases">Fases</router-link>
-                        </div>
-                    </li>
-                    <li class="nav-item col-nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Configuracion alimentos<span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="/foods">Alimentos</router-link>
-                            <router-link class="dropdown-item" to="/historial-costos-alimentos">Historial Costos Alimentos
-                            </router-link>
-                            <router-link class="dropdown-item" to="/food-categories">Tipo de alimentos</router-link>
-                        </div>
-                    </li>
-                    <li class="nav-item col-nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            Configuracion recursos<span class="caret"></span>
-                        </a>
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <router-link class="dropdown-item" to="/recursos">Recursos</router-link>
-                            <router-link class="dropdown-item" to="/historial-costos-recursos">Historial Costos Recursos
-                            </router-link>
-                            <router-link class="dropdown-item" to="/resource-categories">Tipo de recursos</router-link>
+
+                        <div class="collapse submenu" id="submenuInformes">
+                            <ul class="nav flex-column">
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/informe-costos">
+                                        Informes Costos
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/informes-biomasa-alimento">
+                                        Informe Biomasa por Alimentación
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/informe-consolidado">
+                                        Informe consolidado variables de producción
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/informes">
+                                        Informe recursos
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/informes-recursos-necesarios">
+                                        Informe consolidado recursos necesarios
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/informe-consolidado-alimentos">
+                                        Informe consolidado alimentos
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/informes-parametros">
+                                        Informe parámetros de calidad del agua
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/ciclo-productivo">
+                                        Informe ciclo productivo
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/informe-actividades">
+                                        Informe muestreo y pesca
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/reporte-grafico-muestra">
+                                        Reporte gráfico (demo)
+                                    </router-link>
+                                </li>
+
+                            </ul>
                         </div>
                     </li>
 
-                    <li class="nav-item col-nav-item dropdown">
-                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                            {{ Auth::user()->name }} <span class="caret"></span>
+                    <!-- ALMACÉN -->
+                    <div class="menu-section-title">Almacén</div>
+
+                    <li class="nav-item">
+                        <a class="nav-link submenu-toggle"
+                           href="#submenuAlmacen"
+                           role="button"
+                           aria-expanded="false">
+                            <span>Gestión de almacén</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
                         </a>
 
-                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="{{ route('logout') }}"
-                                onclick="event.preventDefault();
-                                        document.getElementById('logout-form').submit();">
-                                {{ __('Salir') }}
-                            </a>
+                        <div class="collapse submenu" id="submenuAlmacen">
+                            <ul class="nav flex-column">
 
-                            <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                                style="display: none;">
-                                @csrf
-                            </form>
+                                <li class="nav-item"><router-link class="nav-link" to="/food-inventory">Alimentos</router-link></li>
+
+                                <li class="nav-item"><router-link class="nav-link" to="/resource-inventory">Recursos</router-link></li>
+
+                                <li class="nav-item"><router-link class="nav-link" to="/stock/foods">Ajustes inv. Alimentos</router-link></li>
+
+                                <li class="nav-item"><router-link class="nav-link" to="/stock/resources">Ajustes inv. Recursos</router-link></li>
+
+                                <li class="nav-item"><router-link class="nav-link" to="/purchases/foods">Compras Alimentos</router-link></li>
+
+                                <li class="nav-item"><router-link class="nav-link" to="/purchases/resources">Compras Recursos</router-link></li>
+
+                                <li class="nav-item"><router-link class="nav-link" to="/kardex/foods">Kardex Alimentos</router-link></li>
+
+                                <li class="nav-item"><router-link class="nav-link" to="/kardex/resources">Kardex Recursos</router-link></li>
+
+                            </ul>
                         </div>
                     </li>
-                @endguest
-            </ul>
-        </div>
+
+                    <!-- CONFIGURACIÓN -->
+                    <div class="menu-section-title">Configuración</div>
+
+                    <!-- Config Almacén -->
+                    <li class="nav-item">
+                        <a class="nav-link submenu-toggle"
+                           href="#submenuConfigAlmacen"
+                           role="button"
+                           aria-expanded="false">
+                            <span>Configuración Almacén</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+
+                        <div class="collapse submenu" id="submenuConfigAlmacen">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><router-link class="nav-link" to="/warehouses">Bodegas</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/providers">Proveedores</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/brands">Marcas</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/food-categories">Categorías alimentos</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/resource-categories">Categorías recursos</router-link></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Config alimentos -->
+                    <li class="nav-item">
+                        <a class="nav-link submenu-toggle"
+                           href="#submenuConfigAlimentos"
+                           role="button"
+                           aria-expanded="false">
+                            <span>Configuración alimentos</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+
+                        <div class="collapse submenu" id="submenuConfigAlimentos">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><router-link class="nav-link" to="/foods">Alimentos</router-link></li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/historial-costos-alimentos">
+                                        Historial Costos Alimentos
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/food-categories">
+                                        Tipo de alimentos
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Config recursos -->
+                    <li class="nav-item">
+                        <a class="nav-link submenu-toggle"
+                           href="#submenuConfigRecursos"
+                           role="button"
+                           aria-expanded="false">
+                            <span>Configuración recursos</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+
+                        <div class="collapse submenu" id="submenuConfigRecursos">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><router-link class="nav-link" to="/recursos">Recursos</router-link></li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/historial-costos-recursos">
+                                        Historial Costos Recursos
+                                    </router-link>
+                                </li>
+
+                                <li class="nav-item">
+                                    <router-link class="nav-link" to="/resource-categories">
+                                        Tipo de recursos
+                                    </router-link>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- Config general -->
+                    <li class="nav-item">
+                        <a class="nav-link submenu-toggle"
+                           href="#submenuConfigGeneral"
+                           role="button"
+                           aria-expanded="false">
+                            <span>Configuración general</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+
+                        <div class="collapse submenu" id="submenuConfigGeneral">
+                            <ul class="nav flex-column">
+                                <li class="nav-item"><router-link class="nav-link" to="/contenedores">Estanques</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/especies">Especies</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/phases">Fases</router-link></li>
+                                <li class="nav-item"><router-link class="nav-link" to="/usuarios">Usuarios</router-link></li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <!-- SISTEMA -->
+                    <div class="menu-section-title">Sistema</div>
+
+                    <li class="nav-item">
+                        <router-link class="nav-link" to="/backup">
+                            <i class="fas fa-database mr-2"></i> Respaldo BD
+                        </router-link>
+                    </li>
+
+                    <!-- USUARIO -->
+                    <li class="nav-item mt-3 user-section">
+                        <a class="nav-link submenu-toggle"
+                           href="#submenuUsuario"
+                           role="button"
+                           aria-expanded="false">
+                            <span class="user-name">{{ Auth::user()->name }}</span>
+                            <span class="chevron"><i class="fas fa-chevron-right"></i></span>
+                        </a>
+
+                        <div class="collapse submenu" id="submenuUsuario">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link"
+                                       href="{{ route('logout') }}"
+                                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                        Salir
+                                    </a>
+
+                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display:none;">
+                                        @csrf
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                </ul>
+            </div>
+        @endguest
     </div>
 </nav>
+
+{{-- JS COMPLETO para el menú: toggle + acordeón --}}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+
+    var sidebar = document.getElementById('aquamazonia-sidebar');
+    var toggleBtn = document.getElementById('sidebarToggleBtn');
+    var body = document.body;
+
+    if (!sidebar || !toggleBtn) return;
+
+    // Estado guardado
+    var isCollapsed = localStorage.getItem('aquamazoniaSidebarCollapsed') === 'true';
+
+    if (isCollapsed) collapseSidebar(); else expandSidebar();
+
+    function collapseSidebar() {
+        body.classList.add('sidebar-collapsed');
+        toggleBtn.querySelector('i').className = 'fas fa-chevron-right';
+        localStorage.setItem('aquamazoniaSidebarCollapsed', 'true');
+        toggleBtn.style.left = '20px';
+    }
+
+    function expandSidebar() {
+        body.classList.remove('sidebar-collapsed');
+        toggleBtn.querySelector('i').className = 'fas fa-chevron-left';
+        localStorage.setItem('aquamazoniaSidebarCollapsed', 'false');
+        toggleBtn.style.left = (window.innerWidth <= 767.98 ? 230 : 260) + 'px';
+    }
+
+    toggleBtn.addEventListener('click', function (e) {
+        e.preventDefault();
+        if (body.classList.contains('sidebar-collapsed')) expandSidebar();
+        else collapseSidebar();
+    });
+
+    // Acordeón
+    var toggles = sidebar.querySelectorAll('.submenu-toggle');
+    toggles.forEach(function (toggle) {
+        toggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            var target = document.querySelector(this.getAttribute('href'));
+            if (!target) return;
+
+            var isOpen = target.classList.contains('show');
+
+            sidebar.querySelectorAll('.submenu.show').forEach(function (sub) {
+                if (sub !== target) sub.classList.remove('show');
+            });
+
+            if (isOpen) target.classList.remove('show');
+            else target.classList.add('show');
+        });
+    });
+
+});
+</script>
+
+<style>
+/* BOTÓN DE TOGGLE */
+.sidebar-toggle-btn {
+    position: fixed;
+    left: 260px;
+    top: 20px;
+    z-index: 1001;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #0ea5e9, #22c55e);
+    border: 2px solid #ffffff;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.sidebar-collapsed #aquamazonia-sidebar {
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+.sidebar-collapsed .sidebar-toggle-btn {
+    left: 20px !important;
+}
+
+#sidebarToggleBtn i {
+    transition: transform 0.3s ease;
+}
+
+.sidebar-collapsed #sidebarToggleBtn i {
+    transform: rotate(180deg);
+}
+
+/* Sidebar ancho responsivo */
+#aquamazonia-sidebar {
+    width: 260px;
+    transition: transform 0.3s ease;
+}
+
+@media (max-width: 767.98px) {
+    #aquamazonia-sidebar {
+        width: 230px;
+    }
+}
+</style>

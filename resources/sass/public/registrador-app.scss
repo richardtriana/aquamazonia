@@ -1,0 +1,1355 @@
+/* 
+ * =============================================
+ * AQUAMAZONIA - APP PÚBLICA DE REGISTRADORES
+ * Estilos responsive para móviles, tablets y escritorio
+ * =============================================
+ */
+
+/* =============================================
+ * 1. VARIABLES Y CONFIGURACIÓN RESPONSIVE
+ * ============================================= */
+
+// Breakpoints
+$breakpoint-xs: 480px;
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+
+// Colores del tema
+$color-bg-dark: #020617;
+$color-bg-gradient: radial-gradient(circle at top, #081326, #020617);
+$color-card-bg: radial-gradient(circle at top, #0f172a, #020617);
+$color-primary-gradient: linear-gradient(135deg, #22c55e, #14b8a6);
+$color-primary: #34d399;
+$color-primary-dark: #059669;
+$color-secondary: #fb923c;
+$color-text-light: #f9fafb;
+$color-text-muted: rgba(229, 231, 235, 0.85);
+$color-text-dark: #020617;
+$color-border: rgba(148, 163, 184, 0.24);
+$color-border-light: rgba(148, 163, 184, 0.55);
+$color-error: #fb7185;
+$color-warning: #fef3c7;
+$color-success: #dcfce7;
+
+// Espaciado
+$spacing-xs: 0.25rem;  // 4px
+$spacing-sm: 0.5rem;   // 8px
+$spacing-md: 1rem;     // 16px
+$spacing-lg: 1.5rem;   // 24px
+$spacing-xl: 2rem;     // 32px
+$spacing-2xl: 3rem;    // 48px
+
+// Tipografía
+$font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+$font-size-xs: 0.75rem;    // 12px
+$font-size-sm: 0.875rem;   // 14px
+$font-size-base: 1rem;     // 16px
+$font-size-lg: 1.125rem;   // 18px
+$font-size-xl: 1.25rem;    // 20px
+$font-size-2xl: 1.5rem;    // 24px
+$font-size-3xl: 1.875rem;  // 30px
+
+// Bordes
+$border-radius-sm: 0.5rem;
+$border-radius-md: 0.75rem;
+$border-radius-lg: 1rem;
+$border-radius-xl: 1.25rem;
+$border-radius-full: 9999px;
+
+// Sombras
+$shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.1);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+$shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+$shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+
+// Transiciones
+$transition-fast: 0.15s ease;
+$transition-normal: 0.3s ease;
+$transition-slow: 0.5s ease;
+
+/* =============================================
+ * 2. MIXINS Y FUNCIONES RESPONSIVE
+ * ============================================= */
+
+// Mixin para media queries
+@mixin respond-to($breakpoint) {
+  @if $breakpoint == xs {
+    @media (max-width: $breakpoint-sm) { @content; }
+  } @else if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) and (max-width: $breakpoint-md - 1) { @content; }
+  } @else if $breakpoint == md {
+    @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg - 1) { @content; }
+  } @else if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) and (max-width: $breakpoint-xl - 1) { @content; }
+  } @else if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) { @content; }
+  } @else if $breakpoint == mobile {
+    @media (max-width: $breakpoint-md - 1) { @content; }
+  } @else if $breakpoint == tablet {
+    @media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg - 1) { @content; }
+  } @else if $breakpoint == desktop {
+    @media (min-width: $breakpoint-lg) { @content; }
+  }
+}
+
+// Mixin para flexbox centrado
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Mixin para grid responsive
+@mixin grid-responsive($min-width: 150px) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-width, 1fr));
+  gap: $spacing-md;
+  
+  @include respond-to(mobile) {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: $spacing-sm;
+  }
+}
+
+// Mixin para texto truncado
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =============================================
+ * 3. ESTILOS BASE Y RESET
+ * ============================================= */
+
+.registrador-root,
+.registrador-app-container {
+  min-height: 100vh;
+  background: $color-bg-gradient;
+  color: $color-text-light;
+  font-family: $font-family;
+  font-size: $font-size-base;
+  line-height: 1.5;
+  
+  // Scroll suave en móviles
+  -webkit-overflow-scrolling: touch;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-sm;
+  }
+}
+
+// Reset para elementos específicos
+button {
+  font-family: $font-family;
+  font-size: inherit;
+}
+
+input, select, textarea {
+  font-family: $font-family;
+  font-size: inherit;
+}
+
+/* =============================================
+ * 4. LAYOUT Y CONTENEDORES
+ * ============================================= */
+
+// Contenedor principal del login
+.registrador-login-container {
+  max-width: 480px;
+  margin: 0 auto;
+  padding: $spacing-2xl $spacing-lg $spacing-2xl;
+  
+  @include respond-to(mobile) {
+    padding: $spacing-xl $spacing-md;
+    max-width: 100%;
+  }
+  
+  @include respond-to(tablet) {
+    padding: $spacing-2xl $spacing-lg;
+  }
+}
+
+// Contenedor de las apps específicas
+.registrador-app-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: $spacing-lg $spacing-md $spacing-2xl;
+  
+  @include respond-to(mobile) {
+    padding: $spacing-md $spacing-sm $spacing-xl;
+    max-width: 100%;
+  }
+  
+  @include respond-to(tablet) {
+    padding: $spacing-lg $spacing-md $spacing-2xl;
+    max-width: 960px;
+  }
+  
+  @include respond-to(desktop) {
+    padding: $spacing-xl $spacing-lg $spacing-2xl;
+    max-width: 1200px;
+  }
+}
+
+/* =============================================
+ * 5. COMPONENTES DE LOGIN (RegistradorApp.vue)
+ * ============================================= */
+
+.registrador-header {
+  text-align: center;
+  margin-bottom: $spacing-xl;
+  
+  @include respond-to(mobile) {
+    margin-bottom: $spacing-lg;
+  }
+}
+
+.app-title {
+  font-size: $font-size-3xl;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  color: $color-text-light;
+  margin-bottom: $spacing-sm;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-2xl;
+    letter-spacing: 0.1em;
+  }
+}
+
+.app-subtitle {
+  font-size: $font-size-lg;
+  color: $color-text-muted;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-base;
+  }
+}
+
+// Tarjetas
+.registrador-card {
+  background: $color-card-bg;
+  border-radius: $border-radius-xl;
+  padding: $spacing-xl $spacing-lg;
+  box-shadow: $shadow-2xl;
+  border: 1px solid $color-border;
+  transition: transform $transition-normal, box-shadow $transition-normal;
+  
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+  }
+  
+  @include respond-to(mobile) {
+    padding: $spacing-lg $spacing-md;
+    border-radius: $border-radius-lg;
+  }
+}
+
+.login-card {
+  text-align: center;
+}
+
+.card-title {
+  font-size: $font-size-xl;
+  font-weight: 600;
+  margin-bottom: $spacing-lg;
+  color: $color-text-light;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-lg;
+    margin-bottom: $spacing-md;
+  }
+}
+
+// Campos de formulario
+.field-label {
+  display: block;
+  font-size: $font-size-sm;
+  font-weight: 500;
+  margin-bottom: $spacing-xs;
+  color: $color-text-muted;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-xs;
+  }
+}
+
+.text-input {
+  width: 100%;
+  border-radius: $border-radius-lg;
+  border: 1px solid $color-border-light;
+  background: rgba(15, 23, 42, 0.9);
+  color: $color-text-light;
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-base;
+  outline: none;
+  transition: all $transition-fast;
+  
+  &.large {
+    padding: $spacing-md $spacing-lg;
+    font-size: $font-size-lg;
+    text-align: center;
+  }
+  
+  &:focus {
+    border-color: $color-primary;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.1);
+    background: rgba(15, 23, 42, 1);
+  }
+  
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+  
+  @include respond-to(mobile) {
+    padding: $spacing-sm;
+    font-size: $font-size-sm;
+    
+    &.large {
+      padding: $spacing-md;
+      font-size: $font-size-base;
+    }
+  }
+}
+
+// Botones
+.primary-button {
+  width: 100%;
+  margin-top: $spacing-lg;
+  border: none;
+  border-radius: $border-radius-full;
+  background: $color-primary-gradient;
+  color: $color-text-dark;
+  font-weight: 600;
+  padding: $spacing-md $spacing-lg;
+  font-size: $font-size-base;
+  cursor: pointer;
+  box-shadow: 0 14px 35px rgba($color-primary, 0.45);
+  transition: all $transition-fast;
+  @include flex-center;
+  gap: $spacing-sm;
+  
+  &.large {
+    padding: $spacing-lg $spacing-xl;
+    font-size: $font-size-lg;
+  }
+  
+  &:hover:not(:disabled) {
+    transform: translateY(-2px);
+    filter: brightness(1.05);
+    box-shadow: 0 18px 40px rgba($color-primary, 0.6);
+  }
+  
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+  
+  &:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+    box-shadow: none;
+  }
+  
+  @include respond-to(mobile) {
+    padding: $spacing-sm $spacing-md;
+    font-size: $font-size-sm;
+    
+    &.large {
+      padding: $spacing-md $spacing-lg;
+      font-size: $font-size-base;
+    }
+  }
+}
+
+.ghost-button {
+  border-radius: $border-radius-full;
+  padding: $spacing-sm $spacing-lg;
+  border: 1px solid $color-secondary;
+  background: rgba(15, 23, 42, 0.95);
+  color: lighten($color-secondary, 20%);
+  font-size: $font-size-sm;
+  font-weight: 500;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all $transition-fast;
+  
+  &:hover {
+    background: rgba(248, 250, 252, 0.04);
+    border-color: lighten($color-secondary, 10%);
+    transform: translateY(-1px);
+  }
+  
+  @include respond-to(mobile) {
+    padding: $spacing-xs $spacing-md;
+    font-size: $font-size-xs;
+  }
+}
+
+/* =============================================
+ * 6. COMPONENTES COMPARTIDOS DE LAS APPS
+ * ============================================= */
+
+// Top Bar
+.top-bar {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-lg;
+  
+  @include respond-to(mobile) {
+    margin-bottom: $spacing-md;
+  }
+}
+
+.top-section-label {
+  font-size: $font-size-xs;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  color: rgba(148, 163, 184, 0.95);
+}
+
+.top-title-row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  flex-wrap: wrap;
+  
+  @include respond-to(mobile) {
+    gap: $spacing-sm;
+  }
+}
+
+.top-title {
+  flex: 1;
+  font-size: $font-size-2xl;
+  font-weight: 700;
+  color: $color-text-light;
+  text-align: center;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-xl;
+    text-align: left;
+    order: 1;
+  }
+}
+
+.top-user {
+  font-size: $font-size-sm;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: $spacing-xs;
+  color: $color-text-muted;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-xs;
+    order: 2;
+    width: 100%;
+    margin-top: $spacing-xs;
+  }
+}
+
+.top-user-name {
+  font-weight: 500;
+}
+
+.top-dot {
+  opacity: 0.8;
+}
+
+.top-role {
+  color: $color-primary;
+  font-weight: 600;
+}
+
+// Barra de inactividad
+.idle-bar-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: $spacing-xs;
+  margin-top: $spacing-sm;
+  
+  @include respond-to(mobile) {
+    order: 3;
+    width: 100%;
+    align-items: center;
+    margin-top: $spacing-sm;
+  }
+}
+
+.idle-bar-bg {
+  width: 150px;
+  height: 8px;
+  border-radius: $border-radius-full;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  overflow: hidden;
+  
+  @include respond-to(mobile) {
+    width: 100%;
+    max-width: 200px;
+  }
+}
+
+.idle-bar-fg {
+  height: 100%;
+  border-radius: $border-radius-full;
+  background: $color-primary-gradient;
+  transition: width 1s linear;
+}
+
+.idle-text {
+  font-size: $font-size-xs;
+  color: rgba(229, 231, 235, 0.8);
+}
+
+// Wizard Steps
+.wizard-steps {
+  display: flex;
+  gap: $spacing-sm;
+  margin-bottom: $spacing-lg;
+  
+  @include respond-to(mobile) {
+    flex-direction: column;
+    gap: $spacing-xs;
+  }
+}
+
+.wizard-step {
+  flex: 1;
+  border-radius: $border-radius-full;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.9);
+  color: rgba(229, 231, 235, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-sm;
+  padding: $spacing-sm;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: default;
+  }
+  
+  @include respond-to(mobile) {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+    justify-content: flex-start;
+  }
+}
+
+.wizard-step-number {
+  width: 28px;
+  height: 28px;
+  border-radius: $border-radius-full;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-sm;
+  border: 1px solid rgba(148, 163, 184, 0.7);
+  
+  @include respond-to(mobile) {
+    width: 24px;
+    height: 24px;
+    font-size: $font-size-xs;
+  }
+}
+
+.wizard-step-label {
+  @include respond-to(mobile) {
+    @include text-truncate;
+  }
+}
+
+.wizard-step.active {
+  background: $color-primary-gradient;
+  border-color: $color-primary;
+  color: $color-text-dark;
+  
+  .wizard-step-number {
+    border-color: $color-text-dark;
+    background: rgba($color-text-dark, 0.15);
+  }
+}
+
+// Contenido de pasos
+.step-content {
+  margin-top: $spacing-md;
+}
+
+.step-header {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-md;
+  margin-bottom: $spacing-lg;
+  
+  @include respond-to(mobile) {
+    flex-direction: column;
+    gap: $spacing-sm;
+  }
+  
+  @include respond-to(tablet) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.step-title {
+  font-size: $font-size-lg;
+  font-weight: 600;
+  color: $color-text-light;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-base;
+  }
+}
+
+.step-right-info {
+  font-size: $font-size-sm;
+  color: rgba(229, 231, 235, 0.8);
+}
+
+.badge {
+  padding: $spacing-xs $spacing-sm;
+  border-radius: $border-radius-full;
+  border: 1px solid rgba(148, 163, 184, 0.6);
+  font-size: $font-size-xs;
+  font-weight: 500;
+}
+
+// Filtro
+.filter-bar {
+  margin-bottom: $spacing-lg;
+  
+  @include respond-to(mobile) {
+    margin-bottom: $spacing-md;
+  }
+}
+
+// Grid de estanques
+.pond-grid {
+  @include grid-responsive(160px);
+  margin-bottom: $spacing-xl;
+  
+  @include respond-to(mobile) {
+    @include grid-responsive(140px);
+  }
+  
+  @include respond-to(tablet) {
+    @include grid-responsive(180px);
+  }
+}
+
+.pond-card {
+  border-radius: $border-radius-lg;
+  border: none;
+  background: $color-text-light;
+  color: $color-text-dark;
+  padding: $spacing-lg $spacing-md;
+  box-shadow: $shadow-xl;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all $transition-fast;
+  text-align: center;
+  min-height: 100px;
+  
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+  }
+  
+  &:active {
+    transform: translateY(-2px);
+  }
+  
+  @include respond-to(mobile) {
+    padding: $spacing-md $spacing-sm;
+    min-height: 80px;
+  }
+}
+
+.pond-card-partial {
+  background: $color-warning;
+  color: darken(#92400e, 10%);
+}
+
+.pond-card-completed {
+  background: $color-success;
+  color: darken(#14532d, 10%);
+}
+
+.pond-name {
+  font-size: $font-size-xl;
+  font-weight: 700;
+  margin-bottom: $spacing-xs;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-lg;
+  }
+}
+
+.pond-hint,
+.pond-status-text {
+  font-size: $font-size-xs;
+  color: #6b7280;
+}
+
+// Enlace de volver
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-xs;
+  border-radius: $border-radius-full;
+  border: 1px solid $color-secondary;
+  background: rgba($color-secondary, 0.18);
+  color: lighten($color-secondary, 20%);
+  font-size: $font-size-sm;
+  padding: $spacing-xs $spacing-md;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &:hover {
+    background: rgba($color-secondary, 0.32);
+    border-color: lighten($color-secondary, 10%);
+    transform: translateY(-1px);
+  }
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-xs;
+    padding: $spacing-xs $spacing-sm;
+  }
+}
+
+.back-icon {
+  font-size: $font-size-base;
+}
+
+.current-pond-label {
+  font-size: $font-size-sm;
+  color: rgba(229, 231, 235, 0.9);
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-xs;
+    text-align: center;
+    width: 100%;
+    margin-top: $spacing-sm;
+  }
+}
+
+// Formulario
+.form-card {
+  margin-top: $spacing-lg;
+}
+
+.form-field {
+  margin-bottom: $spacing-lg;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+  
+  @include respond-to(mobile) {
+    margin-bottom: $spacing-md;
+  }
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: $spacing-md;
+  margin-bottom: $spacing-md;
+  
+  @include respond-to(mobile) {
+    grid-template-columns: 1fr;
+    gap: $spacing-sm;
+  }
+  
+  @include respond-to(tablet) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.hint-text {
+  font-size: $font-size-xs;
+  color: rgba(148, 163, 184, 0.95);
+  margin-top: $spacing-xs;
+}
+
+// Subtabs
+.subtabs {
+  display: inline-flex;
+  border-radius: $border-radius-full;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  overflow: hidden;
+  margin-bottom: $spacing-lg;
+}
+
+.subtab-button {
+  border: none;
+  background: transparent;
+  color: rgba(229, 231, 235, 0.75);
+  padding: $spacing-xs $spacing-md;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &.active {
+    background: rgba($color-primary, 0.14);
+    color: lighten($color-primary, 30%);
+  }
+  
+  @include respond-to(mobile) {
+    padding: $spacing-xs $spacing-sm;
+    font-size: $font-size-xs;
+  }
+}
+
+// Historial
+.hist-date {
+  font-size: $font-size-sm;
+  color: rgba(148, 163, 184, 0.95);
+  margin-bottom: $spacing-lg;
+}
+
+.history-loading {
+  font-size: $font-size-base;
+  color: rgba(229, 231, 235, 0.85);
+  text-align: center;
+  padding: $spacing-xl;
+}
+
+.empty-text {
+  font-size: $font-size-base;
+  color: rgba(148, 163, 184, 0.9);
+  text-align: center;
+  padding: $spacing-xl;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-sm;
+    padding: $spacing-lg;
+  }
+}
+
+.history-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: $spacing-md;
+  
+  @include respond-to(mobile) {
+    gap: $spacing-sm;
+  }
+}
+
+.history-item {
+  border-radius: $border-radius-lg;
+  border: 1px solid rgba(148, 163, 184, 0.5);
+  background: rgba(15, 23, 42, 0.9);
+  padding: $spacing-md $spacing-lg;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &:hover {
+    background: rgba(30, 64, 175, 0.35);
+    border-color: rgba(129, 140, 248, 0.8);
+  }
+  
+  @include respond-to(mobile) {
+    padding: $spacing-sm;
+  }
+}
+
+.history-main {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-xs;
+  margin-bottom: $spacing-sm;
+  
+  @include respond-to(tablet) {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.history-alimento {
+  font-weight: 600;
+  font-size: $font-size-base;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-sm;
+  }
+}
+
+.history-date {
+  color: rgba(148, 163, 184, 0.95);
+  font-size: $font-size-sm;
+}
+
+.history-sub {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-md;
+  font-size: $font-size-sm;
+  color: rgba(229, 231, 235, 0.88);
+  
+  @include respond-to(mobile) {
+    gap: $spacing-sm;
+    font-size: $font-size-xs;
+  }
+}
+
+.history-otros {
+  margin-top: $spacing-sm;
+  font-size: $font-size-xs;
+  color: rgba(148, 163, 184, 0.8);
+}
+
+.history-edit-hint {
+  display: block;
+  margin-top: $spacing-sm;
+  font-size: $font-size-xs;
+  color: rgba(191, 219, 254, 0.95);
+}
+
+/* =============================================
+ * 7. COMPONENTES ESPECÍFICOS
+ * ============================================= */
+
+// Input groups (CeladorApp, ParametrosApp)
+.input-group {
+  display: flex;
+  
+  .text-input {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    flex: 1;
+  }
+}
+
+.input-group-text {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.55);
+  border-left: 0;
+  border-top-right-radius: $border-radius-lg;
+  border-bottom-right-radius: $border-radius-lg;
+  color: rgba(229, 231, 235, 0.8);
+  padding: $spacing-sm $spacing-md;
+  font-size: $font-size-sm;
+  display: flex;
+  align-items: center;
+  min-width: 60px;
+  justify-content: center;
+}
+
+.form-text {
+  font-size: $font-size-xs;
+  color: rgba(148, 163, 184, 0.8);
+  margin-top: $spacing-xs;
+}
+
+.textarea {
+  resize: vertical;
+  min-height: 80px;
+  
+  @include respond-to(mobile) {
+    min-height: 60px;
+  }
+}
+
+// Validación
+.invalid-feedback {
+  font-size: $font-size-xs;
+  color: $color-error;
+  margin-top: $spacing-xs;
+  
+  &.d-block {
+    display: block;
+  }
+}
+
+.is-invalid {
+  border-color: $color-error !important;
+  
+  &:focus {
+    box-shadow: 0 0 0 3px rgba($color-error, 0.1) !important;
+  }
+}
+
+// Botones pequeños
+.btn {
+  padding: $spacing-xs $spacing-sm;
+  font-size: $font-size-xs;
+  border-radius: $border-radius-sm;
+  border: 1px solid;
+  background: transparent;
+  cursor: pointer;
+  transition: all $transition-fast;
+  
+  &.btn-sm {
+    padding: $spacing-xs * 0.75 $spacing-xs * 1.5;
+    font-size: $font-size-xs * 0.9;
+  }
+  
+  &.btn-outline-primary {
+    border-color: $color-primary;
+    color: $color-primary;
+    
+    &:hover {
+      background: $color-primary;
+      color: $color-text-dark;
+    }
+  }
+}
+
+// Modal de éxito
+.success-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(15, 23, 42, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: $spacing-md;
+}
+
+.success-modal-card {
+  width: 100%;
+  max-width: 400px;
+  padding: $spacing-xl $spacing-lg;
+  border-radius: $border-radius-xl;
+  background: $color-card-bg;
+  border: 1px solid rgba($color-primary, 0.6);
+  box-shadow: $shadow-2xl;
+  text-align: center;
+  
+  @include respond-to(mobile) {
+    padding: $spacing-lg $spacing-md;
+    max-width: 320px;
+  }
+}
+
+.success-modal-title {
+  font-size: $font-size-xl;
+  font-weight: 600;
+  color: lighten($color-primary, 30%);
+  margin-bottom: $spacing-md;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-lg;
+  }
+}
+
+.success-modal-text {
+  font-size: $font-size-base;
+  color: rgba(229, 231, 235, 0.9);
+  margin-bottom: $spacing-xl;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-sm;
+    margin-bottom: $spacing-lg;
+  }
+}
+
+.success-modal-button {
+  width: 100%;
+}
+
+// Spinner global
+.global-spinner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(2, 6, 23, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.global-spinner-inner {
+  text-align: center;
+}
+
+.global-spinner-ring {
+  width: 60px;
+  height: 60px;
+  border: 6px solid rgba($color-primary, 0.2);
+  border-top-color: $color-primary;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto $spacing-lg;
+  
+  @include respond-to(mobile) {
+    width: 50px;
+    height: 50px;
+    border-width: 5px;
+  }
+}
+
+.global-spinner-logo {
+  font-size: $font-size-xl;
+  font-weight: 800;
+  letter-spacing: 0.15em;
+  color: $color-text-light;
+  margin-bottom: $spacing-md;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-lg;
+  }
+}
+
+.global-spinner-text {
+  font-size: $font-size-base;
+  color: rgba(229, 231, 235, 0.8);
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-sm;
+  }
+}
+
+// Contenedor de error
+.error-container {
+  max-width: 480px;
+  margin: $spacing-2xl auto;
+  padding: 0 $spacing-lg;
+  
+  @include respond-to(mobile) {
+    margin: $spacing-xl auto;
+    padding: 0 $spacing-md;
+  }
+}
+
+.error-text {
+  margin-top: $spacing-md;
+  font-size: $font-size-sm;
+  color: $color-error;
+  
+  @include respond-to(mobile) {
+    font-size: $font-size-xs;
+  }
+}
+
+/* =============================================
+ * 8. UTILIDADES Y ANIMACIONES
+ * ============================================= */
+
+// Utilidades de texto
+.text-muted {
+  color: rgba(148, 163, 184, 0.8) !important;
+}
+
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+// Utilidades de margen y padding
+.mt-1 { margin-top: $spacing-xs; }
+.mb-1 { margin-bottom: $spacing-xs; }
+.me-1 { margin-right: $spacing-xs; }
+
+// Animaciones
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: translateY(20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+// Clases de animación
+.fade-in {
+  animation: fadeIn 0.3s ease;
+}
+
+.slide-up {
+  animation: slideUp 0.3s ease;
+}
+
+/* =============================================
+ * 9. AJUSTES ESPECÍFICOS POR DISPOSITIVO
+ * ============================================= */
+
+// Móviles en orientación portrait
+@media (max-width: $breakpoint-sm) and (orientation: portrait) {
+  .pond-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .wizard-steps {
+    flex-direction: column;
+  }
+  
+  .top-title-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: $spacing-sm;
+  }
+  
+  .ghost-button {
+    align-self: center;
+  }
+}
+
+// Móviles en orientación landscape
+@media (max-width: $breakpoint-md) and (orientation: landscape) {
+  .registrador-login-container {
+    padding: $spacing-md;
+  }
+  
+  .pond-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .top-title {
+    font-size: $font-size-lg;
+  }
+}
+
+// Tablets
+@media (min-width: $breakpoint-md) and (max-width: $breakpoint-lg) {
+  .pond-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  
+  .registrador-app-container {
+    padding: $spacing-lg $spacing-md;
+  }
+}
+
+// Desktop grande
+@media (min-width: $breakpoint-xl) {
+  .pond-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+  
+  .history-list {
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  }
+}
+
+/* =============================================
+ * 10. PRINT STYLES
+ * ============================================= */
+
+@media print {
+  .registrador-root,
+  .registrador-app-container {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .registrador-card {
+    background: white !important;
+    border: 1px solid #ddd !important;
+    box-shadow: none !important;
+    color: black !important;
+  }
+  
+  .primary-button,
+  .ghost-button,
+  .back-link,
+  .subtab-button,
+  .wizard-step,
+  .idle-bar-wrapper {
+    display: none !important;
+  }
+  
+  .text-input {
+    border: 1px solid #ddd !important;
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Añade esto a tu registrador-app.css */
+.pin-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 30px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    text-align: center;
+}
+
+.pin-container h1 {
+    color: #333;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+.pin-input {
+    width: 100%;
+    padding: 12px;
+    font-size: 18px;
+    text-align: center;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    margin: 20px 0;
+    letter-spacing: 4px;
+}
+
+.pin-input:focus {
+    outline: none;
+    border-color: #667eea;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.btn-ingresar {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s;
+}
+
+.btn-ingresar:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+}
+
+}

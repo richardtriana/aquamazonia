@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class LoginController extends Controller
 {
@@ -36,5 +38,33 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
+    }
+
+    /**
+     * El usuario ha sido autenticado.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function authenticated(Request $request, $user)
+    {
+        // 1. Generamos el token
+        $user->api_token = Str::random(80);
+        $user->save();
+
+        // 2. Si es AJAX, respuesta normal
+        if ($request->ajax() || $request->wantsJson()) {
+            return response()->json([
+                'status' => 'success',
+                'user'   => $user,
+                'token'  => $user->api_token,
+            ]);
+        }
+
+        // 3. PARA LOGIN TRADICIONAL: Guardamos el token en la sesión temporalmente
+        session(['user_api_token' => $user->api_token]);
+
+        return null; 
     }
 }

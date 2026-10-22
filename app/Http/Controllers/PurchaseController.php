@@ -84,27 +84,58 @@ class PurchaseController extends Controller
      */
     public function store(Request $request)
     {
-        $user_id =  auth()->user();
+        // 1. Intentamos obtener el usuario de la sesión actual
+        $user = auth()->user() ?? auth('web')->user();
+
+        if ($user) {
+            $user_id = $user->id;
+        } else {
+            // 2. Si no hay sesión, buscamos el primer usuario administrador en la DB
+            // Esto evita el error de la llave foránea si el ID 1 no existe.
+            $adminUser = \App\User::first();
+            $user_id = $adminUser ? $adminUser->id : null;
+        }
+
+        // Si después de todo no hay un usuario en la tabla 'users', fallará por DB.
+        // Pero con Richard Peña logueado, $user_id tendrá su valor real.
 
         $purchase = new Purchase;
         $purchase->provider_id = $request->id_provider;
-        $purchase->user_id = $user_id;
+        $purchase->user_id = $user_id; // <--- Aquí ya va el ID validado
         $purchase->total_cost = $request->total_tax_inc;
-        $purchase->total_discount = $request->total_discount;
+        $purchase->total_discount = $request->total_discount ?? 0;
         $purchase->state = $request->state;
         $purchase->save();
 
-        foreach ($request->itemsPurchase as $details_purchase) {
-            $new_detail = new DetailPurchaseController;
-            $new_detail = $new_detail->store($details_purchase, $purchase->id);
+        // 3. Procesar los items (esta parte ya funciona bien)
+        foreach ($request->itemsPurchase as $item_data) {
+            
+            $isAlimento = ($request->type == 'alimentos' || isset($item_data['alimento_id']) || !isset($item_data['resource_id']));
 
-            if (isset($details_purchase['food_id'])) {
-                $itemController = new AlimentosController;
+            $normalizedDetail = [
+                'id'                  => $item_data['id'],
+                'food_id'             => $isAlimento ? $item_data['id'] : null,
+                'resource_id'         => !$isAlimento ? $item_data['id'] : null,
+                'price'               => $item_data['price'],
+                'quantity'            => $item_data['quantity'],
+                'item'                => $item_data['item'],
+                'discount_percentage' => $item_data['discount_percentage'] ?? 0,
+                'discount_value'      => $item_data['discount_value'] ?? 0,
+                'total_cost'          => $item_data['total_cost'],
+            ];
+
+            $detailController = new \App\Http\Controllers\DetailPurchaseController;
+            $detailController->store($normalizedDetail, $purchase->id);
+
+            $objUpdate = (object) $normalizedDetail;
+
+            if ($isAlimento) {
+                $itemController = new \App\Http\Controllers\API\AlimentosController;
+                $itemController->updatePriceById('add', $objUpdate);
             } else {
-                $itemController = new RecursosController;
+                $itemController = new \App\Http\Controllers\API\RecursosController;
+                $itemController->updatePriceById('add', $objUpdate);
             }
-
-            $itemController->updatePriceById('add', (object) $details_purchase);
         }
 
         return response()->json([

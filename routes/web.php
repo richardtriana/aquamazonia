@@ -20,5 +20,10 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/registrador', function () {
+    return view('public.registrador');
+});
 
 Route::namespace('API')->group(function () {});
+
+Route::get('/backups/{id}/download', 'BackupController@download')->middleware('auth');

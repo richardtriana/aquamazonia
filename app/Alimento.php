@@ -16,6 +16,7 @@ class Alimento extends Model
         'brand_id',
         'provider_id',
         'cantidad',
+        'cantidad_bulto', // <-- Nuevo campo agregado
         'cantidad_minima',
         'cantidad_maxima',
         'inventario',
@@ -47,5 +48,12 @@ class Alimento extends Model
     public function brand()
     {
         return $this->belongsTo(Brand::class, 'brand_id');
+    }
+
+    public function siembras()
+    {
+        return $this->belongsToMany(Siembra::class, 'siembra_alimentos', 'alimento_id', 'siembra_id')
+            ->withPivot('activo')
+            ->withTimestamps();
     }
 }
