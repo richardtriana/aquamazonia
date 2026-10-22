@@ -9,7 +9,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('img/favicon.ico') }}" />
     
     <!-- Estilos -->
-    <link href="{{ asset('css/registrador-app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/registrador-app.css') }}?v={{ filemtime(public_path('css/registrador-app.css')) }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <title>Aquamazonia | Registrador</title>
@@ -130,7 +130,7 @@
     <div id="registrador-app"></div>
     
     <!-- Scripts -->
-    <script src="{{ asset('js/public-app.js') }}" defer></script>
+    <script src="{{ asset('js/public-app.js') }}?v={{ filemtime(public_path('js/public-app.js')) }}" defer></script>
     
     <script>
         document.addEventListener('DOMContentLoaded', function() {
