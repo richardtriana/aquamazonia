@@ -1,5 +1,5 @@
 // Filtro de estanques por código (T7, E17) o por número (81).
-// Si algún estanque coincide exacto, se muestra solo ese; si no, los que se parezcan.
+// Si algún estanque coincide exacto, se muestra solo ese; si no, los que lo contienen.
 const normalize = (value) => String(value || "").toUpperCase().replace(/[\s-]/g, "");
 const digitsOf = (value) => value.replace(/\D/g, "");
 
@@ -16,5 +16,6 @@ export function filterPonds(siembras, text) {
   const exact = siembras.filter((s) => codeOf(s) === key);
   if (exact.length) return exact;
 
-  return siembras.filter((s) => (withLetters ? codeOf(s).startsWith(key) : codeOf(s).includes(key)));
+  // Sin exacto: los que contienen lo escrito (sirve también para «TILAPIA», «ALEVINOS»)
+  return siembras.filter((s) => codeOf(s).includes(key));
 }
